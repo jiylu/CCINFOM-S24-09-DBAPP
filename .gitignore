@@ -1,2 +1,8 @@
+.idea/
+out/
+bin/
+target/
+.vscode/
+*.class
 db.properties
 *.class
