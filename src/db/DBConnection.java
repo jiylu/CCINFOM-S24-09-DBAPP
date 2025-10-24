@@ -2,7 +2,6 @@ package db;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Properties;
 
 /*
@@ -34,7 +33,13 @@ public class DBConnection {
         }
     }
     
-    public static Connection connect() throws SQLException{
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+    public static Connection connect(){
+        try {
+            Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("Connected to db");
+            return conn;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to connect to db");
+        }
     }
 }

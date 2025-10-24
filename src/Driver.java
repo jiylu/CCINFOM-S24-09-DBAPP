@@ -1,15 +1,10 @@
 import db.DBConnection;
+import java.sql.Connection;
 import view.Frame;
 class Driver {
 
     public static void main (String[] args){
-        try {
-            DBConnection.connect();
-            System.out.println("Connected to db");
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to connect to db");
-        }
-
+        Connection conn = DBConnection.connect();
         Frame frame = new Frame();
     }
 }
