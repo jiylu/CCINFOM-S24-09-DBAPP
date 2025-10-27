@@ -23,14 +23,15 @@ VALUES
     ('montano_rivera', 'password123', 'Employee'), -- 10000
     ('thea_delacruz', 'password123', 'Employee'), -- 10001
     ('maria_cortado', 'password123', 'Employee'), -- 10002
-    ('thomas_lee', 'password123', 'Employee'), -- 10003
-    ('antonio_smith', 'password123', 'Employee'), -- 10004
-    ('luis_lopez', 'password123', 'Employee'), -- 10005
-    ('amanda_torres', 'password123', 'Employee'), -- 10006
-    ('chaewon_dc', 'password123', 'Admin'), -- 10007
-    ('nobitabrto', 'password123', 'Technician'), -- 10008
-    ('carlosbrrng', 'password123', 'Technician'), -- 10009
-    ('fayewebster', 'password123', 'Technician'); -- 10010
+    ('karina_garcia', 'password123', 'Employee'), -- 10003
+    ('thomas_lee', 'password123', 'Employee'), -- 10004
+    ('antonio_smith', 'password123', 'Employee'), -- 10005
+    ('luis_lopez', 'password123', 'Employee'), -- 10006
+    ('amanda_torres', 'password123', 'Employee'), -- 10007
+    ('chaewon_dc', 'password123', 'Admin'), -- 10008
+    ('nobitabrto', 'password123', 'Technician'), -- 10009
+    ('carlosbrrng', 'password123', 'Technician'), -- 10010
+    ('fayewebster', 'password123', 'Technician'); -- 10011
 
 
 
@@ -90,9 +91,9 @@ CREATE TABLE IF NOT EXISTS Technicians (
 
 INSERT IGNORE INTO Technicians(user_id, tech_lastName, tech_firstName)
 VALUES 
-	(10008, 'Roberto', 'Nobita'),
-    (10009, 'Barring', 'Carlos'),
-    (10010, 'Webster', 'Faye');
+	(10009, 'Roberto', 'Nobita'),
+    (10010, 'Barring', 'Carlos'),
+    (10011, 'Webster', 'Faye');
 
 
 -- CREATE TABLE IF NOT EXISTS Categories ();
