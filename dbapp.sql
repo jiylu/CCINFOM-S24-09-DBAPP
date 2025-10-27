@@ -2,11 +2,13 @@ CREATE SCHEMA IF NOT EXISTS ticketing_system;
 
 USE ticketing_system;
 
-
+DROP TABLE IF EXISTS Technicians;
+DROP TABLE IF EXISTS Employees;
+DROP TABLE IF EXISTS Departments;
+DROP TABLE IF EXISTS Users;
 
 -- Table for centralized login credentials (Technician, Employee, Admin) 
 -- UID starts at 10000.
-DROP TABLE IF EXISTS Users;
 
 CREATE TABLE IF NOT EXISTS Users(
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -51,8 +53,6 @@ VALUES
 
 
 
-DROP TABLE IF EXISTS Employees;
-
 CREATE TABLE IF NOT EXISTS Employees (
 	emp_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL, 
@@ -60,7 +60,6 @@ CREATE TABLE IF NOT EXISTS Employees (
     first_name VARCHAR(50) NOT NULL,
     dept_id INT NOT NULL,
     role VARCHAR(50) NOT NULL,
-	active BOOLEAN DEFAULT TRUE,
     CONSTRAINT fk_employee_user FOREIGN KEY (user_id) REFERENCES Users(user_id),
 	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments(department_id)
 ) AUTO_INCREMENT = 90000;
@@ -79,25 +78,21 @@ VALUES
 
 
 
-
-DROP TABLE IF EXISTS Technicians;
-
 CREATE TABLE IF NOT EXISTS Technicians ( 
 	technician_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     tech_lastName VARCHAR(50) NOT NULL,
     tech_firstName VARCHAR(50) NOT NULL,
-    active BOOLEAN DEFAULT TRUE,
     has_active_ticket BOOLEAN DEFAULT FALSE,
     CONSTRAINT fk_technician_user FOREIGN KEY (user_id) REFERENCES Users(user_id)
 )AUTO_INCREMENT = 30000;
 
 
-INSERT IGNORE INTO Technicians(user_id, tech_lastName, tech_firstName, tech_username)
+INSERT IGNORE INTO Technicians(user_id, tech_lastName, tech_firstName)
 VALUES 
-	(10008, 'Roberto', 'Nobita', 'nobitarbrto'),
-    (10009, 'Barring', 'Carlos', 'carlosbrrng'),
-    (10010, 'Webster', 'Faye', 'fayewebster');
+	(10008, 'Roberto', 'Nobita'),
+    (10009, 'Barring', 'Carlos'),
+    (10010, 'Webster', 'Faye');
 
 
 -- CREATE TABLE IF NOT EXISTS Categories ();
