@@ -99,14 +99,14 @@ VALUES
 -- CREATE TABLE IF NOT EXISTS Categories ();
 
 CREATE TABLE IF NOT EXISTS Categories (
-	category_id INT PRIMARY KEY,  
+	category_id INT AUTO_INCREMENT PRIMARY KEY,  
     category_name VARCHAR(50));
 
 INSERT IGNORE INTO Categories (category_id, category_name)
 VALUES
-	(10, 'Network Issue'),
-    (11, 'Software Issue'),
-    (12, 'Hardware Issue'),
-    (13, 'Account Access Issue');
+	('Network Issue'),
+    ('Software Issue'),
+    ('Hardware Issue'),
+    ('Account Access Issue');
 
 -- Inserts (dummy data) dito
