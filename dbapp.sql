@@ -49,7 +49,7 @@ VALUES
     (90075, 'Torres', 'Amanda', 1, 'Employee Relations'),
     (90070, 'dela Cruz', 'Chaewon', 7, 'Admin');
 	
-
+DROP TABLE IF EXISTS Technicians;
 
 -- CREATE TABLE IF NOT EXISTS Technicians ();
 CREATE TABLE IF NOT EXISTS Technicians ( 
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS Technicians (
     has_active_ticket BOOLEAN DEFAULT FALSE
 );
 
-INSERT INTO Technicians(technician_id, tech_lastName, tech_firstName, tech_username)
+INSERT IGNORE INTO Technicians(technician_id, tech_lastName, tech_firstName, tech_username)
 VALUES 
 	(3214, 'Roberto', 'Nobita', 'nobitarbrto'),
     (3215, 'Barring', 'Carlos', 'carlosbrrng');
