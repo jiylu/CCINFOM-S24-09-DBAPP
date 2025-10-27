@@ -30,6 +30,12 @@ CREATE TABLE IF NOT EXISTS Employees (
 	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments(department_id)
 );
 
+-- delete ko na to mamaya inayos ko lang forrmat
+-- dapat pala last_name, first_name
+
+DELETE FROM Employees
+WHERE emp_id = 90070;
+
 INSERT IGNORE INTO Employees(emp_id, last_name, first_name, dept_id, role) 
 VALUES 
 	(90122, 'Rivera', 'Montano', 4, 'Senior Coordinator'),
@@ -40,7 +46,7 @@ VALUES
     (90930, 'Smith', 'Antonio', 7, 'Accounting Clerk'),
     (90356, 'Lopez', 'Luis', 5, 'Project Manager'),
     (90075, 'Torres', 'Amanda', 1, 'Employee Relations'),
-    (90070, 'Chaewon', 'dela Cruz', 7, 'Admin');
+    (90070, 'dela Cruz', 'Chaewon', 7, 'Admin');
 	
     
 -- CREATE TABLE IF NOT EXISTS Technicians ();
