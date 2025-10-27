@@ -4,8 +4,27 @@ USE ticketing_system;
 
 -- Table creation 
 
--- CREATE TABLE IF NOT EXISTS Employees ();
+ CREATE TABLE IF NOT EXISTS Employees (
+	emp_id INT PRIMARY KEY, 
+    last_name VARCHAR(50),
+    first_name VARCHAR(50),
+    dept_id INT,
+    role VARCHAR(50),
 
+	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments (department_id));
+
+INSERT IGNORE INTO Employees(emp_id, last_name, first_name, dept_id, role) 
+VALUES 
+	(90122, 'Rivera', 'Montano', 4, 'Senior Coordinator'),
+    (90756, 'Dela Cruz', 'Thea', 2, 'Department Secretary'),
+    (90329, 'Cortado', 'Maria', 1, 'Training Manager'),
+    (90024, 'Garcia', 'Karina', 3, 'Front Desk Associate'),
+    (90541, 'Lee', 'Thomas', 6, 'Marketing Assistant'),
+    (90930, 'Smith', 'Antonio', 7, 'Accounting Clerk'),
+    (90356, 'Lopez', 'Luis', 5, 'Project Manager'),
+    (90075, 'Torres', 'Amanda', 1, 'Employee Relations');
+	
+    
 -- CREATE TABLE IF NOT EXISTS Technicians ();
 
 CREATE TABLE IF NOT EXISTS Departments (
@@ -13,7 +32,7 @@ CREATE TABLE IF NOT EXISTS Departments (
 	department_name VARCHAR(50) NOT NULL
 );
 
-INSERT INTO Departments (department_name)
+INSERT IGNORE INTO Departments (department_name)
 VALUES
 	('Human Resources'),
 	('Finance'),
@@ -29,4 +48,3 @@ VALUES
 
 
 -- Inserts (dummy data) dito
---
