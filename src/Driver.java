@@ -1,3 +1,5 @@
+import controllers.LoginController;
+import controllers.MainController;
 import db.DBConnection;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +14,7 @@ class Driver {
         Connection conn = DBConnection.connect();
         setupDB(conn);
         Frame frame = new Frame();
+        MainController mainController = new MainController(frame);
     }
 
     // runs the schema
