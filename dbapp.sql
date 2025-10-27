@@ -20,6 +20,7 @@ VALUES
 	('Administration'),
 	('Information Technology');
 
+
 CREATE TABLE IF NOT EXISTS Employees (
 	emp_id INT PRIMARY KEY, 
     last_name VARCHAR(50) NOT NULL,
@@ -48,10 +49,22 @@ VALUES
     (90075, 'Torres', 'Amanda', 1, 'Employee Relations'),
     (90070, 'dela Cruz', 'Chaewon', 7, 'Admin');
 	
-    
+
+
 -- CREATE TABLE IF NOT EXISTS Technicians ();
+CREATE TABLE IF NOT EXISTS Technicians ( 
+	technician_id INT AUTO_INCREMENT PRIMARY KEY,
+    tech_lastName VARCHAR(50) NOT NULL,
+    tech_firstName VARCHAR(50) NOT NULL,
+    tech_username VARCHAR(20) NOT NULL,
+    active BOOLEAN DEFAULT TRUE,
+    has_active_ticket BOOLEAN DEFAULT FALSE
+);
 
-
+INSERT INTO Technicians(technician_id, tech_lastName, tech_firstName, tech_username)
+VALUES 
+	(3214, 'Roberto', 'Nobita', 'nobitarbrto'),
+    (3215, 'Barring', 'Carlos', 'carlosbrrng');
 
 -- CREATE TABLE IF NOT EXISTS Categories ();
 
