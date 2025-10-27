@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS Categories (
 	category_id INT AUTO_INCREMENT PRIMARY KEY,  
     category_name VARCHAR(50));
 
-INSERT IGNORE INTO Categories (category_id, category_name)
+INSERT IGNORE INTO Categories (category_name)
 VALUES
 	('Network Issue'),
     ('Software Issue'),
