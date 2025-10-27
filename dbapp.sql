@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS Employees (
     first_name VARCHAR(50) NOT NULL,
     dept_id INT NOT NULL,
     role VARCHAR(50) NOT NULL,
+    is_active BOOLEAN DEFAULT TRUE,
     CONSTRAINT fk_employee_user FOREIGN KEY (user_id) REFERENCES Users(user_id),
 	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments(department_id)
 ) AUTO_INCREMENT = 90000;
