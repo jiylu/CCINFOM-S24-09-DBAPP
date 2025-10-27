@@ -27,7 +27,7 @@ VALUES
     ('antonio_smith', 'password123', 'Employee'), -- 10004
     ('luis_lopez', 'password123', 'Employee'), -- 10005
     ('amanda_torres', 'password123', 'Employee'), -- 10006
-    ('chaewon_dc', 'password123', 'Employee'), -- 10007
+    ('chaewon_dc', 'password123', 'Admin'), -- 10007
     ('nobitabrto', 'password123', 'Technician'), -- 10008
     ('carlosbrrng', 'password123', 'Technician'), -- 10009
     ('fayewebster', 'password123', 'Technician'); -- 10010
