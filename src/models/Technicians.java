@@ -7,11 +7,11 @@ public class Technicians {
     private int user_id;
     private boolean hasActiveTicket;
 
-    public Technicians(int technician_id, String tech_lastName, String tech_firstName, int user_id, boolean hasActiveTicket){
+    public Technicians(int technician_id, int user_id, String tech_lastName, String tech_firstName, boolean hasActiveTicket){
         this.technician_id = technician_id;
+        this.user_id = user_id;
         this.tech_lastName = tech_lastName;
         this.tech_firstName = tech_firstName;
-        this.user_id = user_id;
         this.hasActiveTicket = hasActiveTicket;
     }
 
