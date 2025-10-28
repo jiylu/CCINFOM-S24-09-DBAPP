@@ -8,6 +8,7 @@ import javax.swing.*;
 import models.User;
 import view.Frame;
 import view.LoginPanel;
+import view.TechnicianDashboardPanel;
 
 public class LoginController {
     private Frame frame;
@@ -45,7 +46,7 @@ public class LoginController {
                 switch (u.getRole()){
                     case User.Role.ADMIN -> redirectToAdminDashboard(u); 
                     case User.Role.EMPLOYEE -> System.out.println("Employee"); // frame.showPanel(Frame.EMP_DASHBOARD)
-                    case User.Role.TECHNICIAN -> System.out.println("Technician"); // frame.showPanel(Frame.TECH_DASHBOARD)
+                    case User.Role.TECHNICIAN -> redirectToTechDashboard(u);
                 }
             }
         });
@@ -74,5 +75,10 @@ public class LoginController {
     private void redirectToAdminDashboard(User user){
         AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO);
         adminDashboardController.init(); 
+    }
+
+    private void redirectToTechDashboard(User user){
+        TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, userDAO, techDAO);
+        technicianDashboardController.init();
     }
 }
