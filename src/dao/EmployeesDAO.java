@@ -53,12 +53,12 @@ public class EmployeesDAO {
 
             while (rs.next()){
                 list.add(new Employees(
-                rs.getInt("emp_id"),
-                rs.getInt("user_id"),
-                rs.getString("last_name"),
-                rs.getString("first_name"),
-                rs.getInt("dept_id"),
-                rs.getString("role"),
+                    rs.getInt("emp_id"),
+                    rs.getInt("user_id"),
+                    rs.getString("last_name"),
+                    rs.getString("first_name"),
+                    rs.getInt("dept_id"),
+                    rs.getString("role"),
                     rs.getBoolean("is_active")
                 ));
             }
