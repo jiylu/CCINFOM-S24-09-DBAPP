@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import models.User;
+import models.User.Role;
 
 public class UserDAO {
     private Connection conn;
@@ -36,6 +37,37 @@ public class UserDAO {
         } catch (SQLException e) {
             System.out.println("Failed to insert " + user.getUsername() + " to users table.");
             e.printStackTrace();
+        }
+    }
+
+    public User getUserByLogin(String username, String password){
+        String query = "SELECT * FROM Users WHERE username = ? AND password = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, username);
+            ps.setString(2, password);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                
+                if (!rs.getBoolean(5)){
+                    return null;
+                }
+
+                return new User(
+                    rs.getInt(1), 
+                    username, 
+                    password, 
+                    Role.valueOf(rs.getString(4).toUpperCase()));
+            }
+
+            rs.close();
+            ps.close();
+            return null;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
         }
     }
 }
