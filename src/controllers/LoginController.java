@@ -20,16 +20,20 @@ public class LoginController {
 
     public void initListeners(){
         loginButton.addActionListener(e->{
-            User u = getUserByLogin();
-            if (validateUser(u)){
-                // wala pa chill ka muna
+            User u = loginUser();
+            if (u != null){
                 JOptionPane.showMessageDialog(null, "Hellow");
+                switch (u.getRole()){
+                    case User.Role.ADMIN -> System.out.println("Admin"); // frame.showPanel(Frame.ADMIN_DASHBOARD)
+                    case User.Role.EMPLOYEE -> System.out.println("Employee"); // frame.showPanel(Frame.EMP_DASHBOARD)
+                    case User.Role.TECHNICIAN -> System.out.println("Technician"); // frame.showPanel(Frame.TECH_DASHBOARD)
+                }
             }
         });
     }
 
-    private User getUserByLogin(){
-        String usernameInput =  panel.getUsernameField().getText().trim();
+    private User loginUser(){
+        String usernameInput = panel.getUsernameField().getText().trim();
         String passwordInput = new String(panel.getPasswordField().getPassword()).trim();
 
         // validate first if username input or password input is not empty
@@ -38,15 +42,13 @@ public class LoginController {
             return null;
         }
 
-        return userDAO.getUserByLogin(usernameInput, passwordInput);
-    }
+        User user = userDAO.getUserByLogin(usernameInput, passwordInput);
 
-    private boolean validateUser(User user){
         if (user == null){
             JOptionPane.showMessageDialog(null, "Username or Password is incorrect.", "Invalid", JOptionPane.ERROR_MESSAGE);
-            return false;
+            return null;
         }
 
-        return true;
+        return user;
     }
 }
