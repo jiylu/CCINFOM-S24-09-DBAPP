@@ -35,4 +35,24 @@ public class DepartmentDAO {
         }
     }
 
+    public Department getDepartmentByID(int departmentID) {
+        String query = "SELECT department_id, department_name FROM departments WHERE department_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setInt(1, departmentID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                return new Department(rs.getInt(1), rs.getString(2));
+            }
+
+            System.out.println("Department not found.");
+            
+            rs.close();
+            ps.close();
+            return null;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
