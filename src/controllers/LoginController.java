@@ -1,30 +1,49 @@
 package controllers;
 
+import dao.EmployeesDAO;
+import dao.TechniciansDAO;
 import dao.UserDAO;
+import java.sql.Connection;
 import javax.swing.*;
 import models.User;
 import view.Frame;
 import view.LoginPanel;
 
 public class LoginController {
+    private Frame frame;
     private UserDAO userDAO;
+    private EmployeesDAO empDAO;
+    private TechniciansDAO techDAO;
     private LoginPanel panel;
     private JButton loginButton;
 
-    public LoginController(UserDAO userDAO, Frame frame){
-        this.userDAO = userDAO;
+    public LoginController(Frame frame){
+        this.frame = frame;
         this.panel = frame.getLoginPanel();
         this.loginButton = panel.getLoginButton();
+    }
+
+    public void init(Connection conn){
+        initListener();
+        initializeDAO(conn);
+        
+        frame.showPanel(Frame.LOGIN_PANEL);
+    }
+
+    private void initializeDAO(Connection conn){
+        this.userDAO = new UserDAO(conn);
+        this.empDAO = new EmployeesDAO(conn);
+        this.techDAO = new TechniciansDAO(conn);
 
     }
 
-    public void initListeners(){
+    private void initListener(){
         loginButton.addActionListener(e->{
             User u = loginUser();
             if (u != null){
                 JOptionPane.showMessageDialog(null, "Hellow");
                 switch (u.getRole()){
-                    case User.Role.ADMIN -> System.out.println("Admin"); // frame.showPanel(Frame.ADMIN_DASHBOARD)
+                    case User.Role.ADMIN -> redirectToAdminDashboard(u); 
                     case User.Role.EMPLOYEE -> System.out.println("Employee"); // frame.showPanel(Frame.EMP_DASHBOARD)
                     case User.Role.TECHNICIAN -> System.out.println("Technician"); // frame.showPanel(Frame.TECH_DASHBOARD)
                 }
@@ -50,5 +69,10 @@ public class LoginController {
         }
 
         return user;
+    }
+
+    private void redirectToAdminDashboard(User user){
+        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO);
+        adminDashboardController.init(); 
     }
 }
