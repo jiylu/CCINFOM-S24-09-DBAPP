@@ -50,6 +50,10 @@ public class Employees {
 
 // setters for update
 
+    public void setEmpID(int emp_id){
+        this.emp_id = emp_id;
+    }
+
     public void setUserID(int user_id) {
         this.user_id = user_id;
     }

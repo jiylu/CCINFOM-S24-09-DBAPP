@@ -41,6 +41,10 @@ public class User {
         return isActive;
     }
 
+    public void setUserID(int userID){
+        this.userID = userID;
+    }
+
     public void setActive(Boolean isActive){
         this.isActive = isActive;
     }

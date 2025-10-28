@@ -2,9 +2,10 @@ package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import models.User.Role;
+import java.sql.Statement;
+import models.User;
 
 public class UserDAO {
     private Connection conn;
@@ -13,17 +14,27 @@ public class UserDAO {
         this.conn = conn;
     }
 
-    public void insertUser(String username, String password, Role role){
+    public void insertUser(User user){
         String query = "INSERT INTO Users (username, password, role) VALUES (?, ?, ?)";
-
-        try (PreparedStatement ps = conn.prepareStatement(query)){
-            ps.setString(1, username);
-            ps.setString(2, password);
-            ps.setString(3, role.name());
+        
+        try (PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getRole().name());
             ps.executeUpdate();
-            System.out.println("Inserted " + username + " successfully!");
+
+            ResultSet rs = ps.getGeneratedKeys();
+            
+            if (rs.next()){
+                user.setUserID(rs.getInt(1));
+            } 
+
+            rs.close();
+            ps.close();
+
+            System.out.println("Inserted " + user.getUsername() + " successfully!");
         } catch (SQLException e) {
-            System.out.println("Failed to insert " + username + " to users table.");
+            System.out.println("Failed to insert " + user.getUsername() + " to users table.");
             e.printStackTrace();
         }
     }
