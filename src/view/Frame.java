@@ -3,6 +3,7 @@ package view;
 import java.awt.*;
 import javax.swing.*;
 import view.admin.AdminDashboardPanel;
+import view.technician.TechnicianDashboardPanel;
 
 public class Frame extends JFrame{
     public final static String LOGIN_PANEL = "loginPanel";
