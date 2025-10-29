@@ -1,5 +1,6 @@
 package controllers;
 
+import dao.DepartmentDAO;
 import dao.EmployeesDAO;
 import dao.TechniciansDAO;
 import dao.UserDAO;
@@ -8,13 +9,13 @@ import javax.swing.*;
 import models.User;
 import view.Frame;
 import view.LoginPanel;
-import view.TechnicianDashboardPanel;
 
 public class LoginController {
     private Frame frame;
     private UserDAO userDAO;
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
+    private DepartmentDAO deptDAO;
     private LoginPanel panel;
     private JButton loginButton;
 
@@ -35,6 +36,7 @@ public class LoginController {
         this.userDAO = new UserDAO(conn);
         this.empDAO = new EmployeesDAO(conn);
         this.techDAO = new TechniciansDAO(conn);
+        this.deptDAO = new DepartmentDAO(conn);
 
     }
 
@@ -73,7 +75,7 @@ public class LoginController {
     }
 
     private void redirectToAdminDashboard(User user){
-        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO);
+        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO);
         adminDashboardController.init(); 
     }
 

@@ -3,13 +3,18 @@ package view.admin;
 import java.awt.Font;
 import javax.swing.*;
 
-public class AddUserPanel extends JPanel  {
+public class AddUserPanel extends JPanel {
     private JTextField usernameField;
     private JTextField passwordField;
     private JTextField firstNameField;
     private JTextField lastNameField;
     private JComboBox<String> roles;
+    private JComboBox<String> departments;
+    private JTextField employeeRole;
     private JButton saveButton;
+
+    private JLabel departmentLabel;
+    private JLabel employeeRoleLabel;
 
     public AddUserPanel(){
         setLayout(null);
@@ -82,6 +87,44 @@ public class AddUserPanel extends JPanel  {
         add(saveButton);
     }
 
+    private void setupDepartmentField(String[] departmentList){
+        departmentLabel = new JLabel("Department: ");
+        departmentLabel.setBounds(20, 280, 200, 25);
+        add(departmentLabel);
+
+        departments = new JComboBox<>(departmentList);
+        departments.setBounds(130, 280, 200,25);
+        add(departments);
+    }
+
+    private void setupEmployeeRoleField(){
+        employeeRoleLabel = new JLabel("Employee Role: ");
+        employeeRoleLabel.setBounds(20, 310, 200, 25);
+        add(employeeRoleLabel);
+
+        employeeRole = new JTextField();
+        employeeRole.setBounds(130, 310, 200, 25);
+        add(employeeRole);
+    }
+
+    public void transformToEmployeeFields(String[] departmentList){
+        setupDepartmentField(departmentList);
+        setupEmployeeRoleField();
+        saveButton.setBounds(130, 340, 100, 30);
+        revalidate();
+        repaint();
+    }
+
+    public void revert(){
+        if (departmentLabel != null && departments != null && employeeRoleLabel != null && employeeRole != null){
+            departmentLabel.setVisible(false);
+            departments.setVisible(false);
+            employeeRoleLabel.setVisible(false);
+            employeeRole.setVisible(false);
+            saveButton.setBounds(130, 280, 100, 30);
+        }
+    }
+
     public JTextField getUsernameField() {
         return usernameField;
     }
@@ -92,6 +135,14 @@ public class AddUserPanel extends JPanel  {
 
     public JComboBox<String> getRoles() {
         return roles;
+    }
+
+    public  JComboBox<String> getDepartmentBox(){
+        return departments;
+    }
+
+    public JTextField getEmployeeRole(){
+        return employeeRole;
     }
 
     public JButton getSaveButton() {
