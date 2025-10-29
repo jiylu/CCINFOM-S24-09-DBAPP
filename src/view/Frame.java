@@ -2,6 +2,7 @@ package view;
 
 import java.awt.*;
 import javax.swing.*;
+import view.admin.AdminDashboardPanel;
 
 public class Frame extends JFrame{
     public final static String LOGIN_PANEL = "loginPanel";
@@ -53,5 +54,9 @@ public class Frame extends JFrame{
 
     public LoginPanel getLoginPanel(){
         return loginPanel;
+    }
+
+    public AdminDashboardPanel getAdminDashboardPanel(){
+        return adminDashboardPanel;
     }
 }
