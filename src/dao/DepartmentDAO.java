@@ -35,6 +35,27 @@ public class DepartmentDAO {
         }
     }
 
+    public List<String> getAllDepartmentNames(){
+        List<String> list = new ArrayList<>();
+        String query = "SELECT department_name FROM departments";
+
+        try (Statement stmt = conn.createStatement()){
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()){
+                list.add(rs.getString("department_name"));
+            }
+
+            rs.close();
+            stmt.close();
+            return list;
+            
+        } catch (SQLException e){
+            System.out.println("Error retrieving dept names");
+            return null;
+        }
+    }
+
     public Department getDepartmentByID(int departmentID) {
         String query = "SELECT department_id, department_name FROM departments WHERE department_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)){
