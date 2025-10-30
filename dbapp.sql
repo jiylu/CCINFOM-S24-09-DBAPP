@@ -2,10 +2,10 @@ CREATE SCHEMA IF NOT EXISTS ticketing_system;
 
 USE ticketing_system;
 
-DROP TABLE IF EXISTS Technicians;
-DROP TABLE IF EXISTS Employees;
-DROP TABLE IF EXISTS Departments;
-DROP TABLE IF EXISTS Users;
+-- DROP TABLE IF EXISTS Technicians;
+-- DROP TABLE IF EXISTS Employees;
+-- DROP TABLE IF EXISTS Departments;
+-- DROP TABLE IF EXISTS Users;
 
 -- Table for centralized login credentials (Technician, Employee, Admin) 
 -- UID starts at 10000.
@@ -56,7 +56,7 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS Employees (
 	emp_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL, 
+    user_id INT NOT NULL UNIQUE, 
     last_name VARCHAR(50) NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     dept_id INT NOT NULL,
@@ -82,7 +82,7 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS Technicians ( 
 	technician_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
+    user_id INT NOT NULL UNIQUE,
     tech_lastName VARCHAR(50) NOT NULL,
     tech_firstName VARCHAR(50) NOT NULL,
     has_active_ticket BOOLEAN DEFAULT FALSE,
