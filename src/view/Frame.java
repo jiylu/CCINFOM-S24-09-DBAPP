@@ -60,8 +60,4 @@ public class Frame extends JFrame{
     public AdminDashboardPanel getAdminDashboardPanel(){
         return adminDashboardPanel;
     }
-
-    public TechnicianDashboardPanel getTechnicianDashboardPanel(){
-        return technicianDashboardPanel;
-    }
 }

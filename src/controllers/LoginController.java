@@ -46,7 +46,7 @@ public class LoginController {
                 JOptionPane.showMessageDialog(null, "Hello!");
                 switch (u.getRole()){
                     case User.Role.ADMIN -> redirectToAdminDashboard(u); 
-                    case User.Role.EMPLOYEE -> System.out.println("Employee"); // frame.showPanel(Frame.EMP_DASHBOARD)
+                    case User.Role.EMPLOYEE -> redirectToEmployeeDashboard(u);
                     case User.Role.TECHNICIAN -> redirectToTechDashboard(u);
                 }
             }
@@ -71,6 +71,11 @@ public class LoginController {
         }
 
         return user;
+    }
+
+    private void redirectToEmployeeDashboard(User user){
+        EmployeeDashboardController empDashboardController = new EmployeeDashboardController(user, frame, userDAO, empDAO);
+        empDashboardController.init();
     }
 
     private void redirectToAdminDashboard(User user){
