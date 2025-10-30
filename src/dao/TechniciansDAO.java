@@ -38,4 +38,22 @@ public class TechniciansDAO {
             return null;
         }
     }
+
+    public void insertTechnician(Technicians tech){
+        String query = "INSERT INTO Technicians(user_id, tech_lastName, tech_firstName, hasActiveTicket) VALUES (?, ?, ?, ?)";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            // Bind the values to the prepared statement
+            pstmt.setInt(1, tech.getUser_ID());          // Set user_id
+            pstmt.setString(2, tech.getTech_lastName()); // Set tech_lastName
+            pstmt.setString(3, tech.getTech_firstName()); // Set tech_firstName
+            pstmt.setBoolean(4, tech.isHasActiveTicket()); // Set hasActiveTicket
+
+            // Execute the insertion query
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();  // Handle exceptions (logging or rethrow as needed)
+        }
+    }
 }
