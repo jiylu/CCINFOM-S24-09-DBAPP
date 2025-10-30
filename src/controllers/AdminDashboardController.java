@@ -4,6 +4,7 @@ import dao.DepartmentDAO;
 import dao.EmployeesDAO;
 import dao.TechniciansDAO;
 import dao.UserDAO;
+import javax.swing.JOptionPane;
 import models.User;
 import view.Frame;
 import view.admin.AddUserPanel;
@@ -38,6 +39,7 @@ public class AdminDashboardController {
     
     private void initListeners(){
         addUserDropBoxFunctionality();
+        saveUserButtonFunctionality();
 
         panel.getAddUserButton().addActionListener(e->{
             panel.showPanel(AdminDashboardPanel.ADD_USER);
@@ -55,6 +57,12 @@ public class AdminDashboardController {
                 addUserPanel.revert();
             }
 
+        });
+    }
+
+    private void saveUserButtonFunctionality(){
+        addUserPanel.getSaveButton().addActionListener(e->{
+            JOptionPane.showMessageDialog(null, "test");
         });
     }
 }
