@@ -15,7 +15,7 @@ public class UserDAO {
         this.conn = conn;
     }
 
-    public void insertUser(User user){
+    public Integer insertUser(User user){
         String query = "INSERT INTO Users (username, password, role) VALUES (?, ?, ?)";
         
         try (PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
@@ -27,7 +27,9 @@ public class UserDAO {
             ResultSet rs = ps.getGeneratedKeys();
             
             if (rs.next()){
-                user.setUserID(rs.getInt(1));
+                int userID = rs.getInt(1);
+                user.setUserID(userID);
+                return userID;       
             } 
 
             rs.close();
@@ -38,6 +40,8 @@ public class UserDAO {
             System.out.println("Failed to insert " + user.getUsername() + " to users table.");
             e.printStackTrace();
         }
+
+        return null;
     }
 
     public User getUserByLogin(String username, String password){
@@ -68,6 +72,52 @@ public class UserDAO {
         } catch (SQLException e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public User getUserByUsername(String username){
+        String query = "SELECT * FROM Users WHERE username = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, username);
+
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                
+                if (!rs.getBoolean(5)){
+                    return null;
+                }
+
+                return new User(
+                    rs.getInt(1), 
+                    username, 
+                    rs.getString(3), 
+                    Role.valueOf(rs.getString(4).toUpperCase()));
+            }
+
+            rs.close();
+            ps.close();
+            return null;
+        } catch (SQLException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void deleteUser(int userID) {
+        String query = "DELETE FROM Users WHERE user_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setInt(1, userID);
+            int rowsAffected = ps.executeUpdate(); // ✅ use executeUpdate()
+            
+            if (rowsAffected > 0) {
+                System.out.println("User with ID " + userID + " deleted successfully.");
+            } else {
+                System.out.println("No user found with ID " + userID + ".");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

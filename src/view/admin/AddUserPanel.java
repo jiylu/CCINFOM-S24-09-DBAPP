@@ -145,6 +145,14 @@ public class AddUserPanel extends JPanel {
         return employeeRole;
     }
 
+    public JTextField getFirstNameField() {
+        return firstNameField;
+    }
+
+    public JTextField getLastNameField() {
+        return lastNameField;
+    }
+
     public JButton getSaveButton() {
         return saveButton;
     }
