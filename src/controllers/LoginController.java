@@ -1,9 +1,7 @@
 package controllers;
 
-import dao.DepartmentDAO;
-import dao.EmployeesDAO;
-import dao.TechniciansDAO;
-import dao.UserDAO;
+import dao.*;
+
 import java.sql.Connection;
 import javax.swing.*;
 import models.User;
@@ -16,6 +14,7 @@ public class LoginController {
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
     private DepartmentDAO deptDAO;
+    private CategoriesDAO categoriesDAO;
     private LoginPanel panel;
     private JButton loginButton;
 
@@ -37,14 +36,14 @@ public class LoginController {
         this.empDAO = new EmployeesDAO(conn);
         this.techDAO = new TechniciansDAO(conn);
         this.deptDAO = new DepartmentDAO(conn);
-
+        this.categoriesDAO = new CategoriesDAO(conn);
     }
 
     private void initListener(){
         loginButton.addActionListener(e->{
             User u = loginUser();
             if (u != null){
-                JOptionPane.showMessageDialog(null, "Hellow");
+                JOptionPane.showMessageDialog(null, "Hello!");
                 switch (u.getRole()){
                     case User.Role.ADMIN -> redirectToAdminDashboard(u); 
                     case User.Role.EMPLOYEE -> System.out.println("Employee"); // frame.showPanel(Frame.EMP_DASHBOARD)
@@ -80,7 +79,7 @@ public class LoginController {
     }
 
     private void redirectToTechDashboard(User user){
-        TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, userDAO, techDAO);
+        TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, userDAO, techDAO, categoriesDAO);
         technicianDashboardController.init();
     }
 }
