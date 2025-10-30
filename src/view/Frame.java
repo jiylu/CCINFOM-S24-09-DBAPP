@@ -2,12 +2,16 @@ package view;
 
 import java.awt.*;
 import javax.swing.*;
+
+import controllers.EmployeeDashboardController;
 import view.admin.AdminDashboardPanel;
+import view.employee.EmployeeDashboardPanel;
 import view.technician.TechnicianDashboardPanel;
 
 public class Frame extends JFrame{
     public final static String LOGIN_PANEL = "loginPanel";
     public final static String ADMIN_PANEL = "adminPanel";
+    public final static String EMPLOYEE_PANEL = "employeePanel";
     public final static String TECHNICIAN_PANEL = "technicianPanel";
 
     private CardLayout cardLayout;
@@ -15,6 +19,7 @@ public class Frame extends JFrame{
     private LoginPanel loginPanel;
     private AdminDashboardPanel adminDashboardPanel;
     private TechnicianDashboardPanel technicianDashboardPanel;
+    private EmployeeDashboardPanel employeeDashboardPanel;
 
     public Frame(){
         super("IT Helpdesk Ticketing System");
@@ -36,6 +41,7 @@ public class Frame extends JFrame{
         loginPanel = new LoginPanel();
         adminDashboardPanel = new AdminDashboardPanel();
         technicianDashboardPanel = new TechnicianDashboardPanel();
+        employeeDashboardPanel = new EmployeeDashboardPanel();
     }
 
     private void setupCardLayout(){
@@ -45,6 +51,7 @@ public class Frame extends JFrame{
         cardPanel.add(loginPanel, LOGIN_PANEL);
         cardPanel.add(adminDashboardPanel, ADMIN_PANEL);
         cardPanel.add(technicianDashboardPanel, TECHNICIAN_PANEL);
+        cardPanel.add(employeeDashboardPanel, EMPLOYEE_PANEL);
 
         add(cardPanel);
     }
@@ -59,5 +66,13 @@ public class Frame extends JFrame{
 
     public AdminDashboardPanel getAdminDashboardPanel(){
         return adminDashboardPanel;
+    }
+
+    public TechnicianDashboardPanel getTechnicianDashboardPanel(){
+        return technicianDashboardPanel;
+    }
+
+    public EmployeeDashboardPanel getEmployeeDashboardPanel(){
+        return employeeDashboardPanel;
     }
 }
