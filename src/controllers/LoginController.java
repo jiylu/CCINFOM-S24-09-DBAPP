@@ -45,9 +45,9 @@ public class LoginController {
             if (u != null){
                 JOptionPane.showMessageDialog(null, "Hello!");
                 switch (u.getRole()){
-                    case User.Role.ADMIN -> redirectToAdminDashboard(u); 
-                    case User.Role.EMPLOYEE -> redirectToEmployeeDashboard(u);
-                    case User.Role.TECHNICIAN -> redirectToTechDashboard(u);
+                    case ADMIN -> redirectToAdminDashboard(u); 
+                    case EMPLOYEE -> redirectToEmployeeDashboard(u);
+                    case TECHNICIAN -> redirectToTechDashboard(u);
                 }
             }
         });

@@ -64,10 +64,18 @@ public class TechnicianDashboardPanel extends JPanel {
         cancelTicketButton = new JButton("Cancel Ticket");
         cancelTicketButton.setBounds(10, 180, 200, 40);
         add(cancelTicketButton);
+        cancelTicketButton.addActionListener(e -> {
+            CancelTicket cancelTicketFrame = new CancelTicket();
+            cancelTicketFrame.setVisible(true);
+        });
 
         viewTicketHistoryButton = new JButton("View Ticket History");
         viewTicketHistoryButton.setBounds(10, 230, 200, 40);
         add(viewTicketHistoryButton);
+        viewTicketHistoryButton.addActionListener(e -> {
+            TicketHistory ticketHistoryFrame = new TicketHistory();
+            ticketHistoryFrame.setVisible(true);
+        });
     }
 
     public JLabel getTitleLabel(){
