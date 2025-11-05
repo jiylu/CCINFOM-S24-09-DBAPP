@@ -32,7 +32,7 @@ public class Technicians {
     }
 
     public boolean isHasActiveTicket(){
-        return isHasActiveTicket();
+        return hasActiveTicket;
     }
 
     public void setHasActiveTicket(boolean hasActiveTicket){

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import models.User;
 import models.User.Role;
 
@@ -15,9 +17,35 @@ public class UserDAO {
         this.conn = conn;
     }
 
+
+    public List<User> getAllUsers(){
+        List<User> list = new ArrayList<>();
+        String query = "SELECT * FROM Users";
+
+        try (Statement stmt = conn.createStatement()){
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()){
+                list.add(new User(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    User.Role.valueOf(rs.getString(4).toUpperCase())
+                ));
+            }
+
+            rs.close();
+            stmt.close();
+            return list;
+        } catch (Exception e) {
+            System.out.println("Error retrieving all users");
+            return null;
+        }
+    }
+
     public Integer insertUser(User user){
         String query = "INSERT INTO Users (username, password, role) VALUES (?, ?, ?)";
-        
+
         try (PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
             ps.setString(1, user.getUsername());
             ps.setString(2, user.getPassword());

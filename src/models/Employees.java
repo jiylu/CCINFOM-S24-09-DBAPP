@@ -9,14 +9,13 @@ public class Employees {
     private String role;
     private boolean is_active;
 
-    public Employees(int emp_id, int user_id, String last_name, String first_name, int dept_id, String role, boolean is_active) {
+    public Employees(int emp_id, int user_id, String last_name, String first_name, int dept_id, String role) {
         this.emp_id = emp_id;
         this.user_id = user_id;
         this.last_name = last_name;
         this.first_name = first_name;
         this.dept_id = dept_id;
         this.role = role;
-        this.is_active = is_active;
     }
 
 // getters
@@ -44,9 +43,6 @@ public class Employees {
         return role;
     }
 
-    public boolean isActive() {
-        return is_active;
-    }
 
 // setters for update
 
@@ -72,10 +68,6 @@ public class Employees {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public void setIsActive(boolean is_active) {
-        this.is_active = is_active;
     }
 
 }

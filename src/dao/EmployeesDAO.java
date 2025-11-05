@@ -15,7 +15,7 @@ public class EmployeesDAO {
 
     // CREATE 
     public void insertEmployee(Employees emp) {
-        String query = "INSERT INTO employees (user_id, last_name, first_name, dept_id, role, is_active) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO employees (user_id, last_name, first_name, dept_id, role) VALUES (?, ?, ?, ?, ?)";
         
         try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
             pstmt.setInt(1, emp.getUserID());
@@ -23,7 +23,6 @@ public class EmployeesDAO {
             pstmt.setString(3, emp.getFirstName());
             pstmt.setInt(4, emp.getDeptID());
             pstmt.setString(5, emp.getRole());
-            pstmt.setBoolean(6, emp.isActive());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -58,8 +57,7 @@ public class EmployeesDAO {
                     rs.getString("last_name"),
                     rs.getString("first_name"),
                     rs.getInt("dept_id"),
-                    rs.getString("role"),
-                    rs.getBoolean("is_active")
+                    rs.getString("role")
                 ));
             }
 

@@ -1,52 +1,40 @@
-package controllers;
+package controllers.admin;
 
 import dao.DepartmentDAO;
 import dao.EmployeesDAO;
 import dao.TechniciansDAO;
 import dao.UserDAO;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
 import models.Employees;
 import models.User;
-import view.Frame;
 import view.admin.AddUserPanel;
-import view.admin.AdminDashboardPanel;
 
-public class AdminDashboardController {
-    private User user;
-    private Frame frame;
-    private AdminDashboardPanel panel;
-    private AddUserPanel addUserPanel;
+public class AddUserController {
     private UserDAO userDAO;
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
     private DepartmentDAO deptDAO;
-
-    public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
-        this.user = user;
-        this.frame = frame;
-        this.panel = frame.getAdminDashboardPanel();
-        this.addUserPanel = panel.getAddUserPanel(); 
+    private AddUserPanel addUserPanel;
+    public AddUserController(UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
         this.userDAO = userDAO;
         this.empDAO = empDAO;
         this.techDAO = techDAO;
         this.deptDAO = deptDAO;
+        this.addUserPanel = new AddUserPanel();
     }
 
     public void init(){
-        frame.showPanel(Frame.ADMIN_PANEL);
-        initListeners();
+        addUserPanel.showPanel();
+        addUserPanel.reset();
     }
 
-    
-    private void initListeners(){
-        addUserDropBoxFunctionality();
+    public void initListeners(){
+        dropBoxFunctionality();
         saveUserFunctionality();
-        panel.getAddUserButton().addActionListener(e->{
-            panel.showPanel(AdminDashboardPanel.ADD_USER);
-        });
     }
 
-    private void addUserDropBoxFunctionality(){
+    private void dropBoxFunctionality(){
         addUserPanel.getRoles().addActionListener(e->{
             String selectedRole = (String) addUserPanel.getRoles().getSelectedItem();
             String[] departmentList = deptDAO.getAllDepartmentNames().toArray(new String[0]);
@@ -59,6 +47,7 @@ public class AdminDashboardController {
 
         });
     }
+
 
     private void saveUserFunctionality(){
         addUserPanel.getSaveButton().addActionListener(e->{
@@ -123,7 +112,7 @@ public class AdminDashboardController {
         String firstName = addUserPanel.getFirstNameField().getText();
 
         if (selectedRole.contentEquals("Admin")){
-            Employees emp = new Employees(0, userID, lastName, firstName, 7, "Admin", true);
+            Employees emp = new Employees(0, userID, lastName, firstName, 7, "Admin");
             empDAO.insertEmployee(emp);
             JOptionPane.showMessageDialog(null, "Successfully inserted " + firstName + " " + lastName);
             return;
@@ -132,7 +121,6 @@ public class AdminDashboardController {
         if (addUserPanel.getEmployeeRole().getText() == null || addUserPanel.getEmployeeRole().getText().isBlank()){
             // delete because the user is in the users table but not in the employees table.
             userDAO.deleteUser(userID);
-
             JOptionPane.showMessageDialog(null, "Employee role must not be blank.");
             return;
         }
@@ -140,7 +128,7 @@ public class AdminDashboardController {
         String department = (String) addUserPanel.getDepartmentBox().getSelectedItem();
         Integer departmentID = deptDAO.getDepartmentIDByName(department);
         String role = addUserPanel.getEmployeeRole().getText().trim();
-        Employees emp = new Employees(0, userID, lastName, firstName, departmentID, role, true);
+        Employees emp = new Employees(0, userID, lastName, firstName, departmentID, role);
 
         empDAO.insertEmployee(emp);
         JOptionPane.showMessageDialog(null, "Successfully inserted " + firstName + " " + lastName);
