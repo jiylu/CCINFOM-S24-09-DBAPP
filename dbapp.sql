@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS Tickets (
     category_id INT NOT NULL,
     department_id INT NOT NULL,
     employee_id INT NOT NULL,
-    technician_id INT,
+    technician_id INT NOT NULL,
     creation_date DATETIME, 
     resolve_date DATETIME,
     status ENUM('Active', 'Resolved', 'Cancelled') NOT NULL,
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS TicketLogs (
     ticket_id INT NOT NULL,
     technician_id INT NOT NULL,
     log_date DATETIME NOT NULL,
-    log_activity ENUM('Ongoing Ticket', 'Reassigned Ticket', 'Resolved Ticket', 'Cancelled Ticket') NOT NULL,
+    log_activity ENUM('Enqueued', 'Ongoing', 'Reassigned Ticket', 'Resolved Ticket', 'Cancelled Ticket') NOT NULL,
     CONSTRAINT fk_ticket_ticketLogs FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
     CONSTRAINT fk_technician_ticketLogs FOREIGN KEY (technician_id) REFERENCES Technicians(technician_id)
 )AUTO_INCREMENT = 50000; 
