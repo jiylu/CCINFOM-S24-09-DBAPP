@@ -72,7 +72,7 @@ public class ViewUsersPanel extends JPanel{
 
         // extrazct user accounts that are employees, map by userid
         Map<Integer, User> userMap = users.stream()
-                                        .filter(u -> u.getRole() == User.Role.EMPLOYEE)
+                                        .filter(u -> u.getRole() == User.Role.EMPLOYEE || u.getRole() == User.Role.ADMIN)
                                         .collect(Collectors.toMap(User::getUserID, u -> u));
 
         for (Employees e : employeeList) {

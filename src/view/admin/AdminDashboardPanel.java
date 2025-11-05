@@ -6,7 +6,6 @@ import javax.swing.*;
 
 public class AdminDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
-    public final static String ADD_USER = "addUser";
     public final static String VIEW_USERS = "viewUsers";
 
     private JLabel titleLabel;
@@ -28,7 +27,6 @@ public class AdminDashboardPanel extends JPanel {
     }
 
     private void initPanels(){
-        addUserPanel = new AddUserPanel();
         viewUsersPanel = new ViewUsersPanel();
     }
 
@@ -39,7 +37,6 @@ public class AdminDashboardPanel extends JPanel {
         cardPanel.setBounds(10, 75, 760, 460);
         
         cardPanel.add(emptyPanel, EMPTY_PANEL);
-        cardPanel.add(addUserPanel, ADD_USER);
         cardPanel.add(viewUsersPanel, VIEW_USERS);
         add(cardPanel);
     }

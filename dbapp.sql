@@ -2,10 +2,10 @@ CREATE SCHEMA IF NOT EXISTS ticketing_system;
 
 USE ticketing_system;
 
--- DROP TABLE IF EXISTS Technicians;
--- DROP TABLE IF EXISTS Employees;
--- DROP TABLE IF EXISTS Departments;
--- DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Technicians;
+DROP TABLE IF EXISTS Employees;
+DROP TABLE IF EXISTS Departments;
+DROP TABLE IF EXISTS Users;
 
 -- Table for centralized login credentials (Technician, Employee, Admin) 
 -- UID starts at 10000.
@@ -37,8 +37,8 @@ VALUES
 
 -- Departments table
 CREATE TABLE IF NOT EXISTS Departments (
-	department_id INT AUTO_INCREMENT PRIMARY KEY,
-	department_name VARCHAR(50) NOT NULL
+    department_id INT AUTO_INCREMENT PRIMARY KEY,
+    department_name VARCHAR(40) NOT NULL UNIQUE
 );
 
 INSERT IGNORE INTO Departments (department_name)
