@@ -2,7 +2,9 @@ package controllers;
 
 import dao.CategoriesDAO;
 import dao.TechniciansDAO;
+import dao.TicketsDAO;
 import dao.UserDAO;
+import models.Tickets;
 import models.User;
 import view.Frame;
 import view.technician.ResolveTicketTechnicianPanel;
@@ -14,40 +16,37 @@ public class TechnicianDashboardController {
     private Frame frame;
     private TechnicianDashboardPanel panel;
     private ResolveTicketTechnicianPanel resolveTicketTechnicianPanel;
-    private UserDAO userDAO;
-    private TechniciansDAO techniciansDAO;
-    private CategoriesDAO categoriesDAO;
+    private TicketsDAO ticketsDAO;
 
-    public TechnicianDashboardController(User user, Frame frame, UserDAO userDAO, TechniciansDAO techniciansDAO, CategoriesDAO categoriesDAO){
+    public TechnicianDashboardController(User user, Frame frame, TicketsDAO ticketsDAO){
         this.user = user;
         this.frame = frame;
         this.panel = frame.getTechnicianDashboardPanel();
         this.resolveTicketTechnicianPanel = panel.getResolveTicketTechnicianPanel();
-        this.userDAO = userDAO;
-        this.techniciansDAO = techniciansDAO;
-        this.categoriesDAO = categoriesDAO;
+        this.ticketsDAO = ticketsDAO;
     }
 
     public void init(){
         frame.showPanel(Frame.TECHNICIAN_PANEL);
         initListeners();
+        loadAssignedTickets();
     }
 
     private void initListeners(){
         panel.getResolveTicketButton().addActionListener(e -> {
-            resolveTicketCategoriesFunctionality();
+            loadAssignedTickets();
             panel.showPanel(TechnicianDashboardPanel.RESOLVE_TICKET);
         });
     }
 
-    private void resolveTicketCategoriesFunctionality() {
+    private void loadAssignedTickets() {
         try {
-            List<String> categoryList = categoriesDAO.getAllCategoryNames();
+            int technicianId = user.getUserID();
 
-            if (categoryList != null) {
-                String[] categoryArray = categoryList.toArray(new String[0]);
-                resolveTicketTechnicianPanel.getCategories()
-                        .setModel(new javax.swing.DefaultComboBoxModel<>(categoryArray));
+            List<Tickets> tickets = ticketsDAO.getTicketsByTechnician(technicianId);
+
+            if (tickets != null) {
+//                resolveTicketTechnicianPanel.updateTicketTable(tickets);      // To be updated
             }
 
         } catch (Exception ex) {

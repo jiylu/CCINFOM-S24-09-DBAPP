@@ -8,8 +8,9 @@ public class Tickets {
     private int technician_id;
     private String creation_date;
     private String resolve_date;
+    private String status;
 
-    public Tickets(int ticket_id, int category_id, int department_id, int employee_id, int technician_id, String creation_date, String resolve_date) {
+    public Tickets(int ticket_id, int category_id, int department_id, int employee_id, int technician_id, String creation_date, String resolve_date, String status) {
         this.ticket_id = ticket_id;
         this.category_id = category_id;
         this.department_id = department_id;
@@ -17,6 +18,7 @@ public class Tickets {
         this.technician_id = technician_id;
         this.creation_date = creation_date;
         this.resolve_date = resolve_date;
+        this.status = status;
     }
     
     //getters
@@ -48,6 +50,10 @@ public class Tickets {
         return resolve_date;
     }
 
+    public String getStatus(){
+        return status;
+    }
+
     //setters
     public void setTechnician_id(int technician_id) {
         this.technician_id = technician_id;
@@ -59,5 +65,9 @@ public class Tickets {
 
     public void setResolve_date(String resolve_date) {
         this.resolve_date = resolve_date;
+    }
+
+    public void setStatus(String status){
+        this.status = status;
     }
 }

@@ -27,7 +27,8 @@ public class TicketsDAO {
                     rs.getInt("employee_id"),
                     rs.getInt("technician_id"),
                     rs.getString("creation_date"),
-                    rs.getString("resolve_date")
+                    rs.getString("resolve_date"),
+                    rs.getString("status")
                 );
                 ticketsList.add(ticket);
             }
@@ -36,6 +37,35 @@ public class TicketsDAO {
             return null;
         }
         
+        return ticketsList;
+    }
+
+    public List<Tickets> getTicketsByTechnician(int technicianId) throws SQLException {
+        List<Tickets> ticketsList = new ArrayList<>();
+
+        String query = "SELECT ticket_id, category_id, department_id, employee_id, technician_id, creation_date, resolve_date, status " +
+                "FROM Tickets WHERE technician_id = ? AND status = 'Active'";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, technicianId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Tickets ticket = new Tickets(
+                            rs.getInt("ticket_id"),
+                            rs.getInt("category_id"),
+                            rs.getInt("department_id"),
+                            rs.getInt("employee_id"),
+                            rs.getInt("technician_id"),
+                            rs.getString("creation_date"),
+                            rs.getString("resolve_date"),
+                            rs.getString("status")
+                    );
+                    ticketsList.add(ticket);
+                }
+            }
+        }
+
         return ticketsList;
     }
 }

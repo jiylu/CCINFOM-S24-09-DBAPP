@@ -6,11 +6,11 @@ import java.awt.*;
 public class ResolveTicketTechnicianPanel extends JPanel {
     private JComboBox<String> ticketsToResolve;
     private JComboBox<String> categories;
-    private JTextArea logNotes;
-    private JScrollPane logNotesScrollPane;
+    private JLabel employeeIDLabel;
+    private JLabel creationDateLabel;
+    private JLabel resolveDateLabel;
     private JComboBox<String> status;
     private JButton saveButton;
-    private JLabel resolveDateLabel;
     private JComboBox<String> monthCombo;
     private JComboBox<String> dayCombo;
     private JComboBox<String> yearCombo;
@@ -38,7 +38,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         ticketsLabel.setBounds(120,80,120,25);
         add(ticketsLabel);
 
-        ticketsToResolve = new JComboBox<>(new String[] {"Wala", "Wala", "Wala"});      // TO BE UPDATED WITH REAL TICKET NAMES
+        ticketsToResolve = new JComboBox<>(new String[] {"Wala"});      // TO BE UPDATED WITH REAL TICKET NAMES
         ticketsToResolve.setBounds(220,80,250,30);
         add(ticketsToResolve);
 
@@ -52,27 +52,18 @@ public class ResolveTicketTechnicianPanel extends JPanel {
     }
 
     private void setupEmployeeID(){ // TO BE UPDATED WITH REAL EMPLOYEE TICKET HOLDER
-        JLabel employeeIDLabel = new JLabel("Employee ID: ");
+        employeeIDLabel = new JLabel("Employee ID: ");
         employeeIDLabel.setBounds(120, 160, 120, 25);
         add(employeeIDLabel);
     }
 
     private void setupLogDetails(){
-        JLabel logNotesLabel = new JLabel("Log Notes:");
-        logNotesLabel.setBounds(120, 200, 120, 25);
-        add(logNotesLabel);
-
-        logNotes = new JTextArea();
-        logNotes.setLineWrap(true);
-        logNotes.setWrapStyleWord(true);
-
-        logNotesScrollPane = new JScrollPane(logNotes);
-        logNotesScrollPane.setBounds(220, 200, 250, 100);
-        logNotesScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        add(logNotesScrollPane);
+        creationDateLabel = new JLabel("Creation Date:");
+        creationDateLabel.setBounds(120, 200, 120, 25);
+        add(creationDateLabel);
 
         resolveDateLabel = new JLabel("Resolve Date:");
-        resolveDateLabel.setBounds(120, 310, 120, 25);
+        resolveDateLabel.setBounds(120, 240, 120, 25);
         add(resolveDateLabel);
 
         // Month dropdown (01-12)
@@ -81,7 +72,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             months[i] = String.format("%02d", i + 1);
         }
         monthCombo = new JComboBox<>(months);
-        monthCombo.setBounds(220, 310, 60, 30);
+        monthCombo.setBounds(220, 240, 60, 30);
         monthCombo.setEnabled(false);
         add(monthCombo);
 
@@ -91,7 +82,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             days[i] = String.format("%02d", i + 1);
         }
         dayCombo = new JComboBox<>(days);
-        dayCombo.setBounds(290, 310, 60, 30);
+        dayCombo.setBounds(290, 240, 60, 30);
         dayCombo.setEnabled(false);
         add(dayCombo);
 
@@ -101,24 +92,24 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             years[i] = String.valueOf(2020 + i);
         }
         yearCombo = new JComboBox<>(years);
-        yearCombo.setBounds(360, 310, 80, 30);
+        yearCombo.setBounds(360, 240, 80, 30);
         yearCombo.setEnabled(false);
         add(yearCombo);
     }
 
     private void setupStatus(){
         JLabel statusLabel = new JLabel("Ticket Status:");
-        statusLabel.setBounds(120, 350, 120, 25);
+        statusLabel.setBounds(120, 280, 120, 25);
         add(statusLabel);
 
-        status = new JComboBox<>(new String[]{"Active", "In Progress", "Closed"});
-        status.setBounds(220, 350, 250, 30);
+        status = new JComboBox<>(new String[]{"Active", "Resolved", "Cancelled"});
+        status.setBounds(220, 280, 250, 30);
         add(status);
     }
 
     private void setupStatusListener(){
         status.addActionListener(e -> {
-            boolean isClosed = "Closed".equals(status.getSelectedItem());
+            boolean isClosed = "Resolved".equals(status.getSelectedItem()) || "Cancelled".equals(status.getSelectedItem());
             monthCombo.setEnabled(isClosed);
             dayCombo.setEnabled(isClosed);
             yearCombo.setEnabled(isClosed);
@@ -129,12 +120,8 @@ public class ResolveTicketTechnicianPanel extends JPanel {
 
     private void setupButton(){
         saveButton = new JButton("Save");
-        saveButton.setBounds(370, 400, 100, 35);
+        saveButton.setBounds(370, 330, 100, 35);
         add(saveButton);
-    }
-
-    public JTextArea getLogNotes(){
-        return logNotes;
     }
 
     public String getResolveDate() {
