@@ -37,7 +37,7 @@ public class AddUserController {
     private void dropBoxFunctionality(){
         addUserPanel.getRoles().addActionListener(e->{
             String selectedRole = (String) addUserPanel.getRoles().getSelectedItem();
-            String[] departmentList = deptDAO.getAllDepartmentNames().toArray(new String[0]);
+            String[] departmentList = deptDAO.getAllDepartmentNames(true).toArray(new String[0]);
             
             if (selectedRole.contentEquals("Employee")){
                 addUserPanel.transformToEmployeeFields(departmentList);

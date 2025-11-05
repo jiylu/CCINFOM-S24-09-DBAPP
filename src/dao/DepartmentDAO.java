@@ -35,9 +35,14 @@ public class DepartmentDAO {
         }
     }
 
-    public List<String> getAllDepartmentNames(){
+    public List<String> getAllDepartmentNames(boolean excludeAdministration){
         List<String> list = new ArrayList<>();
-        String query = "SELECT department_name FROM departments";
+        String query = null;
+        if (excludeAdministration){
+            query = "SELECT department_name FROM departments WHERE department_name != 'Administration'";
+        } else {
+            query = "SELECT department_name FROM departments";
+        }
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
