@@ -86,7 +86,7 @@ public class LoginController {
     }
 
     private void redirectToTechDashboard(User user){
-        TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, ticketsDAO);
+        TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, ticketsDAO, categoriesDAO);
         technicianDashboardController.init();
     }
 }

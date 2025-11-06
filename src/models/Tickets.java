@@ -1,5 +1,7 @@
 package models;
 
+import java.util.List;
+
 public class Tickets {
     private int ticket_id;
     private int category_id;
@@ -69,5 +71,9 @@ public class Tickets {
 
     public void setStatus(String status){
         this.status = status;
+    }
+
+    public void setCategory_id(int category_id){
+        this.category_id = category_id;
     }
 }

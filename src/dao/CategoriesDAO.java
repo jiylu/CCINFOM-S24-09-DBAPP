@@ -56,4 +56,28 @@ public class CategoriesDAO {
             return null;
         }
     }
+
+    public List<Integer> getAllCategoryIds() throws SQLException {
+        List<Integer> ids = new ArrayList<>();
+        String query = "SELECT category_id FROM Categories";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            ids.add(rs.getInt("category_id"));
+        }
+        return ids;
+    }
+
+    public String getCategoryNameById(int id) throws SQLException {
+        String query = "SELECT category_name FROM Categories WHERE category_id = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getString("category_name");
+        }
+        return null;
+    }
 }

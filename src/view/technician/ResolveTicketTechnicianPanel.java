@@ -1,11 +1,14 @@
 package view.technician;
 
+import models.Tickets;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 public class ResolveTicketTechnicianPanel extends JPanel {
     private JComboBox<String> ticketsToResolve;
-    private JComboBox<String> categories;
+    private JComboBox<CategoryItem> categories;
     private JLabel employeeIDLabel;
     private JLabel creationDateLabel;
     private JLabel resolveDateLabel;
@@ -14,6 +17,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
     private JComboBox<String> monthCombo;
     private JComboBox<String> dayCombo;
     private JComboBox<String> yearCombo;
+    private List<Tickets> ticketsList;
 
     public ResolveTicketTechnicianPanel(){
         setLayout(null);
@@ -38,7 +42,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         ticketsLabel.setBounds(120,80,120,25);
         add(ticketsLabel);
 
-        ticketsToResolve = new JComboBox<>(new String[] {"Wala"});      // TO BE UPDATED WITH REAL TICKET NAMES
+        ticketsToResolve = new JComboBox<>(); // Filled dynamically by controller
         ticketsToResolve.setBounds(220,80,250,30);
         add(ticketsToResolve);
 
@@ -46,10 +50,11 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         categoryLabel.setBounds(120, 120, 120, 25);
         add(categoryLabel);
 
-        categories = new JComboBox<>();
+        categories = new JComboBox<CategoryItem>(); // Uses CategoryItem with ID + name
         categories.setBounds(220, 120, 250, 30);
         add(categories);
     }
+
 
     private void setupEmployeeID(){ // TO BE UPDATED WITH REAL EMPLOYEE TICKET HOLDER
         employeeIDLabel = new JLabel("Employee ID: ");
@@ -115,6 +120,15 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             yearCombo.setEnabled(isClosed);
             resolveDateLabel.setEnabled(isClosed);
             resolveDateLabel.setEnabled(isClosed);
+
+            if(isClosed){
+                java.time.LocalDate today = java.time.LocalDate.now();
+
+                // Auto-set Month, Day, Year based on current date
+                monthCombo.setSelectedItem(String.format("%02d", today.getMonthValue()));
+                dayCombo.setSelectedItem(String.format("%02d", today.getDayOfMonth()));
+                yearCombo.setSelectedItem(String.valueOf(today.getYear()));
+            }
         });
     }
 
@@ -137,11 +151,47 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         return ticketsToResolve;
     }
 
-    public JComboBox<String> getCategories(){
+    public JComboBox<CategoryItem> getCategories(){
         return categories;
     }
 
     public JComboBox<String> getStatus(){
         return status;
+    }
+
+    public JLabel getEmployeeIDLabel() {
+        return employeeIDLabel;
+    }
+
+    public JLabel getCreationDateLabel() {
+        return creationDateLabel;
+    }
+
+    public JButton getSaveButton() {
+        return saveButton;
+    }
+
+    public JComboBox<String> getDayCombo() {
+        return dayCombo;
+    }
+
+    public JComboBox<String> getMonthCombo() {
+        return monthCombo;
+    }
+
+    public JComboBox<String> getYearCombo() {
+        return yearCombo;
+    }
+
+    public List<Tickets> getTicketsList() {
+        return ticketsList;
+    }
+
+    public void setCategory(String category) {
+        categories.setSelectedItem(category);
+    }
+
+    public void setTicketsList(List<Tickets> ticketsList){
+        this.ticketsList = ticketsList;
     }
 }

@@ -68,4 +68,21 @@ public class TicketsDAO {
 
         return ticketsList;
     }
+
+    public boolean updateTicket(Tickets ticket) {
+        String sql = "UPDATE tickets SET category_id = ?, status = ?, resolve_date = ? WHERE ticket_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, ticket.getCategory_id());
+            stmt.setString(2, ticket.getStatus());
+            stmt.setString(3, ticket.getResolve_date());
+            stmt.setInt(4, ticket.getTicket_id());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
