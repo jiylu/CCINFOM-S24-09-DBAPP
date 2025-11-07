@@ -87,7 +87,6 @@ CREATE TABLE IF NOT EXISTS Technicians (
     user_id INT NOT NULL UNIQUE,
     tech_lastName VARCHAR(50) NOT NULL,
     tech_firstName VARCHAR(50) NOT NULL,
-    has_active_ticket BOOLEAN DEFAULT FALSE,
     CONSTRAINT fk_technician_user FOREIGN KEY (user_id) REFERENCES Users(user_id)
 )AUTO_INCREMENT = 30000;
 
