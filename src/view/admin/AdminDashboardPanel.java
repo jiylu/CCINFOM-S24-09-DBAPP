@@ -16,7 +16,7 @@ public class AdminDashboardPanel extends JPanel {
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private AddUserPanel addUserPanel;
-    private ViewUsersPanel viewUsersPanel;
+    private UserManagementPanel viewUsersPanel;
 
     public AdminDashboardPanel(){
         setLayout(null);
@@ -27,7 +27,7 @@ public class AdminDashboardPanel extends JPanel {
     }
 
     private void initPanels(){
-        viewUsersPanel = new ViewUsersPanel();
+        viewUsersPanel = new UserManagementPanel();
     }
 
     private void setupCardLayout(){
@@ -54,8 +54,8 @@ public class AdminDashboardPanel extends JPanel {
     }
 
     private void setupButtons(){
-        viewUsersButton = new JButton("View Users");
-        viewUsersButton.setBounds(10, 60, 100, 25);
+        viewUsersButton = new JButton("Manage Users");
+        viewUsersButton.setBounds(10, 60, 150, 25);
         add(viewUsersButton);
 
         // editUserButton = new JButton("Edit User");
@@ -83,7 +83,7 @@ public class AdminDashboardPanel extends JPanel {
     //     return deleteUserButton;
     // }
 
-    public ViewUsersPanel getViewUsersPanel(){
+    public UserManagementPanel getViewUsersPanel(){
         return viewUsersPanel;
     }
 

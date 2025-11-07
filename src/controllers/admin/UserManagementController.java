@@ -3,14 +3,17 @@ package controllers.admin;
 import dao.*;
 import java.util.List;
 
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
 import view.admin.AddUserPanel;
 import view.admin.AdminDashboardPanel;
-import view.admin.ViewUsersPanel;
+import view.admin.UserManagementPanel;
 import models.Employees;
 import models.Technicians;
 import models.User;
-public class ViewUsersController {
-    private ViewUsersPanel panel;    
+public class UserManagementController {
+    private UserManagementPanel panel;    
     private UserDAO userDAO;
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
@@ -19,7 +22,7 @@ public class ViewUsersController {
     private AddUserPanel addUserPanel;
     private AddUserController addUserController;
 
-    public ViewUsersController(ViewUsersPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
+    public UserManagementController(UserManagementPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
         this.panel = panel;
         this.userDAO = userDAO;
         this.empDAO = empDAO;
@@ -36,6 +39,7 @@ public class ViewUsersController {
         addUserController.initListeners();
         initAddUsers();
         initViewEmployees();
+        initViewEmpByDepartment();
         initViewTechnicians();
     }
 
@@ -50,14 +54,31 @@ public class ViewUsersController {
             List<Employees> empList = empDAO.getAllEmployees();
             List<User> userList = userDAO.getAllUsers();
             panel.setupEmployeesTable(empList, userList); 
+            panel.shift();
         });
     }
 
+    private void initViewEmpByDepartment(){
+        panel.getViewByDepartment().addActionListener(e->{
+            JComboBox<String> comboBox = new JComboBox<>(deptDAO.getAllDepartmentNames().toArray(new String[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Department", JOptionPane.OK_CANCEL_OPTION);
+            
+            if (res == JOptionPane.OK_OPTION){
+                String selectedDept = (String) comboBox.getSelectedItem();
+                int deptID = deptDAO.getDepartmentIDByName(selectedDept);
+                List<Employees> empList = empDAO.getEmployeesByDepartment(deptID);
+                List<User> userList = userDAO.getAllUsers();
+                panel.setupEmployeesTable(empList, userList); 
+            }
+        });
+    }
+    
     private void initViewTechnicians(){
         panel.getViewTechnicians().addActionListener(e->{
             List<Technicians> techList = techDAO.getAllTechnicians();
             List<User> userList = userDAO.getAllUsers();
             panel.setupTechniciansTable(techList, userList);
+            panel.revert();
         });
     }
 }

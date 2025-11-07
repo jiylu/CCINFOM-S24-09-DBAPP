@@ -40,7 +40,7 @@ public class TechniciansDAO {
     }
 
     public void insertTechnician(Technicians tech){
-        String query = "INSERT INTO Technicians(user_id, tech_lastName, tech_firstName, hasActiveTicket) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO Technicians(user_id, tech_lastName, tech_firstName, has_active_ticket) VALUES (?, ?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
             // Bind the values to the prepared statement

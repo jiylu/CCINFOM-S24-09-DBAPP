@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import models.Employees;
 import models.User;
+import models.Technicians;
 import view.admin.AddUserPanel;
 
 public class AddUserController {
@@ -55,7 +56,7 @@ public class AddUserController {
             String selectedRole = (String) addUserPanel.getRoles().getSelectedItem();
 
             if (selectedRole.contentEquals("Technician")){
-                System.out.println("Hello!");
+                insertToTechnicians(errors);
             } else {
                 insertToEmployee(selectedRole,errors);
             }
@@ -131,6 +132,21 @@ public class AddUserController {
         Employees emp = new Employees(0, userID, lastName, firstName, departmentID, role);
 
         empDAO.insertEmployee(emp);
-        JOptionPane.showMessageDialog(null, "Successfully inserted " + firstName + " " + lastName);
+        JOptionPane.showMessageDialog(null, "Successfully inserted " + firstName + " " + lastName + " to the Employees Table.");
+    }
+
+    private void insertToTechnicians(StringBuilder errors){
+        Integer userID = insertToUsers(errors);
+
+        if (userID == null){
+            return;
+        }
+
+        String lastName = addUserPanel.getLastNameField().getText();
+        String firstName = addUserPanel.getFirstNameField().getText();
+
+        Technicians tech = new Technicians(0, userID, lastName, firstName, false);
+        techDAO.insertTechnician(tech);
+        JOptionPane.showMessageDialog(null, "Successfuully inserted " + firstName + " " + lastName + " to the Technicians Table.");
     }
 }

@@ -7,7 +7,6 @@ public class Employees {
     private String first_name;
     private int dept_id;
     private String role;
-    private boolean is_active;
 
     public Employees(int emp_id, int user_id, String last_name, String first_name, int dept_id, String role) {
         this.emp_id = emp_id;
@@ -18,7 +17,6 @@ public class Employees {
         this.role = role;
     }
 
-// getters
     public int getEmpID() {
         return emp_id;
     }
