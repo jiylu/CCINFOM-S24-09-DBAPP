@@ -60,7 +60,7 @@ public class UserManagementController {
 
     private void initViewEmpByDepartment(){
         panel.getViewByDepartment().addActionListener(e->{
-            JComboBox<String> comboBox = new JComboBox<>(deptDAO.getAllDepartmentNames().toArray(new String[0]));
+            JComboBox<String> comboBox = new JComboBox<>(deptDAO.getAllDepartmentNames(false).toArray(new String[0]));
             int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Department", JOptionPane.OK_CANCEL_OPTION);
             
             if (res == JOptionPane.OK_OPTION){
