@@ -42,7 +42,7 @@ public class EmployeeDashboardPanel extends JPanel {
         JPanel emptyPanel = new JPanel();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        cardPanel.setBounds(250, 0, 550, 600);
+        cardPanel.setBounds(250, 80, 550, 600);
 
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(createTicketPanel, CREATE_TICKET);
@@ -52,6 +52,7 @@ public class EmployeeDashboardPanel extends JPanel {
     }
 
     private void initPanels() {
+        
         createTicketPanel = new CreateTicketPanel();
         cancelTicketPanel = new CancelTicketPanel();
         ticketHistoryPanel = new TicketHistoryPanel();
