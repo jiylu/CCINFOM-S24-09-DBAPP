@@ -45,7 +45,7 @@ public class EmployeesDAO {
     // READ (onlu active employees)
     public List<Employees> getAllEmployees() {
         List<Employees> list = new ArrayList<>();
-        String query = "SELECT * FROM employees WHERE is_active = TRUE"; 
+        String query = "SELECT * FROM employees"; 
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
@@ -66,6 +66,34 @@ public class EmployeesDAO {
             return list;
         } catch (SQLException e) {
             System.out.println("Error retrieving all active employees.");
+            return null;
+        }
+    }
+
+    public List<Employees> getEmployeesByDepartment(int departmentID){
+        List<Employees> list = new ArrayList<>();
+        String query = "SELECT * FROM employees e WHERE e.dept_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setInt(1, departmentID);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                list.add(new Employees(
+                    rs.getInt("emp_id"),
+                    rs.getInt("user_id"),
+                    rs.getString("last_name"),
+                    rs.getString("first_name"),
+                    rs.getInt("dept_id"),
+                    rs.getString("role")
+                ));
+            }
+
+            rs.close();
+            pstmt.close();
+            return list;
+        } catch (SQLException e){
+            System.out.println("Error executing getEmployeesByDepartment().");
             return null;
         }
     }

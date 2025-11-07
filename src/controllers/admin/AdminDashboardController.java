@@ -8,7 +8,7 @@ import models.User;
 import view.Frame;
 import view.admin.AddUserPanel;
 import view.admin.AdminDashboardPanel;
-import view.admin.ViewUsersPanel;
+import view.admin.UserManagementPanel;
 
 public class AdminDashboardController {
     private User user;
@@ -20,7 +20,7 @@ public class AdminDashboardController {
     private TechniciansDAO techDAO;
     private DepartmentDAO deptDAO;
 
-    private ViewUsersController viewUsersController;
+    private UserManagementController viewUsersController;
 
     public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
         this.user = user;
@@ -34,9 +34,9 @@ public class AdminDashboardController {
     }
 
     public void init(){
-        ViewUsersPanel viewUsersPanel = panel.getViewUsersPanel();
+        UserManagementPanel viewUsersPanel = panel.getViewUsersPanel();
 
-        this.viewUsersController = new ViewUsersController(viewUsersPanel, userDAO, empDAO, techDAO, deptDAO);
+        this.viewUsersController = new UserManagementController(viewUsersPanel, userDAO, empDAO, techDAO, deptDAO);
         
         frame.showPanel(Frame.ADMIN_PANEL);
         initListeners();

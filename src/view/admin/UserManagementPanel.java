@@ -9,20 +9,22 @@ import models.Employees;
 import models.Technicians;
 import models.User;
 
-public class ViewUsersPanel extends JPanel{
+public class UserManagementPanel extends JPanel{
     private JButton viewEmployees;
     private JButton viewTechnicians;
     private JButton addUser;
+    private JButton viewByDepartment;
     private JRadioButton showDeactivated;
 
     private JTable table;
     private JScrollPane tableScrollPane;
 
-    public ViewUsersPanel(){
+    public UserManagementPanel(){
         setLayout(null);
         setupViewEmployeesButton();
         setupViewTechniciansButton();
         setupAddUserButton();
+        setupViewByDepartmentButton();
         setupShowDeactivatedButton();
     }
 
@@ -44,13 +46,35 @@ public class ViewUsersPanel extends JPanel{
         add(addUser);
     }
 
+    private void setupViewByDepartmentButton(){
+        viewByDepartment = new JButton("View By Departments");
+        viewByDepartment.setBounds(390,20,160,25);
+        add(viewByDepartment);
+        viewByDepartment.setVisible(false);
+    }
+
     private void setupShowDeactivatedButton(){
         showDeactivated = new JRadioButton("Show deactivated users");
-        showDeactivated.setBounds(390, 20, 200, 25);
+        showDeactivated.setBounds(390, 20, 210, 25);
         add(showDeactivated);
     }
 
+    public void shift(){
+        viewByDepartment.setVisible(true);
+        showDeactivated.setBounds(565,20,200,25);
+    }
+
+    public void revert(){
+        viewByDepartment.setVisible(false);
+        showDeactivated.setBounds(390, 20, 200, 25);
+    }
+
+
     private DefaultTableModel setupTable(String[] cols){
+        if (tableScrollPane != null){
+            remove(tableScrollPane);
+        }
+
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -62,6 +86,9 @@ public class ViewUsersPanel extends JPanel{
         tableScrollPane = new JScrollPane(table);
         tableScrollPane.setBounds(0, 60, 760, 460);
         add(tableScrollPane);
+
+        revalidate();
+        repaint();
 
         return model;
     }
@@ -122,6 +149,10 @@ public class ViewUsersPanel extends JPanel{
 
     public JButton getViewTechnicians() {
         return viewTechnicians;
+    }
+
+    public JButton getViewByDepartment(){
+        return viewByDepartment;
     }
 
     public JButton getAddUser() {
