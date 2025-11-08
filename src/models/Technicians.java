@@ -5,14 +5,12 @@ public class Technicians {
     private String tech_lastName;
     private String tech_firstName;
     private int user_id;
-    private boolean hasActiveTicket;
 
-    public Technicians(int technician_id, int user_id, String tech_lastName, String tech_firstName, boolean hasActiveTicket){
+    public Technicians(int technician_id, int user_id, String tech_lastName, String tech_firstName){
         this.technician_id = technician_id;
         this.user_id = user_id;
         this.tech_lastName = tech_lastName;
         this.tech_firstName = tech_firstName;
-        this.hasActiveTicket = hasActiveTicket;
     }
 
     public int getTechnician_id(){
@@ -29,13 +27,5 @@ public class Technicians {
 
     public int getUser_ID(){
         return user_id;
-    }
-
-    public boolean isHasActiveTicket(){
-        return hasActiveTicket;
-    }
-
-    public void setHasActiveTicket(boolean hasActiveTicket){
-        this.hasActiveTicket = hasActiveTicket;
     }
 }

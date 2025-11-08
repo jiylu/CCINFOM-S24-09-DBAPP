@@ -5,10 +5,9 @@ import dao.EmployeesDAO;
 import dao.TechniciansDAO;
 import dao.UserDAO;
 import javax.swing.*;
-
 import models.Employees;
-import models.User;
 import models.Technicians;
+import models.User;
 import view.admin.AddUserPanel;
 
 public class AddUserController {
@@ -145,7 +144,7 @@ public class AddUserController {
         String lastName = addUserPanel.getLastNameField().getText();
         String firstName = addUserPanel.getFirstNameField().getText();
 
-        Technicians tech = new Technicians(0, userID, lastName, firstName, false);
+        Technicians tech = new Technicians(0, userID, lastName, firstName);
         techDAO.insertTechnician(tech);
         JOptionPane.showMessageDialog(null, "Successfuully inserted " + firstName + " " + lastName + " to the Technicians Table.");
     }

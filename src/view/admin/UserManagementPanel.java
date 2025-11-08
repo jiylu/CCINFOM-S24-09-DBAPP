@@ -117,7 +117,7 @@ public class UserManagementPanel extends JPanel{
     }
 
     public void setupTechniciansTable(List<Technicians> technicianList, List<User> users){
-        String[] cols = {"User ID", "Tech ID", "Username", "Password", "Name", "HasActiveTicket", "Status"};
+        String[] cols = {"User ID", "Tech ID", "Username", "Password", "Name", "Status"};
         DefaultTableModel model = setupTable(cols);
 
 
@@ -131,11 +131,10 @@ public class UserManagementPanel extends JPanel{
 
             if (u != null){
                 String fullName = t.getTech_lastName() + ", " + t.getTech_firstName();
-                String hasActiveTicket = t.isHasActiveTicket() ? "True" : "False";
                 String status = u.getIsActive() ? "Active" : "Inactive";
 
 
-                Object[] row = { u.getUserID(), t.getTechnician_id(), u.getUsername(), u.getPassword(), fullName, hasActiveTicket, status };
+                Object[] row = { u.getUserID(), t.getTechnician_id(), u.getUsername(), u.getPassword(), fullName, status };
                 model.addRow(row);
             }
         }

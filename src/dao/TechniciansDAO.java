@@ -24,8 +24,7 @@ public class TechniciansDAO {
                     rs.getInt("technician_id"),
                     rs.getInt("user_id"),
                     rs.getString("tech_lastName"),
-                    rs.getString("tech_firstName"),
-                    rs.getBoolean("has_active_ticket")
+                    rs.getString("tech_firstName")
                 ));
             }
 
@@ -47,7 +46,6 @@ public class TechniciansDAO {
             pstmt.setInt(1, tech.getUser_ID());          // Set user_id
             pstmt.setString(2, tech.getTech_lastName()); // Set tech_lastName
             pstmt.setString(3, tech.getTech_firstName()); // Set tech_firstName
-            pstmt.setBoolean(4, tech.isHasActiveTicket()); // Set hasActiveTicket
 
             // Execute the insertion query
             pstmt.executeUpdate();
