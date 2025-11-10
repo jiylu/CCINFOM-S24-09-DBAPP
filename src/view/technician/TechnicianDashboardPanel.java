@@ -9,7 +9,6 @@ public class TechnicianDashboardPanel extends JPanel {
 
     private JLabel titleLabel;
     private JButton resolveTicketButton;
-    private JButton reassignTicketButton;
     private JButton cancelTicketButton;
     private JButton viewTicketHistoryButton;
 
@@ -57,12 +56,8 @@ public class TechnicianDashboardPanel extends JPanel {
         resolveTicketButton.setBounds(10, 80, 200, 40);
         add(resolveTicketButton);
 
-        reassignTicketButton = new JButton("Reassign Ticket");
-        reassignTicketButton.setBounds(10, 130, 200, 40);
-        add(reassignTicketButton);
-
         cancelTicketButton = new JButton("Cancel Ticket");
-        cancelTicketButton.setBounds(10, 180, 200, 40);
+        cancelTicketButton.setBounds(10, 130, 200, 40);
         add(cancelTicketButton);
         cancelTicketButton.addActionListener(e -> {
             CancelTicket cancelTicketFrame = new CancelTicket();
@@ -70,7 +65,7 @@ public class TechnicianDashboardPanel extends JPanel {
         });
 
         viewTicketHistoryButton = new JButton("View Ticket History");
-        viewTicketHistoryButton.setBounds(10, 230, 200, 40);
+        viewTicketHistoryButton.setBounds(10, 180, 200, 40);
         add(viewTicketHistoryButton);
         viewTicketHistoryButton.addActionListener(e -> {
             TicketHistory ticketHistoryFrame = new TicketHistory();
@@ -84,10 +79,6 @@ public class TechnicianDashboardPanel extends JPanel {
 
     public JButton getResolveTicketButton(){
         return resolveTicketButton;
-    }
-
-    public JButton getReassignTicketButton(){
-        return reassignTicketButton;
     }
 
     public JButton getCancelTicketButton(){

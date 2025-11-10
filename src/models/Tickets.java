@@ -61,10 +61,6 @@ public class Tickets {
         this.technician_id = technician_id;
     }
 
-    public void setCreation_date(String creation_date) {
-        this.creation_date = creation_date;
-    }
-
     public void setResolve_date(String resolve_date) {
         this.resolve_date = resolve_date;
     }
