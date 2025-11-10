@@ -3,8 +3,8 @@ package view.employee;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.List;
-import models.Tickets;
+//import java.util.List;
+//import models.Tickets;
 
 public class TicketHistoryPanel extends JPanel {
     private JLabel titleLabel;
@@ -32,7 +32,7 @@ public class TicketHistoryPanel extends JPanel {
         tableModel = new DefaultTableModel(columnNames, 0);
         ticketTable = new JTable(tableModel);
         scrollPane = new JScrollPane(ticketTable);
-        scrollPane.setBounds(10, 60, 500, 400);
+        scrollPane.setBounds(10, 60, 500, 360);
         add(scrollPane);
     }
 }

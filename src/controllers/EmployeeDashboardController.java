@@ -14,7 +14,6 @@ public class EmployeeDashboardController{
     private EmployeesDAO empDAO;
     private EmployeeDashboardPanel panel;
     private CreateTicketPanel createTicketPanel;
-    private CancelTicketPanel cancelTicketPanel;
     private TicketHistoryPanel ticketHistoryPanel;
 
     public EmployeeDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO){
@@ -24,7 +23,6 @@ public class EmployeeDashboardController{
         this.empDAO = empDAO;
         this.panel = frame.getEmployeeDashboardPanel();
         this.createTicketPanel = panel.getCreateTicketPanel();
-        this.cancelTicketPanel = panel.getCancelTicketPanel();
         this.ticketHistoryPanel = panel.getTicketHistoryPanel();
     }
 
@@ -37,10 +35,6 @@ public class EmployeeDashboardController{
 
         panel.getCreateTicketButton().addActionListener(e->{
             panel.showPanel(EmployeeDashboardPanel.CREATE_TICKET);
-        });
-
-        panel.getCancelTicketButton().addActionListener(e->{
-            panel.showPanel(EmployeeDashboardPanel.CANCEL_TICKET);
         });
 
         panel.getTicketHistoryButton().addActionListener(e->{
