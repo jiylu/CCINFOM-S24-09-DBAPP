@@ -66,7 +66,7 @@ public class CreateTicketPanel extends JPanel {
 
     private void createTicketButton(){
         createButton = new JButton("Create Ticket");
-        createButton.setBounds(250, 330, 100, 35);
+        createButton.setBounds(250, 350, 100, 35);
         add(createButton);
     }
 
