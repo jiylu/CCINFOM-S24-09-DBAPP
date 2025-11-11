@@ -32,43 +32,48 @@ public class ResolveTicketTechnicianPanel extends JPanel {
 
     private void setupTitle(){
         JLabel titleLabel = new JLabel("Select Ticket to Resolve");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setBounds(120, 20, 300, 35);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setBounds(250, 20, 500, 35);
         add(titleLabel);
     }
 
     private void setupTicketsAndCategories(){
         JLabel ticketsLabel = new JLabel("Tickets: ");
-        ticketsLabel.setBounds(120,80,120,25);
+        ticketsLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        ticketsLabel.setBounds(250,80,120,25);
         add(ticketsLabel);
 
         ticketsToResolve = new JComboBox<>(); // Filled dynamically by controller
-        ticketsToResolve.setBounds(220,80,250,30);
+        ticketsToResolve.setBounds(370,80,250,30);
         add(ticketsToResolve);
 
         JLabel categoryLabel = new JLabel("Category:");
-        categoryLabel.setBounds(120, 120, 120, 25);
+        categoryLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        categoryLabel.setBounds(250, 120, 120, 25);
         add(categoryLabel);
 
         categories = new JComboBox<CategoryItem>(); // Uses CategoryItem with ID + name
-        categories.setBounds(220, 120, 250, 30);
+        categories.setBounds(370, 120, 250, 30);
         add(categories);
     }
 
 
-    private void setupEmployeeID(){ // TO BE UPDATED WITH REAL EMPLOYEE TICKET HOLDER
+    private void setupEmployeeID(){
         employeeIDLabel = new JLabel("Employee ID: ");
-        employeeIDLabel.setBounds(120, 160, 120, 25);
+        employeeIDLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        employeeIDLabel.setBounds(250, 160, 120, 25);
         add(employeeIDLabel);
     }
 
     private void setupLogDetails(){
         creationDateLabel = new JLabel("Creation Date:");
-        creationDateLabel.setBounds(120, 200, 120, 25);
+        creationDateLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        creationDateLabel.setBounds(250, 200, 120, 25);
         add(creationDateLabel);
 
         resolveDateLabel = new JLabel("Resolve Date:");
-        resolveDateLabel.setBounds(120, 240, 120, 25);
+        resolveDateLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        resolveDateLabel.setBounds(250, 240, 120, 25);
         add(resolveDateLabel);
 
         // Month dropdown (01-12)
@@ -77,7 +82,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             months[i] = String.format("%02d", i + 1);
         }
         monthCombo = new JComboBox<>(months);
-        monthCombo.setBounds(220, 240, 60, 30);
+        monthCombo.setBounds(370, 240, 60, 30);
         monthCombo.setEnabled(false);
         add(monthCombo);
 
@@ -87,7 +92,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             days[i] = String.format("%02d", i + 1);
         }
         dayCombo = new JComboBox<>(days);
-        dayCombo.setBounds(290, 240, 60, 30);
+        dayCombo.setBounds(440, 240, 60, 30);
         dayCombo.setEnabled(false);
         add(dayCombo);
 
@@ -97,18 +102,19 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             years[i] = String.valueOf(2020 + i);
         }
         yearCombo = new JComboBox<>(years);
-        yearCombo.setBounds(360, 240, 80, 30);
+        yearCombo.setBounds(510, 240, 80, 30);
         yearCombo.setEnabled(false);
         add(yearCombo);
     }
 
     private void setupStatus(){
         JLabel statusLabel = new JLabel("Ticket Status:");
-        statusLabel.setBounds(120, 280, 120, 25);
+        statusLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        statusLabel.setBounds(250, 280, 120, 25);
         add(statusLabel);
 
         status = new JComboBox<>(new String[]{"Active", "Resolved", "Cancelled"});
-        status.setBounds(220, 280, 250, 30);
+        status.setBounds(370, 280, 250, 30);
         add(status);
     }
 
@@ -133,8 +139,11 @@ public class ResolveTicketTechnicianPanel extends JPanel {
     }
 
     private void setupButton(){
+        Font buttonFont = new Font("Arial", Font.BOLD, 14);
+
         saveButton = new JButton("Save");
-        saveButton.setBounds(370, 330, 100, 35);
+        saveButton.setFont(buttonFont);
+        saveButton.setBounds(520, 330, 100, 35);
         add(saveButton);
     }
 

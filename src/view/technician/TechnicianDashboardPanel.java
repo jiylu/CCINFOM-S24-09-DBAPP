@@ -32,7 +32,7 @@ public class TechnicianDashboardPanel extends JPanel {
         JPanel emptyPanel = new JPanel();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        cardPanel.setBounds(230,80,550,520);
+        cardPanel.setBounds(280,80,1200,800);
 
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(resolveTicketTechnicianPanel, RESOLVE_TICKET);
@@ -45,19 +45,24 @@ public class TechnicianDashboardPanel extends JPanel {
 
     private void initTitle(){
         titleLabel = new JLabel("Welcome, Technician!");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
-        titleLabel.setBounds(10, 10, 500, 50);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        titleLabel.setBounds(10, 10, 600, 50);
 
         add(titleLabel);
     }
 
-    private void setupButtons(){
+    private void setupButtons() {
+        // Bigger font
+        Font buttonFont = new Font("Arial", Font.BOLD, 18);
+
         resolveTicketButton = new JButton("Resolve Ticket");
-        resolveTicketButton.setBounds(10, 80, 200, 40);
+        resolveTicketButton.setFont(buttonFont);
+        resolveTicketButton.setBounds(20, 80, 250, 50); // increased width & height
         add(resolveTicketButton);
 
         cancelTicketButton = new JButton("Cancel Ticket");
-        cancelTicketButton.setBounds(10, 130, 200, 40);
+        cancelTicketButton.setFont(buttonFont);
+        cancelTicketButton.setBounds(20, 150, 250, 50); // increased width & height
         add(cancelTicketButton);
         cancelTicketButton.addActionListener(e -> {
             CancelTicket cancelTicketFrame = new CancelTicket();
@@ -65,7 +70,8 @@ public class TechnicianDashboardPanel extends JPanel {
         });
 
         viewTicketHistoryButton = new JButton("View Ticket History");
-        viewTicketHistoryButton.setBounds(10, 180, 200, 40);
+        viewTicketHistoryButton.setFont(buttonFont);
+        viewTicketHistoryButton.setBounds(20, 220, 250, 50); // increased width & height
         add(viewTicketHistoryButton);
         viewTicketHistoryButton.addActionListener(e -> {
             TicketHistory ticketHistoryFrame = new TicketHistory();

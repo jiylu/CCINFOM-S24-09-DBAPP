@@ -20,35 +20,35 @@ public class LoginPanel extends JPanel {
         JLabel title = new JLabel("Login");
         title.setFont(new Font("Arial", Font.BOLD, 48));
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        title.setBounds(0, 120, 800, 80);
+        title.setBounds(200, 200, 800, 80);
         add(title);
     }
 
     private void setupUsernameField(){
         JLabel usernameLabel = new JLabel("Username: ");
         usernameLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        usernameLabel.setBounds(270, 250, 120, 30);
+        usernameLabel.setBounds(460, 300, 120, 30);
         add(usernameLabel);
 
         usernameField = new JTextField();
-        usernameField.setBounds(390, 250, 180, 30);
+        usernameField.setBounds(580, 300, 180, 30);
         add(usernameField);
     }
 
     private void setupPasswordField(){
         JLabel passwordLabel = new JLabel("Password:");
         passwordLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-        passwordLabel.setBounds(270,300, 120, 30);
+        passwordLabel.setBounds(460,350, 120, 30);
         add(passwordLabel);
 
         passwordField = new JPasswordField();
-        passwordField.setBounds(390, 300, 180, 30);
+        passwordField.setBounds(580, 350, 180, 30);
         add(passwordField);
     }
 
     private void setupButtons(){
         loginButton = new JButton("Login");
-        loginButton.setBounds(350, 370, 100, 40);
+        loginButton.setBounds(550, 420, 100, 40);
         add(loginButton);
     }
 
