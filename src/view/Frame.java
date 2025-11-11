@@ -2,7 +2,6 @@ package view;
 
 import java.awt.*;
 import javax.swing.*;
-
 import view.admin.AdminDashboardPanel;
 import view.employee.EmployeeDashboardPanel;
 import view.technician.TechnicianDashboardPanel;
@@ -29,7 +28,7 @@ public class Frame extends JFrame{
     }
 
     private void setupFrameComponents(){
-        setSize(800,600);
+        setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
