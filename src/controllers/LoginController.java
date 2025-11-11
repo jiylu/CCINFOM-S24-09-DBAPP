@@ -72,6 +72,11 @@ public class LoginController {
             return null;
         }
 
+        if (!user.getIsActive()){
+            JOptionPane.showMessageDialog(null, "User is deactivated.", "Invalid", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
         return user;
     }
 
