@@ -48,7 +48,6 @@ public class AddUserController {
         });
     }
 
-
     private void saveUserFunctionality(){
         addUserPanel.getSaveButton().addActionListener(e->{
             StringBuilder errors = new StringBuilder();
@@ -85,7 +84,7 @@ public class AddUserController {
             errors.append("Username must be 3-20 characters long.\n");
         }
 
-        if (password.length() < 3 || username.length() > 15){
+        if (password.length() < 3 || password.length() > 15){
             errors.append("Password must be 3-15 characters long.\n");
         }
 

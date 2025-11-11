@@ -5,6 +5,7 @@ import java.awt.Font;
 import javax.swing.*;
 
 public class AddUserPanel{
+    private JLabel titleLabel;
     private JPanel panel;
     private JTextField usernameField;
     private JTextField passwordField;
@@ -35,7 +36,7 @@ public class AddUserPanel{
     }
 
     private void setupTitle(){
-        JLabel titleLabel = new JLabel("Add New User");
+        titleLabel = new JLabel("Add New User");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBounds(20, 20, 300, 40);
         panel.add(titleLabel);
@@ -133,6 +134,9 @@ public class AddUserPanel{
 
             departments.setSelectedIndex(0);
             employeeRole.setText("");
+
+            panel.revalidate();
+            panel.repaint();
         }
     }
 
@@ -145,6 +149,14 @@ public class AddUserPanel{
 
         // if employee is previously selected.
         revert();  
+    }
+
+    public JPanel getPanel(){
+        return panel;
+    }
+
+    public JLabel getTitleLabel(){
+        return titleLabel;
     }
 
     public JTextField getUsernameField() {

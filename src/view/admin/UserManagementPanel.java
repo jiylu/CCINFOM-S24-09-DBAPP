@@ -1,7 +1,6 @@
 package view.admin;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -14,7 +13,6 @@ public class UserManagementPanel extends JPanel{
     private JButton viewTechnicians;
     private JButton addUser;
     private JButton viewByDepartment;
-    private JRadioButton showDeactivated;
 
     private JTable table;
     private JScrollPane tableScrollPane;
@@ -25,7 +23,6 @@ public class UserManagementPanel extends JPanel{
         setupViewTechniciansButton();
         setupAddUserButton();
         setupViewByDepartmentButton();
-        setupShowDeactivatedButton();
     }
 
     private void setupViewEmployeesButton(){
@@ -53,22 +50,14 @@ public class UserManagementPanel extends JPanel{
         viewByDepartment.setVisible(false);
     }
 
-    private void setupShowDeactivatedButton(){
-        showDeactivated = new JRadioButton("Show deactivated users");
-        showDeactivated.setBounds(390, 20, 210, 25);
-        add(showDeactivated);
-    }
 
     public void shift(){
         viewByDepartment.setVisible(true);
-        showDeactivated.setBounds(565,20,200,25);
     }
 
     public void revert(){
         viewByDepartment.setVisible(false);
-        showDeactivated.setBounds(390, 20, 200, 25);
     }
-
 
     private DefaultTableModel setupTable(String[] cols){
         if (tableScrollPane != null){
@@ -78,13 +67,14 @@ public class UserManagementPanel extends JPanel{
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false;
+                String colName = getColumnName(column);
+                return colName.equals("Edit") || colName.equals("Deactivate");
             }
         };
 
         table = new JTable(model);
         tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setBounds(0, 60, 760, 460);
+        tableScrollPane.setBounds(0, 60, 1160, 630);
         add(tableScrollPane);
 
         revalidate();
@@ -94,21 +84,26 @@ public class UserManagementPanel extends JPanel{
     }
 
     public void setupEmployeesTable(List<Employees> employeeList, List<User> users){
-        String[] cols = {"User ID", "Emp ID", "Username", "Password", "Name", "Dept ID", "Role", "Status"};
+        String[] cols = {"User ID", "Emp ID", "Username", "Password", "Name", "Dept ID", "Job Title", "Status", "Edit", "Deactivate"};
         DefaultTableModel model = setupTable(cols);
+        
+        // sorted by active users
+        List<User> userList = users.stream()
+                .filter(u -> u.getRole() == User.Role.EMPLOYEE || u.getRole() == User.Role.ADMIN)
+                .sorted((u1, u2) -> Boolean.compare(u2.getIsActive(), u1.getIsActive()))
+                .collect(Collectors.toList());
+        
+        for (User u : userList) {
+            Employees e = employeeList.stream()
+                            .filter(emp -> emp.getUserID() == u.getUserID())
+                            .findFirst()
+                            .orElse(null);
 
-        // extrazct user accounts that are employees, map by userid
-        Map<Integer, User> userMap = users.stream()
-                                        .filter(u -> u.getRole() == User.Role.EMPLOYEE || u.getRole() == User.Role.ADMIN)
-                                        .collect(Collectors.toMap(User::getUserID, u -> u));
-
-        for (Employees e : employeeList) {
-            User u = userMap.get(e.getUserID());
-
-            if (u != null){
+            if (e != null) {
                 String fullName = e.getLastName() + ", " + e.getFirstName();
                 String status = u.getIsActive() ? "Active" : "Inactive";
-                Object[] row = { u.getUserID(), e.getEmpID(), u.getUsername(), u.getPassword(), fullName, e.getDeptID(), e.getRole(), status };
+                Object[] row = { u.getUserID(), e.getEmpID(), u.getUsername(), u.getPassword(),
+                                fullName, e.getDeptID(), e.getJobTitle(), status, "Edit", "Delete"};
                 model.addRow(row);
             }
         }
@@ -117,19 +112,21 @@ public class UserManagementPanel extends JPanel{
     }
 
     public void setupTechniciansTable(List<Technicians> technicianList, List<User> users){
-        String[] cols = {"User ID", "Tech ID", "Username", "Password", "Name", "Status"};
+        String[] cols = {"User ID", "Tech ID", "Username", "Password", "Name", "Status", "Edit", "Deactivate"};
         DefaultTableModel model = setupTable(cols);
 
+        List<User> userList = users.stream()
+                    .filter(u -> u.getRole() == User.Role.TECHNICIAN)
+                    .sorted((u1, u2) -> Boolean.compare(u2.getIsActive(), u1.getIsActive()))
+                    .collect(Collectors.toList());
 
-        // extract user accounts that are technicians, map by userid
-        Map<Integer, User> userMap = users.stream()
-                                        .filter(u -> u.getRole() == User.Role.TECHNICIAN)
-                                        .collect(Collectors.toMap(User::getUserID, u -> u));
-    
-        for (Technicians t : technicianList){
-            User u = userMap.get(t.getUser_ID());
-
-            if (u != null){
+        for (User u : userList){
+            Technicians t = technicianList.stream()
+                            .filter(tec -> tec.getUser_ID() == u.getUserID())
+                            .findFirst()
+                            .orElse(null);
+            
+            if (t != null){
                 String fullName = t.getTech_lastName() + ", " + t.getTech_firstName();
                 String status = u.getIsActive() ? "Active" : "Inactive";
 
@@ -137,9 +134,14 @@ public class UserManagementPanel extends JPanel{
                 Object[] row = { u.getUserID(), t.getTechnician_id(), u.getUsername(), u.getPassword(), fullName, status };
                 model.addRow(row);
             }
+
         }
 
         table.setModel(model);
+    }
+
+    public JTable getTable(){
+        return table;
     }
 
     public JButton getViewEmployees() {
@@ -156,9 +158,5 @@ public class UserManagementPanel extends JPanel{
 
     public JButton getAddUser() {
         return addUser;
-    }
-
-    public JRadioButton getShowDeactivated() {
-        return showDeactivated;
     }
 }

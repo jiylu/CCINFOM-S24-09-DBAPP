@@ -34,7 +34,7 @@ public class AdminDashboardPanel extends JPanel {
         JPanel emptyPanel = new JPanel();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        cardPanel.setBounds(10, 75, 760, 460);
+        cardPanel.setBounds(10, 75, 1180, 710);
         
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(viewUsersPanel, VIEW_USERS);
@@ -57,14 +57,6 @@ public class AdminDashboardPanel extends JPanel {
         viewUsersButton = new JButton("Manage Users");
         viewUsersButton.setBounds(10, 60, 150, 25);
         add(viewUsersButton);
-
-        // editUserButton = new JButton("Edit User");
-        // editUserButton.setBounds(10, 130, 120, 40);
-        // add(editUserButton);
-
-        // deleteUserButton = new JButton("Delete User");
-        // deleteUserButton.setBounds(10, 180, 120, 40);
-        // add(deleteUserButton);
     }
 
     public JLabel getTitleLabel(){
