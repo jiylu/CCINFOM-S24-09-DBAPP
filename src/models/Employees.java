@@ -6,15 +6,15 @@ public class Employees {
     private String last_name;
     private String first_name;
     private int dept_id;
-    private String role;
+    private String jobTitle;
 
-    public Employees(int emp_id, int user_id, String last_name, String first_name, int dept_id, String role) {
+    public Employees(int emp_id, int user_id, String last_name, String first_name, int dept_id, String jobTitle) {
         this.emp_id = emp_id;
         this.user_id = user_id;
         this.last_name = last_name;
         this.first_name = first_name;
         this.dept_id = dept_id;
-        this.role = role;
+        this.jobTitle = jobTitle;
     }
 
     public int getEmpID() {
@@ -37,8 +37,8 @@ public class Employees {
         return dept_id;
     }
 
-    public String getRole() {
-        return role;
+    public String getJobTitle() {
+        return jobTitle;
     }
 
 
@@ -64,8 +64,8 @@ public class Employees {
         this.dept_id = dept_id;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setJobTitle(String jobTitle) {
+        this.jobTitle = jobTitle;
     }
 
 }

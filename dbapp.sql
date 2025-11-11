@@ -62,13 +62,12 @@ CREATE TABLE IF NOT EXISTS Employees (
     last_name VARCHAR(50) NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     dept_id INT NOT NULL,
-    role VARCHAR(50) NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
+    job_title VARCHAR(50) NOT NULL,
     CONSTRAINT fk_employee_user FOREIGN KEY (user_id) REFERENCES Users(user_id),
 	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments(department_id)
 ) AUTO_INCREMENT = 90000;
 
-INSERT IGNORE INTO Employees(user_id, last_name, first_name, dept_id, role) 
+INSERT IGNORE INTO Employees(user_id, last_name, first_name, dept_id, job_title) 
 VALUES 
 	(10000, 'Rivera', 'Montano', 4, 'Senior Coordinator'),
     (10001, 'Dela Cruz', 'Thea', 2, 'Department Secretary'),

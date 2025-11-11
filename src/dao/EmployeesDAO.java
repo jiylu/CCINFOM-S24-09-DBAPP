@@ -15,14 +15,14 @@ public class EmployeesDAO {
 
     // CREATE 
     public void insertEmployee(Employees emp) {
-        String query = "INSERT INTO employees (user_id, last_name, first_name, dept_id, role) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO employees (user_id, last_name, first_name, dept_id, job_title) VALUES (?, ?, ?, ?, ?)";
         
         try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
             pstmt.setInt(1, emp.getUserID());
             pstmt.setString(2, emp.getLastName());
             pstmt.setString(3, emp.getFirstName());
             pstmt.setInt(4, emp.getDeptID());
-            pstmt.setString(5, emp.getRole());
+            pstmt.setString(5, emp.getJobTitle());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -57,7 +57,7 @@ public class EmployeesDAO {
                     rs.getString("last_name"),
                     rs.getString("first_name"),
                     rs.getInt("dept_id"),
-                    rs.getString("role")
+                    rs.getString("job_title")
                 ));
             }
 
@@ -98,17 +98,25 @@ public class EmployeesDAO {
         }
     }
 
-    // UPDATE (set is_active to false)
-    public void deactivateEmployee(int emp_id) {
-        String query = "UPDATE employees SET is_active = FALSE WHERE emp_id = ?";
-    
-        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, emp_id);
-            pstmt.executeUpdate();
-            pstmt.close();
-            System.out.println("Deactivated emp_id: " + emp_id);        
+    public void updateEmployee(Employees emp){
+        String query = "UPDATE employees SET last_name = ?, first_name = ?, dept_id = ?, job_title = ? WHERE emp_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setString(1, emp.getLastName());
+            pstmt.setString(2, emp.getFirstName());
+            pstmt.setInt(3, emp.getDeptID());
+            pstmt.setString(4, emp.getJobTitle());
+            pstmt.setInt(5, emp.getEmpID());
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Emp " + emp.getEmpID() + " deactivated successfully.");
+            } else {
+                System.out.println("No emp found with ID " + emp.getEmpID());
+            }
         } catch (SQLException e) {
-            System.out.println("Unsucessfully deactivated emp_id: " + emp_id);
+            e.printStackTrace();
         }
     }
 

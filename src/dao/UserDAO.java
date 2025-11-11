@@ -20,18 +20,22 @@ public class UserDAO {
 
     public List<User> getAllUsers(){
         List<User> list = new ArrayList<>();
-        String query = "SELECT * FROM Users";
+        String query = "SELECT * FROM Users ORDER BY active DESC";
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()){
-                list.add(new User(
+                User u = new User(
                     rs.getInt(1),
                     rs.getString(2),
                     rs.getString(3),
                     User.Role.valueOf(rs.getString(4).toUpperCase())
-                ));
+                );
+                
+                u.setActive(rs.getBoolean(5));
+                list.add(u);
+                
             }
 
             rs.close();
@@ -133,11 +137,51 @@ public class UserDAO {
         }
     }
 
+    public void editUser(User user){
+        String query = "UPDATE users SET username = ?, password = ?, role = ? WHERE user_id = ?";
+        
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, user.getUsername());
+            ps.setString(2, user.getPassword());
+            ps.setString(3, user.getRole().name());
+            ps.setInt(4, user.getUserID());    
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("User " + user.getUserID() + " updated successfully.");
+            } else {
+                System.out.println("No user found with ID " + user.getUserID());
+            }
+
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void deactivateUser(int userID){
+        String query = "UPDATE users SET active = 0 WHERE user_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setInt(1, userID);
+            int rowsAffected = ps.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                System.out.println("User " + userID + " deactivated successfully.");
+            } else {
+                System.out.println("No user found with ID " + userID);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void deleteUser(int userID) {
         String query = "DELETE FROM Users WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, userID);
-            int rowsAffected = ps.executeUpdate(); // ✅ use executeUpdate()
+            int rowsAffected = ps.executeUpdate(); 
             
             if (rowsAffected > 0) {
                 System.out.println("User with ID " + userID + " deleted successfully.");

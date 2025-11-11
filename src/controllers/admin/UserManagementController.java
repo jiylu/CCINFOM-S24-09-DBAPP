@@ -2,17 +2,20 @@ package controllers.admin;
 
 import dao.*;
 import java.util.List;
-
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-
-import view.admin.AddUserPanel;
-import view.admin.AdminDashboardPanel;
-import view.admin.UserManagementPanel;
+import javax.swing.JTable;
 import models.Employees;
 import models.Technicians;
 import models.User;
+import util.ButtonEditor;
+import util.ButtonRenderer;
+import view.admin.AddUserPanel;
+import view.admin.AdminDashboardPanel;
+import view.admin.UserManagementPanel;
 public class UserManagementController {
+    private User user;
     private UserManagementPanel panel;    
     private UserDAO userDAO;
     private EmployeesDAO empDAO;
@@ -22,7 +25,8 @@ public class UserManagementController {
     private AddUserPanel addUserPanel;
     private AddUserController addUserController;
 
-    public UserManagementController(UserManagementPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
+    public UserManagementController(User user, UserManagementPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
+        this.user = user;
         this.panel = panel;
         this.userDAO = userDAO;
         this.empDAO = empDAO;
@@ -53,10 +57,21 @@ public class UserManagementController {
         panel.getViewEmployees().addActionListener(e->{
             List<Employees> empList = empDAO.getAllEmployees();
             List<User> userList = userDAO.getAllUsers();
-            panel.setupEmployeesTable(empList, userList); 
-            panel.shift();
+
+            loadEmployeesTable(empList, userList);
         });
     }
+
+    private void loadEmployeesTable(List<Employees> empList, List<User> userList){
+        panel.setupEmployeesTable(empList, userList); 
+        JTable table = panel.getTable();
+        table.getColumn("Edit").setCellRenderer(new ButtonRenderer("Edit"));
+        table.getColumn("Deactivate").setCellRenderer(new ButtonRenderer("Deactivate")); 
+        initEditEmp(table);
+        initDeactivateEmployee(table);
+        panel.shift();
+    }
+
 
     private void initViewEmpByDepartment(){
         panel.getViewByDepartment().addActionListener(e->{
@@ -73,12 +88,98 @@ public class UserManagementController {
         });
     }
     
+    private void initEditEmp(JTable table){
+        EditUserController euc = new EditUserController(userDAO, empDAO, techDAO, deptDAO);
+
+        euc.setOnSaveCallback(() -> {
+            List<Employees> empList = empDAO.getAllEmployees();
+            List<User> userList = userDAO.getAllUsers();
+            loadEmployeesTable(empList, userList);
+        });
+
+        euc.initListener(table);
+    }
+
+    private void initEditTech(JTable table){
+        EditUserController euc = new EditUserController(userDAO, empDAO, techDAO, deptDAO);
+
+        euc.setOnSaveCallback(() -> {
+            List<Technicians> techList = techDAO.getAllTechnicians();
+            List<User> userList = userDAO.getAllUsers();
+            loadTechniciansTable(techList, userList);
+        });
+
+        euc.initListener(table);
+    }
+
+    private void initDeactivateEmployee(JTable table){
+        table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
+            int userID = (int) table.getValueAt(row, 0); 
+            Object status = table.getValueAt(row, 7); 
+            
+            // apra di mag self deactivate
+            if (userID == user.getUserID()){
+                JOptionPane.showMessageDialog(null, "You cannot deactivate yourself.");
+                return;
+            }
+            
+            if (status != null && status.toString().equals("Inactive")) {
+                JOptionPane.showMessageDialog(null, "User is already inactive.");
+                return;
+            }
+
+
+            int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to deactivate this user?","Confirm Deactivation",JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.YES_OPTION){
+                userDAO.deactivateUser(userID);
+                JOptionPane.showMessageDialog(null, "Deactivated Emp ID " + userID);
+                
+                // refresh table
+                List<Employees> empList = empDAO.getAllEmployees();
+                List<User> userList = userDAO.getAllUsers();
+
+                loadEmployeesTable(empList, userList);
+            }
+        }));
+    }
+
     private void initViewTechnicians(){
         panel.getViewTechnicians().addActionListener(e->{
             List<Technicians> techList = techDAO.getAllTechnicians();
             List<User> userList = userDAO.getAllUsers();
-            panel.setupTechniciansTable(techList, userList);
-            panel.revert();
+
+            loadTechniciansTable(techList, userList);
         });
+    }
+
+    private void loadTechniciansTable(List<Technicians> techList, List<User> userList){
+        panel.setupTechniciansTable(techList, userList); 
+
+        JTable table = panel.getTable();
+        table.getColumn("Edit").setCellRenderer(new ButtonRenderer("Edit"));
+        table.getColumn("Deactivate").setCellRenderer(new ButtonRenderer("Deactivate")); 
+
+        initDeactivateTechnician(table);
+        initEditTech(table);
+        panel.revert();
+    }
+
+    private void initDeactivateTechnician(JTable table){
+        table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
+            int userID = (int) table.getValueAt(row, 0);
+                        
+            int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to deactivate this user?","Confirm Deactivation",JOptionPane.YES_NO_OPTION);
+            
+            if (choice == JOptionPane.YES_OPTION){
+                userDAO.deactivateUser(userID);
+                JOptionPane.showMessageDialog(null, "Deactivated User ID " + userID);
+                
+                // refresh table
+                List<Technicians> techList = techDAO.getAllTechnicians();
+                List<User> userList = userDAO.getAllUsers();
+
+                loadTechniciansTable(techList, userList);
+            }
+        }));
     }
 }

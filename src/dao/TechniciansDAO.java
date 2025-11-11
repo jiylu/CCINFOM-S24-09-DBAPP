@@ -54,4 +54,26 @@ public class TechniciansDAO {
             e.printStackTrace();  // Handle exceptions (logging or rethrow as needed)
         }
     }
+
+    public void updateTechnician(Technicians tech){
+        String query = "UPDATE technicians SET tech_lastName = ?, tech_firstName = ? WHERE technician_id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, tech.getTech_lastName());
+            ps.setString(2, tech.getTech_firstName());
+            ps.setInt(3, tech.getTechnician_id());    
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("User " + tech.getUser_ID() + " updated successfully.");
+            } else {
+                System.out.println("No user found with ID " + tech.getUser_ID());
+            }
+
+            ps.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

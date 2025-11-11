@@ -36,7 +36,7 @@ public class AdminDashboardController {
     public void init(){
         UserManagementPanel viewUsersPanel = panel.getViewUsersPanel();
 
-        this.viewUsersController = new UserManagementController(viewUsersPanel, userDAO, empDAO, techDAO, deptDAO);
+        this.viewUsersController = new UserManagementController(user, viewUsersPanel, userDAO, empDAO, techDAO, deptDAO);
         
         frame.showPanel(Frame.ADMIN_PANEL);
         initListeners();
