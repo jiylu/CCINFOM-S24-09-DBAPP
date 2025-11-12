@@ -3,6 +3,9 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mysql.cj.xdevapi.PreparableStatement;
+import db.DBConnection;
 import models.Tickets;
 
 public class TicketsDAO {
@@ -129,8 +132,6 @@ public class TicketsDAO {
         return -1; // No available technician
     }
 
-
-
     public boolean updateTicket(Tickets ticket) {
         String sql = "UPDATE tickets SET category_id = ?, status = ?, resolve_date = ? WHERE ticket_id = ?";
 
@@ -147,4 +148,34 @@ public class TicketsDAO {
         }
     }
 
+    public List<Tickets> getEnqueuedTicketsByTechnician(int technicianID) throws SQLException {
+        List<Tickets> tickets = new ArrayList<>();
+
+        String sql = "SELECT ticket_id, ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
+                "FROM Tickets WHERE technician_id = ? AND status = 'Enqueued' ORDER BY creation_date ASC";
+
+        try (Connection conn = DBConnection.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, technicianID);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Tickets t = new Tickets(
+                            rs.getInt("ticket_id"),
+                            rs.getString("ticket_subject"),
+                            rs.getInt("category_id"),
+                            rs.getInt("employee_id"),
+                            rs.getInt("technician_id"),
+                            rs.getString("creation_date"),
+                            rs.getString("resolve_date"),
+                            rs.getString("status")
+                    );
+                    tickets.add(t);
+                }
+            }
+        }
+
+        return tickets;
+    }
 }
