@@ -33,7 +33,7 @@ VALUES
     (10002, 'Cortado', 'Maria', 1, 'Training Manager'),
     (10003, 'Garcia', 'Karina', 3, 'Front Desk Associate'),
     (10004, 'Lee', 'Thomas', 6, 'Marketing Assistant'),
-    (10005, 'Smith', 'Antonio', 7, 'Accounting Clerk'),
+    (10005, 'Smith', 'Antonio', 7, 'Admin'),
     (10006, 'Lopez', 'Luis', 5, 'Project Manager'),
     (10007, 'Torres', 'Amanda', 1, 'Employee Relations'),
     (10008, 'Dela Cruz', 'Chaewon', 7, 'Admin');

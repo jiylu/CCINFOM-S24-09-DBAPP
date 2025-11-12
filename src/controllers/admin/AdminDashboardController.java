@@ -49,7 +49,9 @@ public class AdminDashboardController {
         panel.getViewUsersButton().addActionListener(e->{
             viewUsersController.init(panel);
         });
-
         
+        panel.getReportsButton().addActionListener(e->{
+            panel.showPanel(AdminDashboardPanel.VIEW_REPORTS);
+        });
     }
 }
