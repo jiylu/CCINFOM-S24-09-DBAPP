@@ -85,7 +85,7 @@ VALUES
     (10029, 'Lee', 'Samuel'),
     (10030, 'Kim', 'Emma'),
     (10031, 'Rivera', 'Dante'),
-    (10031, 'Gulapa', 'Dante');
+    (10032, 'Gulapa', 'Dante');
 
 INSERT IGNORE INTO Categories (category_name)
 VALUES
