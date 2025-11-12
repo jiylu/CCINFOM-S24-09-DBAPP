@@ -61,9 +61,9 @@ public class EditUserController {
             User user = updateUserData();
 
             switch (user.getRole()){
-                case User.Role.ADMIN -> updateAdminData(user);
-                case User.Role.EMPLOYEE -> updateEmployeeData(user);
-                case User.Role.TECHNICIAN -> updateTechnicianData(user);
+                case ADMIN -> updateAdminData(user);
+                case EMPLOYEE -> updateEmployeeData(user);
+                case TECHNICIAN -> updateTechnicianData(user);
             }
 
             JOptionPane.showMessageDialog(null, "Sucessfuly Updated " + user.getUserID());

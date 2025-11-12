@@ -6,15 +6,17 @@ import java.awt.*;
 public class TechnicianDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
     public final static String RESOLVE_TICKET = "resolveTicket";
+    public final static String TICKET_QUEUE = "ticketQueue";
 
     private JLabel titleLabel;
     private JButton resolveTicketButton;
-    private JButton cancelTicketButton;
-    private JButton viewTicketHistoryButton;
+    private JButton viewTicketQueueButton;
+
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private ResolveTicketTechnicianPanel resolveTicketTechnicianPanel;
+    private TechnicianTicketQueue technicianTicketQueuePanel;
 
     public TechnicianDashboardPanel(){
         setLayout(null);
@@ -26,6 +28,7 @@ public class TechnicianDashboardPanel extends JPanel {
 
     private void initPanels(){
         resolveTicketTechnicianPanel = new ResolveTicketTechnicianPanel();
+        technicianTicketQueuePanel = new TechnicianTicketQueue();
     }
 
     private void setupCardLayout(){
@@ -36,6 +39,8 @@ public class TechnicianDashboardPanel extends JPanel {
 
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(resolveTicketTechnicianPanel, RESOLVE_TICKET);
+        cardPanel.add(technicianTicketQueuePanel, "ticketQueue");
+
         add(cardPanel);
     }
 
@@ -55,28 +60,15 @@ public class TechnicianDashboardPanel extends JPanel {
         // Bigger font
         Font buttonFont = new Font("Arial", Font.BOLD, 18);
 
+        viewTicketQueueButton = new JButton("View Ticket Queue");
+        viewTicketQueueButton.setFont(buttonFont);
+        viewTicketQueueButton.setBounds(20, 150, 250, 50);
+        add(viewTicketQueueButton);
+
         resolveTicketButton = new JButton("Resolve Ticket");
         resolveTicketButton.setFont(buttonFont);
         resolveTicketButton.setBounds(20, 80, 250, 50); // increased width & height
         add(resolveTicketButton);
-
-        cancelTicketButton = new JButton("Cancel Ticket");
-        cancelTicketButton.setFont(buttonFont);
-        cancelTicketButton.setBounds(20, 150, 250, 50); // increased width & height
-        add(cancelTicketButton);
-        cancelTicketButton.addActionListener(e -> {
-            CancelTicket cancelTicketFrame = new CancelTicket();
-            cancelTicketFrame.setVisible(true);
-        });
-
-        viewTicketHistoryButton = new JButton("View Ticket History");
-        viewTicketHistoryButton.setFont(buttonFont);
-        viewTicketHistoryButton.setBounds(20, 220, 250, 50); // increased width & height
-        add(viewTicketHistoryButton);
-        viewTicketHistoryButton.addActionListener(e -> {
-            TicketHistory ticketHistoryFrame = new TicketHistory();
-            ticketHistoryFrame.setVisible(true);
-        });
     }
 
     public JLabel getTitleLabel(){
@@ -87,15 +79,15 @@ public class TechnicianDashboardPanel extends JPanel {
         return resolveTicketButton;
     }
 
-    public JButton getCancelTicketButton(){
-        return cancelTicketButton;
-    }
-
-    public JButton getViewTicketHistoryButton(){
-        return viewTicketHistoryButton;
+    public JButton getViewTicketQueueButton() {
+        return viewTicketQueueButton;
     }
 
     public ResolveTicketTechnicianPanel getResolveTicketTechnicianPanel(){
         return resolveTicketTechnicianPanel;
+    }
+
+    public TechnicianTicketQueue getTechnicianTicketQueuePanel() {
+        return technicianTicketQueuePanel;
     }
 }

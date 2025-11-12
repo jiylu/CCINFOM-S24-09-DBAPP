@@ -50,3 +50,21 @@ VALUES
     ('Software Issue'),
     ('Hardware Issue'),
     ('Account Access Issue');
+    
+INSERT INTO Tickets (ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status)
+VALUES
+('Computer won’t boot', 1, 90000, 30000, '2025-11-01 08:30:00', NULL, 'Active'),
+('Email not syncing', 2, 90001, 30001, '2025-11-01 09:00:00', '2025-11-01 09:45:00', 'Active'),
+('Printer not responding', 1, 90002, 30002, '2025-11-02 10:20:00', NULL, 'Active'),
+('Wi-Fi disconnected', 3, 90003, 30000, '2025-11-02 11:15:00', NULL, 'Enqueued'),
+('VPN not connecting', 3, 90004, 30001, '2025-11-03 13:40:00', NULL, 'Enqueued'),
+('Monitor flickering', 1, 90005, 30002, '2025-11-03 15:00:00', '2025-11-03 15:40:00', 'Enqueued'),
+('Slow computer performance', 1, 90006, 30000, '2025-11-04 08:50:00', NULL, 'Enqueued'),
+('Cannot print PDF files', 2, 90007, 30001, '2025-11-04 09:30:00', NULL, 'Enqueued'),
+('Antivirus expired', 2, 90008, 30002, '2025-11-05 10:10:00', '2025-11-05 11:00:00', 'Enqueued'),
+('System update failed', 4, 90000, 30000, '2025-11-05 14:45:00', NULL, 'Enqueued'),
+('Mouse not detected', 1, 90001, 30001, '2025-11-06 08:20:00', NULL, 'Enqueued'),
+('Projector not displaying', 4, 90002, 30002, '2025-11-06 09:30:00', NULL, 'Enqueued'),
+('Software installation request', 2, 90003, 30000, '2025-11-07 13:00:00', '2025-11-07 14:00:00', 'Enqueued'),
+('Keyboard malfunctioning', 1, 90004, 30001, '2025-11-08 09:15:00', NULL, 'Enqueued'),
+('Forgot Windows password', 2, 90005, 30002, '2025-11-08 10:00:00', NULL, 'Enqueued');

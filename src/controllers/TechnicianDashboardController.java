@@ -12,6 +12,7 @@ import view.Frame;
 import view.technician.CategoryItem;
 import view.technician.ResolveTicketTechnicianPanel;
 import view.technician.TechnicianDashboardPanel;
+import view.technician.TechnicianTicketQueue;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class TechnicianDashboardController {
     private Frame frame;
     private TechnicianDashboardPanel panel;
     private ResolveTicketTechnicianPanel resolveTicketTechnicianPanel;
+    private TechnicianTicketQueue ticketQueuePanel;
     private TicketsDAO ticketsDAO;
     private CategoriesDAO categoriesDAO;
     private List<Integer> categoryIds;
@@ -33,6 +35,7 @@ public class TechnicianDashboardController {
         this.frame = frame;
         this.panel = frame.getTechnicianDashboardPanel();
         this.resolveTicketTechnicianPanel = panel.getResolveTicketTechnicianPanel();
+        this.ticketQueuePanel = panel.getTechnicianTicketQueuePanel();
         this.ticketsDAO = ticketsDAO;
         this.categoriesDAO = categoriesDAO;
     }
@@ -58,6 +61,36 @@ public class TechnicianDashboardController {
         resolveTicketTechnicianPanel.getSaveButton().addActionListener(e -> {
             saveTicketChanges();
         });
+
+        panel.getViewTicketQueueButton().addActionListener(e -> {
+            ticketQueuePanel.clearTickets();
+            loadTicketQueue();
+            panel.showPanel(TechnicianDashboardPanel.TICKET_QUEUE);
+        });
+    }
+
+    private void loadTicketQueue() {
+        try {
+            int technicianId = new TechniciansDAO(DBConnection.connect())
+                    .getTechnicianIdByUserId(user.getUserID());
+            List<Tickets> tickets = ticketsDAO.getTicketsByTechninicianID(technicianId);
+
+            for (Tickets t : tickets) {
+                ticketQueuePanel.addTicket(
+                    String.valueOf(t.getTicket_id()),
+                    String.valueOf(t.getTicket_subject()),
+                    String.valueOf(t.getCategory_id()),
+                    String.valueOf(t.getEmployee_id()),
+                    String.valueOf(t.getTechnician_id()),
+                    t.getCreation_date(),
+                    t.getStatus()
+                );
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     private void loadAssignedTickets() {
