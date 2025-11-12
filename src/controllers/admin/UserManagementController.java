@@ -92,7 +92,7 @@ public class UserManagementController {
         EditUserController euc = new EditUserController(userDAO, empDAO, techDAO, deptDAO);
 
         euc.setOnSaveCallback(() -> {
-            List<Employees> empList = empDAO.getAllEmployees();
+        List<Employees> empList = empDAO.getAllEmployees();
             List<User> userList = userDAO.getAllUsers();
             loadEmployeesTable(empList, userList);
         });

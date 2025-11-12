@@ -106,7 +106,7 @@ public class EmployeesDAO {
                     rs.getString("last_name"),
                     rs.getString("first_name"),
                     rs.getInt("dept_id"),
-                    rs.getString("role")
+                    rs.getString("job_title")
                 ));
             }
 
@@ -133,7 +133,7 @@ public class EmployeesDAO {
             int rowsAffected = pstmt.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("Emp " + emp.getEmpID() + " deactivated successfully.");
+                System.out.println("Emp " + emp.getEmpID() + " activated successfully.");
             } else {
                 System.out.println("No emp found with ID " + emp.getEmpID());
             }

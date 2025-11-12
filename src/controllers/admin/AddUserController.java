@@ -16,6 +16,7 @@ public class AddUserController {
     private TechniciansDAO techDAO;
     private DepartmentDAO deptDAO;
     private AddUserPanel addUserPanel;
+
     public AddUserController(UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
         this.userDAO = userDAO;
         this.empDAO = empDAO;
@@ -62,51 +63,22 @@ public class AddUserController {
         });
     }
 
-    private Integer insertToUsers(StringBuilder errors){
+    private Integer insertToUsers(){
         String username = addUserPanel.getUsernameField().getText().trim();
         String password = addUserPanel.getPasswordField().getText().trim();
         String selectedRole = (String) addUserPanel.getRoles().getSelectedItem();
         User.Role role = User.Role.valueOf(selectedRole.toUpperCase());
-
-        if (!isValidInput(errors, username, password)){
-            JOptionPane.showMessageDialog(null, errors.toString(),"Input Error",JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-
-        // placeholder for values
+        
         User u = new User(0,username,password,role);
-
         return userDAO.insertUser(u);
     }
 
-    private boolean isValidInput(StringBuilder errors, String username, String password){        
-        if (username.length() < 3 || username.length() > 20){
-            errors.append("Username must be 3-20 characters long.\n");
-        }
-
-        if (password.length() < 3 || password.length() > 15){
-            errors.append("Password must be 3-15 characters long.\n");
-        }
-
-        if (isUsernameExisting(username)){
-            errors.append("Username already exists.");
-            return false;
-        }
-
-        return errors.length() == 0;
-    }
-
-    private boolean isUsernameExisting(String username){
-        return userDAO.getUserByUsername(username) != null;
-    }
-
     private void insertToEmployee(String selectedRole, StringBuilder errors){
-        Integer userID = insertToUsers(errors);
-
-        if (userID == null){
+        if (!validateInputFields(errors)){
             return;
         }
-
+        
+        Integer userID = insertToUsers();
         String lastName = addUserPanel.getLastNameField().getText();
         String firstName = addUserPanel.getFirstNameField().getText();
 
@@ -117,13 +89,6 @@ public class AddUserController {
             return;
         }
         
-        if (addUserPanel.getEmployeeRole().getText() == null || addUserPanel.getEmployeeRole().getText().isBlank()){
-            // delete because the user is in the users table but not in the employees table.
-            userDAO.deleteUser(userID);
-            JOptionPane.showMessageDialog(null, "Employee role must not be blank.");
-            return;
-        }
-
         String department = (String) addUserPanel.getDepartmentBox().getSelectedItem();
         Integer departmentID = deptDAO.getDepartmentIDByName(department);
         String role = addUserPanel.getEmployeeRole().getText().trim();
@@ -134,12 +99,11 @@ public class AddUserController {
     }
 
     private void insertToTechnicians(StringBuilder errors){
-        Integer userID = insertToUsers(errors);
-
-        if (userID == null){
+        if (!validateInputFields(errors)){
             return;
         }
 
+        Integer userID = insertToUsers();
         String lastName = addUserPanel.getLastNameField().getText();
         String firstName = addUserPanel.getFirstNameField().getText();
 
@@ -147,4 +111,72 @@ public class AddUserController {
         techDAO.insertTechnician(tech);
         JOptionPane.showMessageDialog(null, "Successfuully inserted " + firstName + " " + lastName + " to the Technicians Table.");
     }
+
+    private boolean validateInputFields(StringBuilder errors){
+        String selectedRole = (String) addUserPanel.getRoles().getSelectedItem();
+        
+        if (!isValidUserFieldInput(errors)){
+            JOptionPane.showMessageDialog(null, errors.toString(),"Input Error",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        if (selectedRole.contentEquals("Employee") && !isValidEmpFieldInput(errors)){
+            JOptionPane.showMessageDialog(null, errors.toString(),"Input Error",JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isValidUserFieldInput(StringBuilder errors){        
+        String username = addUserPanel.getUsernameField().getText().trim();    
+        String password = addUserPanel.getPasswordField().getText().trim();
+        String lastName = addUserPanel.getLastNameField().getText().trim();
+        String firstName = addUserPanel.getFirstNameField().getText().trim();
+
+        if (username.length() < 3 || username.length() > 20){
+            errors.append("Username must be 3-20 characters long.\n");
+        }
+
+        if (password.length() < 3 || password.length() > 15){
+            errors.append("Password must be 3-15 characters long.\n");
+        }
+
+        if (lastName.isEmpty() || firstName.isEmpty()){
+            errors.append("Name fields should not be empty.\n");
+        }
+
+        if (lastName.length() > 50 || firstName.length() > 50){
+            errors.append("Name fields should not exceed 50 characters.\n");
+        }
+
+        if (isUsernameExisting(username)){
+            errors.append("Username already exists.\n");
+        }
+
+        return errors.length() == 0;
+    }
+
+    private boolean isUsernameExisting(String username){
+        return userDAO.getUserByUsername(username) != null;
+    }
+
+    private boolean isValidEmpFieldInput(StringBuilder errors){
+        String jobTitle = addUserPanel.getEmployeeRole().getText().trim();
+        
+        if (jobTitle.isEmpty()){
+            errors.append("Job Title field cannot be empty.\n");
+            return false;
+        }
+
+        if (jobTitle.length() > 50){
+            errors.append("Job Title cannot exceed 50 characters.\n");
+            return false;
+        }
+
+        return true;
+    }
+    
+
+
 }

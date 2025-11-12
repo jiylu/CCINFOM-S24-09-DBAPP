@@ -39,19 +39,17 @@ public class TechniciansDAO {
     }
 
     public void insertTechnician(Technicians tech){
-        String query = "INSERT INTO Technicians(user_id, tech_lastName, tech_firstName, has_active_ticket) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO Technicians(user_id, tech_lastName, tech_firstName) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            // Bind the values to the prepared statement
-            pstmt.setInt(1, tech.getUser_ID());          // Set user_id
-            pstmt.setString(2, tech.getTech_lastName()); // Set tech_lastName
-            pstmt.setString(3, tech.getTech_firstName()); // Set tech_firstName
+            pstmt.setInt(1, tech.getUser_ID());          
+            pstmt.setString(2, tech.getTech_lastName());
+            pstmt.setString(3, tech.getTech_firstName());
 
-            // Execute the insertion query
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();  // Handle exceptions (logging or rethrow as needed)
+            e.printStackTrace();  
         }
     }
 
