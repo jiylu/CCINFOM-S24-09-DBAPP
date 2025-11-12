@@ -70,6 +70,27 @@ public class EmployeesDAO {
         }
     }
 
+    public Employees getEmployeeByUserId(int userId) throws SQLException {
+        String query = "SELECT emp_id, user_id, last_name, first_name, dept_id, job_title FROM Employees WHERE user_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Employees(
+                    rs.getInt("emp_id"),
+                    rs.getInt("user_id"),
+                    rs.getString("last_name"),
+                    rs.getString("first_name"),
+                    rs.getInt("dept_id"),
+                    rs.getString("job_title")
+                );
+            }
+        }
+        return null; 
+    }
+
+
     public List<Employees> getEmployeesByDepartment(int departmentID){
         List<Employees> list = new ArrayList<>();
         String query = "SELECT * FROM employees e WHERE e.dept_id = ?";
@@ -98,6 +119,7 @@ public class EmployeesDAO {
         }
     }
 
+    //DELETE
     public void updateEmployee(Employees emp){
         String query = "UPDATE employees SET last_name = ?, first_name = ?, dept_id = ?, job_title = ? WHERE emp_id = ?";
 

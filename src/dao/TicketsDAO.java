@@ -69,6 +69,28 @@ public class TicketsDAO {
         return ticketsList;
     }
 
+    public boolean insertTicket(Tickets ticket) {
+        String sql = "INSERT INTO Tickets (category_id, department_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, ticket.getCategory_id());
+            stmt.setInt(2, ticket.getDepartment_id());
+            stmt.setInt(3, ticket.getEmployee_id());
+            stmt.setInt(4, ticket.getTechnician_id());
+            stmt.setString(5, ticket.getCreation_date());
+            stmt.setString(6, ticket.getResolve_date());
+            stmt.setString(7, ticket.getStatus());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+
+}
+
+
     public boolean updateTicket(Tickets ticket) {
         String sql = "UPDATE tickets SET category_id = ?, status = ?, resolve_date = ? WHERE ticket_id = ?";
 

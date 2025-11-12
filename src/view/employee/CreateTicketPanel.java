@@ -1,13 +1,13 @@
 package view.employee;
 
-import models.Categories;
+import view.technician.CategoryItem;
 import javax.swing.*;
 import java.awt.*;
 
 public class CreateTicketPanel extends JPanel {
     private JLabel titleLabel;
     private JTextField subjectField;
-    private JComboBox<Categories> categories;
+    private JComboBox<CategoryItem> categories;
     private JTextArea descriptionArea;
     private JButton createButton;
 
@@ -42,13 +42,7 @@ public class CreateTicketPanel extends JPanel {
         categoryLabel.setBounds(120,120,120,25);
         add(categoryLabel);
 
-        JComboBox<String> categories = new JComboBox<>();
-        categories.addItem("- Select Category -");
-        categories.addItem("Network Issue");
-        categories.addItem("Software Issue");
-        categories.addItem("Hardware Issue");
-        categories.addItem("Account Access Issue");
-    
+        categories = new JComboBox<>();             
         categories.setBounds(220, 120, 250, 30);
         add(categories);
     }
@@ -70,9 +64,28 @@ public class CreateTicketPanel extends JPanel {
         add(createButton);
     }
 
-    public JComboBox<Categories> getCategories(){
+    public JComboBox<CategoryItem> getCategories(){
         return categories;
     }
+
+    public JButton getCreateButton() {
+        return createButton;
+    }
+
+    public JTextField getSubjectField() {
+    return subjectField;
+    }
+
+    public JTextArea getDescriptionArea() {
+        return descriptionArea;
+    }
+
+    public void clearFields() {
+        subjectField.setText("");
+        descriptionArea.setText("");
+        categories.setSelectedIndex(0);
+    }
+
     
 
 }

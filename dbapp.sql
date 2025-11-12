@@ -8,6 +8,7 @@ DROP TABLE IF EXISTS Technicians;
 DROP TABLE IF EXISTS Employees;
 DROP TABLE IF EXISTS Departments;
 DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Categories;
 
 -- Table for centralized login credentials (Technician, Employee, Admin) 
 -- UID starts at 10000.
@@ -65,7 +66,7 @@ CREATE TABLE IF NOT EXISTS Employees (
     job_title VARCHAR(50) NOT NULL,
     CONSTRAINT fk_employee_user FOREIGN KEY (user_id) REFERENCES Users(user_id),
 	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments(department_id)
-) AUTO_INCREMENT = 90000;
+) AUTO_INCREMENT = 10000;
 
 INSERT IGNORE INTO Employees(user_id, last_name, first_name, dept_id, job_title) 
 VALUES 
