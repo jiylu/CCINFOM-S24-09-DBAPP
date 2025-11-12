@@ -98,6 +98,7 @@ public class TicketsDAO {
     }
 
     public boolean insertTicket(Tickets ticket) {
+        
         String sql = "INSERT INTO Tickets (ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -114,9 +115,20 @@ public class TicketsDAO {
             e.printStackTrace();
             return false;
         }
+    }
 
+    public int getAvailableTechnicianId() throws SQLException {
+        String sql = "SELECT technician_id FROM Technicians WHERE technician_id NOT IN (SELECT technician_id FROM Tickets WHERE status = 'Active') LIMIT 1";
 
-}
+        try (PreparedStatement pstmt = connection.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt("technician_id");
+            }
+        }
+        return -1; // No available technician
+    }
+
 
 
     public boolean updateTicket(Tickets ticket) {

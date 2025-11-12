@@ -96,6 +96,9 @@ public class EmployeeDashboardController{
                 return;
             }
 
+            int availableTechId = ticketsDAO.getAvailableTechnicianId();
+            String status = (availableTechId != -1) ? "Active" : "Enqueued";
+
             Tickets newTicket = new Tickets();
             newTicket.setCategory_id(selectedCategory.getId());
             newTicket.setSubject(subject); 
@@ -103,7 +106,7 @@ public class EmployeeDashboardController{
             newTicket.setTechnician_id(getRandomTechnicianId()); 
             newTicket.setCreation_date(java.time.LocalDate.now().toString());
             newTicket.setResolve_date(null);
-            newTicket.setStatus("Active");
+            newTicket.setStatus(status);
 
             boolean success = ticketsDAO.insertTicket(newTicket);
 
