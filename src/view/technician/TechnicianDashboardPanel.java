@@ -62,12 +62,12 @@ public class TechnicianDashboardPanel extends JPanel {
 
         viewTicketQueueButton = new JButton("View Ticket Queue");
         viewTicketQueueButton.setFont(buttonFont);
-        viewTicketQueueButton.setBounds(20, 150, 250, 50);
+        viewTicketQueueButton.setBounds(20, 80, 250, 50);
         add(viewTicketQueueButton);
 
         resolveTicketButton = new JButton("Resolve Ticket");
         resolveTicketButton.setFont(buttonFont);
-        resolveTicketButton.setBounds(20, 80, 250, 50); // increased width & height
+        resolveTicketButton.setBounds(20, 150, 250, 50); // increased width & height
         add(resolveTicketButton);
     }
 
