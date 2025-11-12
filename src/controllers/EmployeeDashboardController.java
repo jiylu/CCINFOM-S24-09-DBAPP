@@ -106,7 +106,7 @@ public class EmployeeDashboardController{
             newTicket.setSubject(subject); 
             newTicket.setEmployee_id(emp.getEmpID());
             newTicket.setTechnician_id(getTechnicianId()); 
-            newTicket.setCreation_date(java.time.LocalDate.now().toString());
+            newTicket.setCreation_date(java.time.LocalDateTime.now().toString());
             newTicket.setResolve_date(null);
             newTicket.setStatus(status);
 

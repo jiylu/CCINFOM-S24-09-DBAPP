@@ -201,7 +201,7 @@ public class TechnicianDashboardController {
                 JOptionPane.showMessageDialog(frame,
                         "Ticket updated successfully!");
 
-                if("Resolved".equalsIgnoreCase(newStatus)){
+                if ("Resolved".equalsIgnoreCase(newStatus) || "Cancelled".equalsIgnoreCase(newStatus)) {
                     activateNextEnqueuedTicket();
                 }
 
