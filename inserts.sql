@@ -13,7 +13,28 @@ VALUES
     ('chaewon_dc', 'password123', 'Admin'),
     ('nobitabrto', 'password123', 'Technician'),
     ('carlosbrrng', 'password123', 'Technician'),
-    ('fayewebster', 'password123', 'Technician');
+    ('fayewebster', 'password123', 'Technician'),
+    ('elena_morales', 'password123', 'Employee'),
+    ('daniel_hernandez', 'password123', 'Employee'),
+    ('isabel_lopez', 'password123', 'Employee'),
+    ('victor_reyes', 'password123', 'Employee'),
+    ('sofia_ramos', 'password123', 'Employee'),
+    ('miguel_flores', 'password123', 'Employee'),
+    ('camila_diaz', 'password123', 'Employee'),
+    ('javier_silva', 'password123', 'Employee'),
+    ('adriana_torres', 'password123', 'Employee'),
+    ('ricardo_mendoza', 'password123', 'Employee'),
+    ('danielle_ng', 'password123', 'Technician'),
+    ('leo_chang', 'password123', 'Technician'),
+    ('maya_fernandez', 'password123', 'Technician'),
+    ('kevin_garcia', 'password123', 'Technician'),
+    ('nina_choi', 'password123', 'Technician'),
+    ('omar_johnson', 'password123', 'Technician'),
+    ('lara_huang', 'password123', 'Technician'),
+    ('samuel_lee', 'password123', 'Technician'),
+    ('emma_kim', 'password123', 'Technician'),
+    ('dante_rivera', 'password123', 'Technician'),
+    ('dante_gulapa', 'password123', 'Technician');
 
 INSERT IGNORE INTO Departments (department_name)
 VALUES
@@ -36,13 +57,35 @@ VALUES
     (10005, 'Smith', 'Antonio', 7, 'Admin'),
     (10006, 'Lopez', 'Luis', 5, 'Project Manager'),
     (10007, 'Torres', 'Amanda', 1, 'Employee Relations'),
-    (10008, 'Dela Cruz', 'Chaewon', 7, 'Admin');
+    (10008, 'Dela Cruz', 'Chaewon', 7, 'Admin'),
+    (10012, 'Morales', 'Elena', 1, 'HR Assistant'),
+    (10013, 'Hernandez', 'Daniel', 2, 'Accountant'),
+    (10014, 'Lopez', 'Isabel', 3, 'Customer Service Rep'),
+    (10015, 'Reyes', 'Victor', 4, 'Sales Associate'),
+    (10016, 'Ramos', 'Sofia', 5, 'Operations Coordinator'),
+    (10017, 'Flores', 'Miguel', 6, 'Marketing Specialist'),
+    (10018, 'Diaz', 'Camila', 1, 'HR Coordinator'),
+    (10019, 'Silva', 'Javier', 2, 'Finance Analyst'),
+    (10020, 'Torres', 'Adriana', 3, 'Customer Support Specialist'),
+    (10021, 'Mendoza', 'Ricardo', 5, 'Operations Manager');
+
 
 INSERT IGNORE INTO Technicians(user_id, tech_lastName, tech_firstName)
 VALUES 
 	(10009, 'Roberto', 'Nobita'),
     (10010, 'Barring', 'Carlos'),
-    (10011, 'Webster', 'Faye');
+    (10011, 'Webster', 'Faye'),
+    (10022, 'Ng', 'Danielle'),
+    (10023, 'Chang', 'Leo'),
+    (10024, 'Fernandez', 'Maya'),
+    (10025, 'Garcia', 'Kevin'),
+    (10026, 'Choi', 'Nina'),
+    (10027, 'Johnson', 'Omar'),
+    (10028, 'Huang', 'Lara'),
+    (10029, 'Lee', 'Samuel'),
+    (10030, 'Kim', 'Emma'),
+    (10031, 'Rivera', 'Dante'),
+    (10031, 'Gulapa', 'Dante');
 
 INSERT IGNORE INTO Categories (category_name)
 VALUES
