@@ -176,20 +176,4 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
-
-    public void deleteUser(int userID) {
-        String query = "DELETE FROM Users WHERE user_id = ?";
-        try (PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, userID);
-            int rowsAffected = ps.executeUpdate(); 
-            
-            if (rowsAffected > 0) {
-                System.out.println("User with ID " + userID + " deleted successfully.");
-            } else {
-                System.out.println("No user found with ID " + userID + ".");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }

@@ -168,9 +168,9 @@ public class EditUserController {
     private void updateAdminData(User user){
         String newLastName = editPanel.getLastNameField().getText().trim();
         String newFirstName = editPanel.getLastNameField().getText().trim();
-        int deptID = deptDAO.getDepartmentIDByName("Administration");
+        int fieldDeptID = deptDAO.getDepartmentIDByName("Administration");
 
-        Employees emp = new Employees(specID, user.getUserID(), newLastName, newFirstName, deptID, "Admin");
+        Employees emp = new Employees(specID, user.getUserID(), newLastName, newFirstName, fieldDeptID, "Admin");
         empDAO.updateEmployee(emp);
     }
 
@@ -183,15 +183,12 @@ public class EditUserController {
     }
 
     private boolean validateInputFields(StringBuilder errors){
-        String newUsername = editPanel.getUsernameField().getText();
-        String newPassword = editPanel.getPasswordField().getText();
-        
-        if (!isValidUserFieldInput(errors, newUsername, newPassword)){
+        if (!isValidUserFieldInput(errors)){
             JOptionPane.showMessageDialog(null, errors.toString(),"Input Error",JOptionPane.ERROR_MESSAGE);
             return false;
         }
         
-        if (userRole != User.Role.TECHNICIAN && !isValidEmpFieldInput(errors)){
+        if (userRole == User.Role.EMPLOYEE && !isValidEmpFieldInput(errors)){
             JOptionPane.showMessageDialog(null, errors.toString(),"Input Error",JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -199,13 +196,26 @@ public class EditUserController {
         return true;
     }
 
-    private boolean isValidUserFieldInput(StringBuilder errors, String newUsername, String newPassword){        
+    private boolean isValidUserFieldInput(StringBuilder errors){        
+        String newUsername = editPanel.getUsernameField().getText();
+        String newPassword = editPanel.getPasswordField().getText();
+        String fieldLastName = editPanel.getLastNameField().getText().trim();
+        String fieldFirstName = editPanel.getFirstNameField().getText().trim();
+        
         if (newUsername.length() < 3 || newUsername.length() > 20){
             errors.append("Username must be 3-20 characters long.\n");
         }
 
         if (newPassword.length() < 3 || newPassword.length() > 15){
             errors.append("Password must be 3-15 characters long.\n");
+        }
+
+        if (fieldLastName.isEmpty() || fieldFirstName.isEmpty()){
+            errors.append("Name fields should not be empty.\n");
+        }
+
+        if (fieldLastName.length() > 50 || fieldFirstName.length() > 50){
+            errors.append("Name fields should not exceed 50 characters.\n");
         }
 
         if (isUsernameExisting(newUsername)){
@@ -217,18 +227,15 @@ public class EditUserController {
     }
 
     private boolean isValidEmpFieldInput(StringBuilder errors){
-        String newLastName = editPanel.getLastNameField().getText().trim();
-        String newFirstName = editPanel.getFirstNameField().getText().trim();
-        String newJobTitle = " ";
-
-        if (userRole != User.Role.ADMIN){
-            newJobTitle = editPanel.getEmployeeRole().getText().trim();
-        } else {
-            newJobTitle = "Admin";
+        String jobTitle = editPanel.getEmployeeRole().getText().trim();
+        
+        if (jobTitle.isEmpty()){
+            errors.append("Job Title field cannot be empty.\n");
+            return false;
         }
 
-        if (newJobTitle.isEmpty() || newLastName.isEmpty() || newFirstName.isEmpty()){
-            errors.append("Fields cannot be empty.\n");
+        if (jobTitle.length() > 50){
+            errors.append("Job Title cannot exceed 50 characters.\n");
             return false;
         }
 
