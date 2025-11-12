@@ -1,5 +1,4 @@
 CREATE SCHEMA IF NOT EXISTS ticketing_system;
-
 USE ticketing_system;
 
 DROP TABLE IF EXISTS TicketLogs;
@@ -10,9 +9,6 @@ DROP TABLE IF EXISTS Departments;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Categories;
 
--- Table for centralized login credentials (Technician, Employee, Admin) 
--- UID starts at 10000.
-
 CREATE TABLE IF NOT EXISTS Users(
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(20) NOT NULL UNIQUE,
@@ -21,41 +17,10 @@ CREATE TABLE IF NOT EXISTS Users(
     active BOOLEAN DEFAULT TRUE 
 ) AUTO_INCREMENT = 10000;
 
-INSERT IGNORE INTO Users(username, password, role)
-VALUES
-    ('montano_rivera', 'password123', 'Employee'), -- 10000
-    ('thea_delacruz', 'password123', 'Employee'), -- 10001
-    ('maria_cortado', 'password123', 'Employee'), -- 10002
-    ('karina_garcia', 'password123', 'Employee'), -- 10003
-    ('thomas_lee', 'password123', 'Employee'), -- 10004
-    ('antonio_smith', 'password123', 'Employee'), -- 10005
-    ('luis_lopez', 'password123', 'Employee'), -- 10006
-    ('amanda_torres', 'password123', 'Employee'), -- 10007
-    ('chaewon_dc', 'password123', 'Admin'), -- 10008
-    ('nobitabrto', 'password123', 'Technician'), -- 10009
-    ('carlosbrrng', 'password123', 'Technician'), -- 10010
-    ('fayewebster', 'password123', 'Technician'); -- 10011
-
-
-
--- Departments table
 CREATE TABLE IF NOT EXISTS Departments (
     department_id INT AUTO_INCREMENT PRIMARY KEY,
     department_name VARCHAR(40) NOT NULL UNIQUE
 );
-
-INSERT IGNORE INTO Departments (department_name)
-VALUES
-	('Human Resources'),
-	('Finance'),
-	('Customer Support'),
-	('Sales'),
-	('Operations'),
-	('Marketing'),
-	('Administration'),
-	('Information Technology');
-
-
 
 CREATE TABLE IF NOT EXISTS Employees (
 	emp_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -68,51 +33,19 @@ CREATE TABLE IF NOT EXISTS Employees (
 	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments(department_id)
 ) AUTO_INCREMENT = 90000;
 
-INSERT IGNORE INTO Employees(user_id, last_name, first_name, dept_id, job_title) 
-VALUES 
-	(10000, 'Rivera', 'Montano', 4, 'Senior Coordinator'),
-    (10001, 'Dela Cruz', 'Thea', 2, 'Department Secretary'),
-    (10002, 'Cortado', 'Maria', 1, 'Training Manager'),
-    (10003, 'Garcia', 'Karina', 3, 'Front Desk Associate'),
-    (10004, 'Lee', 'Thomas', 6, 'Marketing Assistant'),
-    (10005, 'Smith', 'Antonio', 7, 'Accounting Clerk'),
-    (10006, 'Lopez', 'Luis', 5, 'Project Manager'),
-    (10007, 'Torres', 'Amanda', 1, 'Employee Relations'),
-    (10008, 'dela Cruz', 'Chaewon', 7, 'Admin');
-
-
-
 CREATE TABLE IF NOT EXISTS Technicians ( 
 	technician_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL UNIQUE,
     tech_lastName VARCHAR(50) NOT NULL,
     tech_firstName VARCHAR(50) NOT NULL,
     CONSTRAINT fk_technician_user FOREIGN KEY (user_id) REFERENCES Users(user_id)
-)AUTO_INCREMENT = 30000;
-
-
-INSERT IGNORE INTO Technicians(user_id, tech_lastName, tech_firstName)
-VALUES 
-	(10009, 'Roberto', 'Nobita'),
-    (10010, 'Barring', 'Carlos'),
-    (10011, 'Webster', 'Faye');
-
-
--- CREATE TABLE IF NOT EXISTS Categories ();
+) AUTO_INCREMENT = 30000;
 
 CREATE TABLE IF NOT EXISTS Categories (
 	category_id INT AUTO_INCREMENT PRIMARY KEY,  
-    category_name VARCHAR(50));
+    category_name VARCHAR(50)
+);
 
-INSERT IGNORE INTO Categories (category_name)
-VALUES
-	('Network Issue'),
-    ('Software Issue'),
-    ('Hardware Issue'),
-    ('Account Access Issue');
-
--- Inserts (dummy data) dito
--- Tickets Table
 CREATE TABLE IF NOT EXISTS Tickets (
 	ticket_id INT AUTO_INCREMENT PRIMARY KEY,
     category_id INT NOT NULL,
@@ -126,4 +59,4 @@ CREATE TABLE IF NOT EXISTS Tickets (
     CONSTRAINT fk_department_ticket FOREIGN KEY (department_id) REFERENCES Departments(department_id),
     CONSTRAINT fk_employee_ticket FOREIGN KEY (employee_id) REFERENCES Employees(emp_id),
     CONSTRAINT fk_technician_ticket FOREIGN KEY (technician_id) REFERENCES Technicians(technician_id)
-)AUTO_INCREMENT = 40000;
+) AUTO_INCREMENT = 40000;
