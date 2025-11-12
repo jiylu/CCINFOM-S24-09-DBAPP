@@ -5,6 +5,7 @@ import java.util.List;
 public class Tickets {
     private int ticket_id;
     private int category_id;
+    private String ticket_subject;
     private int department_id;
     private int employee_id;
     private int technician_id;
@@ -12,9 +13,10 @@ public class Tickets {
     private String resolve_date;
     private String status;
 
-    public Tickets(int ticket_id, int category_id, int department_id, int employee_id, int technician_id, String creation_date, String resolve_date, String status) {
+    public Tickets(int ticket_id, String ticket_subject, int category_id, int department_id, int employee_id, int technician_id, String creation_date, String resolve_date, String status) {
         this.ticket_id = ticket_id;
         this.category_id = category_id;
+        this.ticket_subject = ticket_subject;
         this.department_id = department_id;
         this.employee_id = employee_id;
         this.technician_id = technician_id;
@@ -33,6 +35,10 @@ public class Tickets {
 
     public int getCategory_id() {
         return category_id;
+    }
+
+    public String getTicket_subject() {
+        return ticket_subject;
     }
 
     public int getDepartment_id() {
@@ -86,5 +92,9 @@ public class Tickets {
 
     public void setCategory_id(int category_id){
         this.category_id = category_id;
+    }
+
+    public void setSubject(String subject) {
+        this.ticket_subject = subject;
     }
 }
