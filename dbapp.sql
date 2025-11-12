@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS Employees (
     job_title VARCHAR(50) NOT NULL,
     CONSTRAINT fk_employee_user FOREIGN KEY (user_id) REFERENCES Users(user_id),
 	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments(department_id)
-) AUTO_INCREMENT = 10000;
+) AUTO_INCREMENT = 90000;
 
 INSERT IGNORE INTO Employees(user_id, last_name, first_name, dept_id, job_title) 
 VALUES 
