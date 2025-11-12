@@ -13,6 +13,7 @@ import view.technician.CategoryItem;
 import view.technician.ResolveTicketTechnicianPanel;
 import view.technician.TechnicianDashboardPanel;
 import view.technician.TechnicianTicketQueue;
+import view.technician.TicketHistory;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
@@ -26,6 +27,7 @@ public class TechnicianDashboardController {
     private TechnicianDashboardPanel panel;
     private ResolveTicketTechnicianPanel resolveTicketTechnicianPanel;
     private TechnicianTicketQueue ticketQueuePanel;
+    private TicketHistory ticketHistoryPanel;
     private TicketsDAO ticketsDAO;
     private CategoriesDAO categoriesDAO;
     private List<Integer> categoryIds;
@@ -35,6 +37,7 @@ public class TechnicianDashboardController {
         this.frame = frame;
         this.panel = frame.getTechnicianDashboardPanel();
         this.resolveTicketTechnicianPanel = panel.getResolveTicketTechnicianPanel();
+        this.ticketHistoryPanel = panel.getTicketHistoryPanel();
         this.ticketQueuePanel = panel.getTechnicianTicketQueuePanel();
         this.ticketsDAO = ticketsDAO;
         this.categoriesDAO = categoriesDAO;
@@ -67,6 +70,12 @@ public class TechnicianDashboardController {
             loadTicketQueue();
             panel.showPanel(TechnicianDashboardPanel.TICKET_QUEUE);
         });
+
+        panel.getTicketHistoryButton().addActionListener(e -> {
+            ticketHistoryPanel.clearTickets();
+            loadTicketHistory();
+            panel.showPanel(TechnicianDashboardPanel.TICKET_HISTORY);
+        });
     }
 
     private void loadTicketQueue() {
@@ -91,6 +100,30 @@ public class TechnicianDashboardController {
             ex.printStackTrace();
         }
 
+    }
+
+    private void loadTicketHistory() {
+        try {
+            int technicianId = new TechniciansDAO(DBConnection.connect())
+                    .getTechnicianIdByUserId(user.getUserID());
+            List<Tickets> tickets = ticketsDAO.getResolvedTickets(technicianId);
+
+            for (Tickets t : tickets) {
+                ticketHistoryPanel.addTicket(
+                    String.valueOf(t.getTicket_id()),
+                    String.valueOf(t.getTicket_subject()),
+                    String.valueOf(t.getCategory_id()),
+                    String.valueOf(t.getEmployee_id()),
+                    String.valueOf(t.getTechnician_id()),
+                    t.getCreation_date(),
+                    t.getResolve_date(),
+                    t.getStatus()
+                );
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void loadAssignedTickets() {
@@ -193,6 +226,11 @@ public class TechnicianDashboardController {
             selected.setResolve_date(java.time.LocalDateTime.now().toString());
         }
 
+        if ("Mark Ticket Resolution Status".equals(newStatus)) {
+            JOptionPane.showMessageDialog(frame, "Please select a valid resolution status!");
+            return;
+        }
+
         selected.setStatus(newStatus);
 
         try {
@@ -201,7 +239,11 @@ public class TechnicianDashboardController {
                 JOptionPane.showMessageDialog(frame,
                         "Ticket updated successfully!");
 
-                loadAssignedTickets(); // refresh list
+                if ("Resolved".equalsIgnoreCase(newStatus) || "Cancelled".equalsIgnoreCase(newStatus)) {
+                    activateNextEnqueuedTicket();
+                }
+
+                loadAssignedTickets();
                 panel.showPanel(TechnicianDashboardPanel.EMPTY_PANEL);
             } else {
                 JOptionPane.showMessageDialog(frame,
@@ -211,6 +253,28 @@ public class TechnicianDashboardController {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(frame,
                     "Error updating ticket!");
+        }
+    }
+
+    private void activateNextEnqueuedTicket(){
+        try {
+            int technicianID = new TechniciansDAO(DBConnection.connect()).getTechnicianIdByUserId(user.getUserID());
+
+            List<Tickets> enqueuedTickets = ticketsDAO.getEnqueuedTicketsByTechnician(technicianID);
+
+            if (enqueuedTickets != null && !enqueuedTickets.isEmpty()){
+                Tickets nextTicket = enqueuedTickets.get(0);
+
+                nextTicket.setStatus("Active");
+                nextTicket.setTechnician_id(technicianID);
+
+                boolean activated = ticketsDAO.updateTicket(nextTicket);
+                if (activated) {
+                    JOptionPane.showMessageDialog(frame, "Next enqueued ticket (" + nextTicket.getTicket_id() + ") is now Active!");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

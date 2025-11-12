@@ -7,16 +7,18 @@ import javax.swing.*;
 public class AdminDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
     public final static String VIEW_USERS = "viewUsers";
+    public final static String VIEW_REPORTS = "viewReports";
 
     private JLabel titleLabel;
     private JButton viewUsersButton; 
-    // private JButton editUserButton; 
+    private JButton reportsButton; 
     // private JButton deleteUserButton; 
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private AddUserPanel addUserPanel;
     private UserManagementPanel viewUsersPanel;
+    private ReportsDashboardPanel reportsDashboardPanel;
 
     public AdminDashboardPanel(){
         setLayout(null);
@@ -28,6 +30,7 @@ public class AdminDashboardPanel extends JPanel {
 
     private void initPanels(){
         viewUsersPanel = new UserManagementPanel();
+        reportsDashboardPanel = new ReportsDashboardPanel();
     }
 
     private void setupCardLayout(){
@@ -38,6 +41,7 @@ public class AdminDashboardPanel extends JPanel {
         
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(viewUsersPanel, VIEW_USERS);
+        cardPanel.add(reportsDashboardPanel, VIEW_REPORTS);
         add(cardPanel);
     }
 
@@ -57,6 +61,11 @@ public class AdminDashboardPanel extends JPanel {
         viewUsersButton = new JButton("Manage Users");
         viewUsersButton.setBounds(10, 60, 150, 25);
         add(viewUsersButton);
+
+        reportsButton = new JButton("View Reports");
+        reportsButton.setBounds(170, 60, 150, 25);
+        add(reportsButton);
+
     }
 
     public JLabel getTitleLabel(){
@@ -67,9 +76,9 @@ public class AdminDashboardPanel extends JPanel {
         return viewUsersButton;
     }
 
-    // public JButton getEditUserButton(){
-    //     return editUserButton;
-    // }
+    public JButton getReportsButton(){
+        return reportsButton;
+    }
 
     // public JButton getDeleteUserButton(){
     //     return deleteUserButton;
