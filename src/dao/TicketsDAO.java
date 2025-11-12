@@ -24,7 +24,6 @@ public class TicketsDAO {
                     rs.getInt("ticket_id"),
                     rs.getString("ticket_subject"), 
                     rs.getInt("category_id"),
-                    rs.getInt("department_id"),
                     rs.getInt("employee_id"),
                     rs.getInt("technician_id"),
                     rs.getString("creation_date"),
@@ -44,7 +43,7 @@ public class TicketsDAO {
     public List<Tickets> getTicketsByTechnician(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String query = "SELECT ticket_id, category_id, department_id, employee_id, technician_id, creation_date, resolve_date, status " +
+        String query = "SELECT ticket_id, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
                 "FROM Tickets WHERE technician_id = ? AND status = 'Active'";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -56,7 +55,6 @@ public class TicketsDAO {
                             rs.getInt("ticket_id"),
                             rs.getString("ticket_subject"), 
                             rs.getInt("category_id"),
-                            rs.getInt("department_id"),
                             rs.getInt("employee_id"),
                             rs.getInt("technician_id"),
                             rs.getString("creation_date"),
@@ -72,17 +70,16 @@ public class TicketsDAO {
     }
 
     public boolean insertTicket(Tickets ticket) {
-        String sql = "INSERT INTO Tickets (ticket_subject, category_id, department_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Tickets (ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, ticket.getTicket_subject());
             stmt.setInt(2, ticket.getCategory_id());
-            stmt.setInt(3, ticket.getDepartment_id());
-            stmt.setInt(4, ticket.getEmployee_id());
-            stmt.setInt(5, ticket.getTechnician_id());
-            stmt.setString(6, ticket.getCreation_date());
-            stmt.setString(7, ticket.getResolve_date());
-            stmt.setString(8, ticket.getStatus());
+            stmt.setInt(3, ticket.getEmployee_id());
+            stmt.setInt(4, ticket.getTechnician_id());
+            stmt.setString(5, ticket.getCreation_date());
+            stmt.setString(6, ticket.getResolve_date());
+            stmt.setString(7, ticket.getStatus());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {

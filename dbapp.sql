@@ -117,14 +117,12 @@ CREATE TABLE IF NOT EXISTS Tickets (
 	ticket_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_subject VARCHAR(100) NOT NULL,
     category_id INT NOT NULL,
-    department_id INT NOT NULL,
     employee_id INT NOT NULL,
     technician_id INT NOT NULL,
     creation_date DATETIME, 
     resolve_date DATETIME,
     status ENUM('Enqueued', 'Active', 'Resolved', 'Cancelled') NOT NULL,
     CONSTRAINT fk_category_ticket FOREIGN KEY (category_id) REFERENCES Categories(category_id),
-    CONSTRAINT fk_department_ticket FOREIGN KEY (department_id) REFERENCES Departments(department_id),
     CONSTRAINT fk_employee_ticket FOREIGN KEY (employee_id) REFERENCES Employees(emp_id),
     CONSTRAINT fk_technician_ticket FOREIGN KEY (technician_id) REFERENCES Technicians(technician_id)
 )AUTO_INCREMENT = 40000;
