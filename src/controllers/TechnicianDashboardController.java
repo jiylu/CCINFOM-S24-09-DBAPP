@@ -201,7 +201,11 @@ public class TechnicianDashboardController {
                 JOptionPane.showMessageDialog(frame,
                         "Ticket updated successfully!");
 
-                loadAssignedTickets(); // refresh list
+                if ("Resolved".equalsIgnoreCase(newStatus) || "Cancelled".equalsIgnoreCase(newStatus)) {
+                    activateNextEnqueuedTicket();
+                }
+
+                loadAssignedTickets();
                 panel.showPanel(TechnicianDashboardPanel.EMPTY_PANEL);
             } else {
                 JOptionPane.showMessageDialog(frame,
@@ -211,6 +215,28 @@ public class TechnicianDashboardController {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(frame,
                     "Error updating ticket!");
+        }
+    }
+
+    private void activateNextEnqueuedTicket(){
+        try {
+            int technicianID = new TechniciansDAO(DBConnection.connect()).getTechnicianIdByUserId(user.getUserID());
+
+            List<Tickets> enqueuedTickets = ticketsDAO.getEnqueuedTicketsByTechnician(technicianID);
+
+            if (enqueuedTickets != null && !enqueuedTickets.isEmpty()){
+                Tickets nextTicket = enqueuedTickets.get(0);
+
+                nextTicket.setStatus("Active");
+                nextTicket.setTechnician_id(technicianID);
+
+                boolean activated = ticketsDAO.updateTicket(nextTicket);
+                if (activated) {
+                    JOptionPane.showMessageDialog(frame, "Next enqueued ticket (" + nextTicket.getTicket_id() + ") is now Active!");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
