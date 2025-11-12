@@ -43,7 +43,7 @@ public class TicketsDAO {
     public List<Tickets> getTicketsByTechnician(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String query = "SELECT ticket_id, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
+        String query = "SELECT ticket_id, ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
                 "FROM Tickets WHERE technician_id = ? AND status = 'Active'";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {

@@ -4,6 +4,7 @@ import dao.CategoriesDAO;
 import dao.TechniciansDAO;
 import dao.TicketsDAO;
 import dao.UserDAO;
+import db.DBConnection;
 import models.Categories;
 import models.Tickets;
 import models.User;
@@ -15,6 +16,7 @@ import view.technician.TechnicianDashboardPanel;
 import javax.swing.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TechnicianDashboardController {
@@ -38,13 +40,14 @@ public class TechnicianDashboardController {
     public void init(){
         frame.showPanel(Frame.TECHNICIAN_PANEL);
         initListeners();
+        loadTicketCategories();
         loadAssignedTickets();
     }
 
     private void initListeners(){
         panel.getResolveTicketButton().addActionListener(e -> {
-            loadAssignedTickets();
             loadTicketCategories();
+            loadAssignedTickets();
             panel.showPanel(TechnicianDashboardPanel.RESOLVE_TICKET);
         });
 
@@ -59,7 +62,8 @@ public class TechnicianDashboardController {
 
     private void loadAssignedTickets() {
         try {
-            int technicianId = user.getUserID();
+            int technicianId = new TechniciansDAO(DBConnection.connect())
+                    .getTechnicianIdByUserId(user.getUserID());
             List<Tickets> tickets = ticketsDAO.getTicketsByTechnician(technicianId);
 
             if (tickets == null || tickets.isEmpty()){
@@ -79,6 +83,10 @@ public class TechnicianDashboardController {
 
             resolveTicketTechnicianPanel.setTicketsList(tickets);
 
+            // Select the first ticket
+            resolveTicketTechnicianPanel.getTicketsToResolve().setSelectedIndex(0);
+            updateTicketDetails();
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -90,11 +98,14 @@ public class TechnicianDashboardController {
 
         Tickets selected = resolveTicketTechnicianPanel.getTicketsList().get(index);
 
+        resolveTicketTechnicianPanel.getTicketsSubjectLabel()
+                .setText(selected.getTicket_subject());
+
         resolveTicketTechnicianPanel.getEmployeeIDLabel()
-                .setText("Employee ID: " + selected.getEmployee_id());
+                .setText(String.valueOf(selected.getEmployee_id()));
 
         resolveTicketTechnicianPanel.getCreationDateLabel()
-                .setText("Creation Date: " + selected.getCreation_date());
+                .setText(selected.getCreation_date());
 
         resolveTicketTechnicianPanel.getStatus().setSelectedItem(selected.getStatus());
 
@@ -112,8 +123,11 @@ public class TechnicianDashboardController {
             JComboBox<CategoryItem> categoriesCombo = resolveTicketTechnicianPanel.getCategories();
             categoriesCombo.removeAllItems();
 
+            categoryIds = new ArrayList<>();
+
             for (Categories c : categories) {
                 categoriesCombo.addItem(new CategoryItem(c.getCategoryID(), c.getCategoryName()));
+                categoryIds.add(c.getCategoryID());
             }
 
         } catch (Exception ex) {
@@ -121,6 +135,7 @@ public class TechnicianDashboardController {
             JOptionPane.showMessageDialog(frame, "Failed to load categories!");
         }
     }
+
     private void saveTicketChanges() {
         int selectedIndex = resolveTicketTechnicianPanel.getTicketsToResolve().getSelectedIndex();
         if (selectedIndex < 0) {

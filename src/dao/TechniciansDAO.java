@@ -74,4 +74,14 @@ public class TechniciansDAO {
             e.printStackTrace();
         }
     }
+
+    public int getTechnicianIdByUserId(int userId) throws SQLException {
+        String sql = "SELECT technician_id FROM Technicians WHERE user_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt("technician_id");
+        }
+        return -1;
+    }
 }

@@ -14,8 +14,8 @@ public class Tickets {
 
     public Tickets(int ticket_id, String ticket_subject, int category_id, int employee_id, int technician_id, String creation_date, String resolve_date, String status) {
         this.ticket_id = ticket_id;
-        this.category_id = category_id;
         this.ticket_subject = ticket_subject;
+        this.category_id = category_id;
         this.employee_id = employee_id;
         this.technician_id = technician_id;
         this.creation_date = creation_date;

@@ -9,6 +9,7 @@ import java.util.List;
 public class ResolveTicketTechnicianPanel extends JPanel {
     private JComboBox<String> ticketsToResolve;
     private JComboBox<CategoryItem> categories;
+    private JLabel ticketsSubjectLabel;
     private JLabel employeeIDLabel;
     private JLabel creationDateLabel;
     private JLabel resolveDateLabel;
@@ -23,6 +24,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         setLayout(null);
         setupTitle();
         setupTicketsAndCategories();
+        setupTicketSubject();
         setupEmployeeID();
         setupLogDetails();
         setupStatus();
@@ -57,23 +59,45 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         add(categories);
     }
 
+    private void setupTicketSubject(){
+        JLabel ticketSubject = new JLabel("Ticket Subject:");
+        ticketSubject.setFont(new Font("Arial", Font.BOLD, 16));
+        ticketSubject.setBounds(250, 160, 400, 25);
+        add(ticketSubject);
+
+        ticketsSubjectLabel = new JLabel("");
+        ticketsSubjectLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        ticketsSubjectLabel.setBounds(370, 160, 400, 25);
+        add(ticketsSubjectLabel);
+    }
 
     private void setupEmployeeID(){
-        employeeIDLabel = new JLabel("Employee ID: ");
-        employeeIDLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        employeeIDLabel.setBounds(250, 160, 120, 25);
+        JLabel employeeID = new JLabel("Employee ID:");
+        employeeID.setFont(new Font("Arial", Font.BOLD, 16));
+        employeeID.setBounds(250, 220, 400, 25);
+        add(employeeID);
+
+        employeeIDLabel = new JLabel("");
+        employeeIDLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        employeeIDLabel.setBounds(370, 220, 400, 25);
         add(employeeIDLabel);
     }
 
     private void setupLogDetails(){
-        creationDateLabel = new JLabel("Creation Date:");
-        creationDateLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        creationDateLabel.setBounds(250, 200, 120, 25);
+        JLabel creationDate = new JLabel("Creation Date:");
+        creationDate = new JLabel("Creation Date:");
+        creationDate.setFont(new Font("Arial", Font.BOLD, 16));
+        creationDate.setBounds(250, 260, 400, 25);
+        add(creationDate);
+
+        creationDateLabel = new JLabel("");
+        creationDateLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        creationDateLabel.setBounds(370, 260, 400, 25);
         add(creationDateLabel);
 
         resolveDateLabel = new JLabel("Resolve Date:");
         resolveDateLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        resolveDateLabel.setBounds(250, 240, 120, 25);
+        resolveDateLabel.setBounds(250, 300, 120, 25);
         add(resolveDateLabel);
 
         // Month dropdown (01-12)
@@ -82,7 +106,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             months[i] = String.format("%02d", i + 1);
         }
         monthCombo = new JComboBox<>(months);
-        monthCombo.setBounds(370, 240, 60, 30);
+        monthCombo.setBounds(370, 300, 60, 30);
         monthCombo.setEnabled(false);
         add(monthCombo);
 
@@ -92,7 +116,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             days[i] = String.format("%02d", i + 1);
         }
         dayCombo = new JComboBox<>(days);
-        dayCombo.setBounds(440, 240, 60, 30);
+        dayCombo.setBounds(440, 300, 60, 30);
         dayCombo.setEnabled(false);
         add(dayCombo);
 
@@ -102,7 +126,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
             years[i] = String.valueOf(2020 + i);
         }
         yearCombo = new JComboBox<>(years);
-        yearCombo.setBounds(510, 240, 80, 30);
+        yearCombo.setBounds(510, 300, 80, 30);
         yearCombo.setEnabled(false);
         add(yearCombo);
     }
@@ -110,11 +134,11 @@ public class ResolveTicketTechnicianPanel extends JPanel {
     private void setupStatus(){
         JLabel statusLabel = new JLabel("Ticket Status:");
         statusLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        statusLabel.setBounds(250, 280, 120, 25);
+        statusLabel.setBounds(250, 340, 120, 25);
         add(statusLabel);
 
         status = new JComboBox<>(new String[]{"Active", "Resolved", "Cancelled"});
-        status.setBounds(370, 280, 250, 30);
+        status.setBounds(370, 340, 250, 30);
         add(status);
     }
 
@@ -143,7 +167,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
 
         saveButton = new JButton("Save");
         saveButton.setFont(buttonFont);
-        saveButton.setBounds(520, 330, 100, 35);
+        saveButton.setBounds(520, 390, 100, 35);
         add(saveButton);
     }
 
@@ -178,6 +202,10 @@ public class ResolveTicketTechnicianPanel extends JPanel {
 
     public JButton getSaveButton() {
         return saveButton;
+    }
+
+    public JLabel getTicketsSubjectLabel() {
+        return ticketsSubjectLabel;
     }
 
     public JComboBox<String> getDayCombo() {
