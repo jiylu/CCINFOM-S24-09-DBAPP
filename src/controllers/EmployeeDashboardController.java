@@ -100,7 +100,6 @@ public class EmployeeDashboardController{
             newTicket.setCategory_id(selectedCategory.getId());
             newTicket.setSubject(subject); 
             newTicket.setEmployee_id(emp.getEmpID());
-            newTicket.setDepartment_id(emp.getDeptID());
             newTicket.setTechnician_id(getRandomTechnicianId()); 
             newTicket.setCreation_date(java.time.LocalDate.now().toString());
             newTicket.setResolve_date(null);
