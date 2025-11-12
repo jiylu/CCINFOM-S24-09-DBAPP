@@ -129,9 +129,38 @@ public class TicketsDAO {
         return -1; // No available technician
     }
 
+    public List<Tickets> getTicketsByEmployeeId(int employeeId) {
+        List<Tickets> empTicketList = new ArrayList<>();
+        String query = "SELECT * FROM Tickets WHERE employee_id = ? ORDER BY creation_date ASC";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, employeeId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Tickets ticket = new Tickets(
+                            rs.getInt("ticket_id"),
+                            rs.getString("ticket_subject"), 
+                            rs.getInt("category_id"),
+                            rs.getInt("employee_id"),
+                            rs.getInt("technician_id"),
+                            rs.getString("creation_date"),
+                            rs.getString("resolve_date"),
+                            rs.getString("status")
+                    );
+                    empTicketList.add(ticket);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return empTicketList;
+    }
+
+
 
 
     public boolean updateTicket(Tickets ticket) {
+
         String sql = "UPDATE tickets SET category_id = ?, status = ?, resolve_date = ? WHERE ticket_id = ?";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {

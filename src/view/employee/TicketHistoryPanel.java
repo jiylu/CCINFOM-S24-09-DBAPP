@@ -35,4 +35,22 @@ public class TicketHistoryPanel extends JPanel {
         scrollPane.setBounds(10, 60, 500, 360);
         add(scrollPane);
     }
+
+    public void loadTickets(java.util.List<models.Tickets> tickets) {
+        
+        tableModel.setRowCount(0); 
+
+        for (models.Tickets ticket : tickets) {
+            tableModel.addRow(new Object[] {
+                ticket.getTicket_id(),
+                ticket.getCategory_id(),
+                ticket.getEmployee_id(),
+                ticket.getTechnician_id(),
+                ticket.getCreation_date(),
+                ticket.getResolve_date(),
+                ticket.getStatus()
+            });
+        }
+    }
+
 }

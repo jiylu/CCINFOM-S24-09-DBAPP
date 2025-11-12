@@ -1,7 +1,7 @@
 package controllers;
 
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Random;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -73,11 +73,13 @@ public class EmployeeDashboardController{
 
         panel.getTicketHistoryButton().addActionListener(e->{
             panel.showPanel(EmployeeDashboardPanel.TICKET_HISTORY);
+            viewTicketHistory();
         });
 
         createTicketPanel.getCreateButton().addActionListener(e -> {
             createTicket();
         });
+
     }
 
     private void createTicket() {
@@ -135,8 +137,21 @@ public class EmployeeDashboardController{
         return allTechs.get(lastTechIndex).getTechnician_id();
     }
 
+    private void viewTicketHistory() {
+        try {
+            Employees employee = empDAO.getEmployeeByUserId(user.getUserID());
+            if (employee == null) {
+                JOptionPane.showMessageDialog(frame, "Employee record not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
 
+            List<Tickets> empTickets = ticketsDAO.getTicketsByEmployeeId(employee.getEmpID());
+            ticketHistoryPanel.loadTickets(empTickets);
 
-
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "Error retrieving ticket history.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
 }
