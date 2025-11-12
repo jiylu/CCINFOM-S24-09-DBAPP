@@ -137,7 +137,7 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         statusLabel.setBounds(250, 340, 120, 25);
         add(statusLabel);
 
-        status = new JComboBox<>(new String[]{"Active", "Resolved", "Cancelled"});
+        status = new JComboBox<>(new String[]{"Mark Ticket Resolution Status", "Resolved", "Cancelled"});
         status.setBounds(370, 340, 250, 30);
         add(status);
     }

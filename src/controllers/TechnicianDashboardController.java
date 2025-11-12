@@ -193,6 +193,11 @@ public class TechnicianDashboardController {
             selected.setResolve_date(java.time.LocalDateTime.now().toString());
         }
 
+        if ("Mark Ticket Resolution Status".equals(newStatus)) {
+            JOptionPane.showMessageDialog(frame, "Please select a valid resolution status!");
+            return;
+        }
+
         selected.setStatus(newStatus);
 
         try {
