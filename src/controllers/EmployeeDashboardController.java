@@ -14,6 +14,8 @@ import view.technician.*;
 
 
 public class EmployeeDashboardController{
+
+    private int lastTechIndex = -1;
     private User user;
     private Frame frame;
     private UserDAO userDAO;
@@ -103,7 +105,7 @@ public class EmployeeDashboardController{
             newTicket.setCategory_id(selectedCategory.getId());
             newTicket.setSubject(subject); 
             newTicket.setEmployee_id(emp.getEmpID());
-            newTicket.setTechnician_id(getRandomTechnicianId()); 
+            newTicket.setTechnician_id(getTechnicianId()); 
             newTicket.setCreation_date(java.time.LocalDate.now().toString());
             newTicket.setResolve_date(null);
             newTicket.setStatus(status);
@@ -123,14 +125,14 @@ public class EmployeeDashboardController{
         }
 }
 
-    private int getRandomTechnicianId() { //tagakuha ng random tecgnician
+    private int getTechnicianId() { //tagakuha ng next tecgnician
         List<Technicians> allTechs = techniciansDAO.getAllTechnicians();
-        if (allTechs != null && !allTechs.isEmpty()) {
-            Random rand = new Random();
-            Technicians randomTech = allTechs.get(rand.nextInt(allTechs.size()));
-            return randomTech.getTechnician_id(); 
-        }
-        return 0; 
+        if (allTechs == null || allTechs.isEmpty()) return 0; // fallback
+
+        // increment index 
+        lastTechIndex = (lastTechIndex + 1) % allTechs.size();
+
+        return allTechs.get(lastTechIndex).getTechnician_id();
     }
 
 
