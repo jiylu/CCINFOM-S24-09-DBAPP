@@ -7,16 +7,18 @@ public class TechnicianDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
     public final static String RESOLVE_TICKET = "resolveTicket";
     public final static String TICKET_QUEUE = "ticketQueue";
+    public final static String TICKET_HISTORY = "ticketHistory";
 
     private JLabel titleLabel;
     private JButton resolveTicketButton;
     private JButton viewTicketQueueButton;
-
+    private JButton ticketHistoryButton;
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private ResolveTicketTechnicianPanel resolveTicketTechnicianPanel;
     private TechnicianTicketQueue technicianTicketQueuePanel;
+    private TicketHistory ticketHistoryPanel;
 
     public TechnicianDashboardPanel(){
         setLayout(null);
@@ -29,6 +31,7 @@ public class TechnicianDashboardPanel extends JPanel {
     private void initPanels(){
         resolveTicketTechnicianPanel = new ResolveTicketTechnicianPanel();
         technicianTicketQueuePanel = new TechnicianTicketQueue();
+        ticketHistoryPanel = new TicketHistory();
     }
 
     private void setupCardLayout(){
@@ -39,7 +42,8 @@ public class TechnicianDashboardPanel extends JPanel {
 
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(resolveTicketTechnicianPanel, RESOLVE_TICKET);
-        cardPanel.add(technicianTicketQueuePanel, "ticketQueue");
+        cardPanel.add(technicianTicketQueuePanel, TICKET_QUEUE);
+        cardPanel.add(ticketHistoryPanel, TICKET_HISTORY);
 
         add(cardPanel);
     }
@@ -69,6 +73,11 @@ public class TechnicianDashboardPanel extends JPanel {
         resolveTicketButton.setFont(buttonFont);
         resolveTicketButton.setBounds(20, 150, 250, 50); // increased width & height
         add(resolveTicketButton);
+
+        ticketHistoryButton = new JButton("View Ticket History");
+        ticketHistoryButton.setFont(buttonFont);
+        ticketHistoryButton.setBounds(20, 220, 250, 50);
+        add(ticketHistoryButton);
     }
 
     public JLabel getTitleLabel(){
@@ -83,11 +92,19 @@ public class TechnicianDashboardPanel extends JPanel {
         return viewTicketQueueButton;
     }
 
+    public JButton getTicketHistoryButton() {
+        return ticketHistoryButton;
+    }
+
     public ResolveTicketTechnicianPanel getResolveTicketTechnicianPanel(){
         return resolveTicketTechnicianPanel;
     }
 
     public TechnicianTicketQueue getTechnicianTicketQueuePanel() {
         return technicianTicketQueuePanel;
+    }
+
+    public TicketHistory getTicketHistoryPanel() {
+        return ticketHistoryPanel;
     }
 }
