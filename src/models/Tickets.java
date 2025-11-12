@@ -22,6 +22,9 @@ public class Tickets {
         this.resolve_date = resolve_date;
         this.status = status;
     }
+
+    public Tickets() {
+    }
     
     //getters
     public int getTicket_id() {
@@ -57,6 +60,18 @@ public class Tickets {
     }
 
     //setters
+    public void setEmployee_id(int employee_id) {
+        this.employee_id = employee_id;
+    }
+
+    public void setDepartment_id(int dept_id) {
+        this.department_id = dept_id;
+    }
+
+    public void setCreation_date(String date) {
+        this.creation_date = date;
+    }
+
     public void setTechnician_id(int technician_id) {
         this.technician_id = technician_id;
     }

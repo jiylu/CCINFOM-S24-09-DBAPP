@@ -81,7 +81,7 @@ public class LoginController {
     }
 
     private void redirectToEmployeeDashboard(User user){
-        EmployeeDashboardController empDashboardController = new EmployeeDashboardController(user, frame, userDAO, empDAO);
+        EmployeeDashboardController empDashboardController = new EmployeeDashboardController(user, frame, userDAO, empDAO, techDAO, ticketsDAO, categoriesDAO);
         empDashboardController.init();
     }
 
