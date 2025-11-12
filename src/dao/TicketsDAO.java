@@ -22,6 +22,7 @@ public class TicketsDAO {
             while (rs.next()) {
                 Tickets ticket = new Tickets(
                     rs.getInt("ticket_id"),
+                    rs.getString("ticket_subject"), 
                     rs.getInt("category_id"),
                     rs.getInt("department_id"),
                     rs.getInt("employee_id"),
@@ -53,6 +54,7 @@ public class TicketsDAO {
                 while (rs.next()) {
                     Tickets ticket = new Tickets(
                             rs.getInt("ticket_id"),
+                            rs.getString("ticket_subject"), 
                             rs.getInt("category_id"),
                             rs.getInt("department_id"),
                             rs.getInt("employee_id"),
@@ -70,16 +72,17 @@ public class TicketsDAO {
     }
 
     public boolean insertTicket(Tickets ticket) {
-        String sql = "INSERT INTO Tickets (category_id, department_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Tickets (ticket_subject, category_id, department_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, ticket.getCategory_id());
-            stmt.setInt(2, ticket.getDepartment_id());
-            stmt.setInt(3, ticket.getEmployee_id());
-            stmt.setInt(4, ticket.getTechnician_id());
-            stmt.setString(5, ticket.getCreation_date());
-            stmt.setString(6, ticket.getResolve_date());
-            stmt.setString(7, ticket.getStatus());
+            stmt.setString(1, ticket.getTicket_subject());
+            stmt.setInt(2, ticket.getCategory_id());
+            stmt.setInt(3, ticket.getDepartment_id());
+            stmt.setInt(4, ticket.getEmployee_id());
+            stmt.setInt(5, ticket.getTechnician_id());
+            stmt.setString(6, ticket.getCreation_date());
+            stmt.setString(7, ticket.getResolve_date());
+            stmt.setString(8, ticket.getStatus());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
