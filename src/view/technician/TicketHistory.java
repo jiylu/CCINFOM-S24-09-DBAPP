@@ -27,7 +27,7 @@ public class TicketHistory extends JPanel {
     private void initTable() {
         // Define columns
         String[] columnNames = {"Ticket Id", "Subject", "Category ID", "Employee ID", 
-                                "Technician ID", "Creation Date", "Close Date", "Status"};
+                                "Technician ID", "Creation Date", "Resolved Date", "Status"};
 
         // Create empty table model (editable = false)
         tableModel = new DefaultTableModel(columnNames, 0) {
