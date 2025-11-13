@@ -1,18 +1,14 @@
 package controllers.admin;
 
-import java.util.List;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
+import dao.CategoriesDAO;
 import dao.DepartmentDAO;
 import dao.EmployeesDAO;
 import dao.ReportDAO;
 import dao.TechniciansDAO;
 import dao.TicketsDAO;
+import java.util.List;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import reports.CategoryReport;
 import view.admin.AdminDashboardPanel;
 import view.admin.ReportsDashboardPanel;
@@ -24,16 +20,15 @@ public class ReportsDashboardController {
     private TechniciansDAO techDAO;
     private DepartmentDAO deptDAO;
     private TicketsDAO ticketsDAO;
+    private CategoriesDAO categoriesDAO;
 
-    // filters
-    private Integer selectedYear;
-
-    public ReportsDashboardController(ReportDAO reportDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportsDashboardPanel reportsDashboardPanel) {
+    public ReportsDashboardController(ReportDAO reportDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, CategoriesDAO categoriesDAO, ReportsDashboardPanel reportsDashboardPanel) {
         this.reportDAO = reportDAO;
         this.empDAO = empDAO;
         this.techDAO = techDAO;
         this.deptDAO = deptDAO;
         this.ticketsDAO = ticketsDAO;
+        this.categoriesDAO = categoriesDAO;
         this.panel = reportsDashboardPanel;
     }
 
@@ -42,13 +37,7 @@ public class ReportsDashboardController {
     }
 
     public void initListeners(){
-        // panel.getFilterByCategoryButton().addActionListener(e->{
-
-        // });
-
-        panel.getFilterByYeaButton().addActionListener(e->{
-            initFilterYearBehavior();
-        });
+        initFilterListeners();
 
         panel.getCategoryReportButton().addActionListener(e->{
             List<CategoryReport> cr = reportDAO.generateCategoryReport();
@@ -57,27 +46,28 @@ public class ReportsDashboardController {
         });
     }
 
-    private void initFilterYearBehavior(){
-        Integer[] years = ticketsDAO.getTicketYears().toArray(new Integer[0]);
-        JDialog dialog = new JDialog();
-        dialog.setTitle("Select Year");
-        dialog.setModal(true); 
-        dialog.setSize(250, 150);
-        dialog.setLocationRelativeTo(null);
-        JComboBox<Integer> yearCombo = new JComboBox<>(years);
-        
-        JButton okButton = new JButton("OK");
-        okButton.addActionListener(ev -> {
-            selectedYear = (Integer) yearCombo.getSelectedItem();
-            dialog.dispose();
+    private void initFilterListeners(){
+        panel.getFilterByCategoryButton().addActionListener(e->{
+            JComboBox<String> comboBox = new JComboBox<>(categoriesDAO.getAllCategoryNames().toArray(new String[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Category", JOptionPane.OK_CANCEL_OPTION);
+
+            if (res == JOptionPane.OK_OPTION){
+                String category = (String) comboBox.getSelectedItem();
+                int categoryID = categoriesDAO.getCategoryIDByName(category);
+                List<CategoryReport> cr = reportDAO.generateCategoryReportByCategory(categoryID);
+                panel.setupCategoryReportTable(cr);
+            }
+        }); 
+
+        panel.getFilterByYearButton().addActionListener(e->{
+            JComboBox<Integer> comboBox = new JComboBox<>(ticketsDAO.getTicketYears().toArray(new Integer[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Year", JOptionPane.OK_CANCEL_OPTION);
+
+            if (res == JOptionPane.OK_OPTION){
+                Integer year = (Integer) comboBox.getSelectedItem();
+                List<CategoryReport> cr = reportDAO.generateCategoryReportByYear(year);
+                panel.setupCategoryReportTable(cr);
+            }
         });
-
-        JPanel content = new JPanel();
-        content.add(new JLabel("Choose a year:"));
-        content.add(yearCombo);
-        content.add(okButton);
-
-        dialog.add(content);
-        dialog.setVisible(true);
     }
 }

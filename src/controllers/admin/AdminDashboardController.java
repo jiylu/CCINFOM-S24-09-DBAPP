@@ -1,5 +1,6 @@
 package controllers.admin;
 
+import dao.CategoriesDAO;
 import dao.DepartmentDAO;
 import dao.EmployeesDAO;
 import dao.ReportDAO;
@@ -24,10 +25,11 @@ public class AdminDashboardController {
     private DepartmentDAO deptDAO;
     private ReportDAO reportDAO;
     private TicketsDAO ticketsDAO;
+    private CategoriesDAO categoriesDAO;
     private UserManagementController viewUsersController;
     private ReportsDashboardController reportsDashboardController;
 
-    public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO){
+    public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO, CategoriesDAO categoriesDAO){
         this.user = user;
         this.frame = frame;
         this.panel = frame.getAdminDashboardPanel();
@@ -38,13 +40,14 @@ public class AdminDashboardController {
         this.deptDAO = deptDAO;
         this.ticketsDAO = ticketsDAO;
         this.reportDAO = reportDAO;
+        this.categoriesDAO = categoriesDAO;
     }
 
     public void init(){
         UserManagementPanel viewUsersPanel = panel.getViewUsersPanel();
         ReportsDashboardPanel reportsDashboardPanel = panel.getReportsDashboardPanel();
-        this.viewUsersController = new UserManagementController(user, viewUsersPanel, userDAO, empDAO, techDAO, deptDAO, ticketsDAO);
-        this.reportsDashboardController = new ReportsDashboardController(reportDAO, empDAO, techDAO, deptDAO, ticketsDAO, reportsDashboardPanel);
+        this.viewUsersController = new UserManagementController(user, viewUsersPanel, userDAO, empDAO, techDAO, deptDAO);
+        this.reportsDashboardController = new ReportsDashboardController(reportDAO, empDAO, techDAO, deptDAO, ticketsDAO, categoriesDAO, reportsDashboardPanel);
         frame.showPanel(Frame.ADMIN_PANEL);
         initListeners();
     }

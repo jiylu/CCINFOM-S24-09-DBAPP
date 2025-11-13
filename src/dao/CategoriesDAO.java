@@ -80,4 +80,22 @@ public class CategoriesDAO {
         }
         return null;
     }
+
+    public Integer getCategoryIDByName(String name){
+        String query = "SELECT category_id FROM Categories WHERE category_name = ?";
+        
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                return rs.getInt(1);
+            }
+
+            return null;
+        } catch (SQLException e) {
+            System.out.println("Error getCategoryIDByName()");
+            return null;
+        }
+    }
 }
