@@ -21,17 +21,19 @@ public class UserManagementController {
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
     private DepartmentDAO deptDAO;
+    private TicketsDAO ticketsDAO;
 
     private AddUserPanel addUserPanel;
     private AddUserController addUserController;
 
-    public UserManagementController(User user, UserManagementPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
+    public UserManagementController(User user, UserManagementPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO){
         this.user = user;
         this.panel = panel;
         this.userDAO = userDAO;
         this.empDAO = empDAO;
         this.techDAO = techDAO;
         this.deptDAO = deptDAO;
+        this.ticketsDAO = ticketsDAO;
         this.addUserController = new AddUserController(userDAO, empDAO, techDAO, deptDAO);
     }
 
@@ -167,8 +169,22 @@ public class UserManagementController {
     private void initDeactivateTechnician(JTable table){
         table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
             int userID = (int) table.getValueAt(row, 0);
+            int technicianID = techDAO.getTechnicianIdByUserId(userID);
+
+            if (technicianID == -1) {
+                JOptionPane.showMessageDialog(null, "Technician record not found for this user.");
+                return;
+            }
+
+            if(ticketsDAO.hasActiveOrEnqueuedTickets(technicianID)) {
+                JOptionPane.showMessageDialog(null,
+                        "This Technician still has Active or Enqueued Tickets.", "Cannot Deactivate Technician",
+                                JOptionPane.WARNING_MESSAGE);
+                return;
+            }
                         
-            int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to deactivate this user?","Confirm Deactivation",JOptionPane.YES_NO_OPTION);
+            int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to deactivate this user?",
+                    "Confirm Deactivation",JOptionPane.YES_NO_OPTION);
             
             if (choice == JOptionPane.YES_OPTION){
                 userDAO.deactivateUser(userID);

@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mysql.cj.conf.DatabaseUrlContainer;
 import com.mysql.cj.xdevapi.PreparableStatement;
 import db.DBConnection;
 import models.Tickets;
@@ -286,5 +287,21 @@ public class TicketsDAO {
             System.out.println("Cannot retrieve ticket years.");
             return null;
         }
+    }
+
+    public boolean hasActiveOrEnqueuedTickets(int technicianId) {
+        String query = "SELECT COUNT(*) FROM tickets WHERE technician_id = ? AND status IN ('Active', 'Enqueued')";
+
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setInt(1, technicianId);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
