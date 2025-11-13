@@ -84,6 +84,7 @@ public class EmployeeDashboardController{
 
     private void createTicket() {
         String subject = createTicketPanel.getSubjectField().getText();
+        String description = createTicketPanel.getDescription().getText();
         CategoryItem selectedCategory = (CategoryItem) createTicketPanel.getCategories().getSelectedItem();
 
 
@@ -106,6 +107,7 @@ public class EmployeeDashboardController{
             Tickets newTicket = new Tickets();
             newTicket.setCategory_id(selectedCategory.getId());
             newTicket.setSubject(subject); 
+            newTicket.setDescription(description);
             newTicket.setEmployee_id(emp.getEmpID());
             newTicket.setTechnician_id(getTechnicianId()); 
             newTicket.setCreation_date(java.time.LocalDateTime.now().toString());
