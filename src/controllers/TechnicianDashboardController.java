@@ -169,6 +169,8 @@ public class TechnicianDashboardController {
         resolveTicketTechnicianPanel.getTicketsSubjectLabel()
                 .setText(selected.getTicket_subject());
 
+        resolveTicketTechnicianPanel.getTicketsDescriptionLabel().setText(selected.getTicket_description());
+
         resolveTicketTechnicianPanel.getEmployeeIDLabel()
                 .setText(String.valueOf(selected.getEmployee_id()));
 
