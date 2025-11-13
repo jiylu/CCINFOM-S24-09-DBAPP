@@ -53,6 +53,17 @@ public class ReportsDashboardController {
     }
 
     private void initFilterListeners(){
+        panel.getClearFilterButton().addActionListener(e -> {
+            if (panel.getFilterByCategoryButton().isVisible()) {
+                List<CategoryReport> cr = reportDAO.generateCategoryReport();
+                panel.setupCategoryReportTable(cr);
+            } else if (panel.getFilterByDepartment().isVisible()) {
+                List<DepartmentReport> dr = reportDAO.generateDepartmentReport();
+                panel.setupDepartmentReportTable(dr);
+            }
+            panel.getClearFilterButton().setVisible(false);
+        });
+
         panel.getFilterByCategoryButton().addActionListener(e->{
             JComboBox<String> comboBox = new JComboBox<>(categoriesDAO.getAllCategoryNames().toArray(new String[0]));
             int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Category", JOptionPane.OK_CANCEL_OPTION);
@@ -63,6 +74,7 @@ public class ReportsDashboardController {
                 List<CategoryReport> cr = reportDAO.generateCategoryReportByCategory(categoryID);
                 panel.setupCategoryReportTable(cr);
             }
+            panel.getClearFilterButton().setVisible(true);
         }); 
 
         panel.getFilterByYearButton().addActionListener(e->{
@@ -74,6 +86,7 @@ public class ReportsDashboardController {
                 List<CategoryReport> cr = reportDAO.generateCategoryReportByYear(year);
                 panel.setupCategoryReportTable(cr);
             }
+            panel.getClearFilterButton().setVisible(true);
         });
 
         panel.getFilterByDepartment().addActionListener(e -> {
@@ -85,7 +98,8 @@ public class ReportsDashboardController {
                 int deptID = deptDAO.getDepartmentIDByName(dept);
                 List<DepartmentReport> dr = reportDAO.generateDeptReportByDept(deptID);
                 panel.setupDepartmentReportTable(dr);
-            }        
+            }
+            panel.getClearFilterButton().setVisible(true);
         });
 
         panel.getFilterByDepartmentYear().addActionListener(e -> {
@@ -97,6 +111,7 @@ public class ReportsDashboardController {
                 List<DepartmentReport> dr = reportDAO.generateDepartmentReportByYear(year);
                 panel.setupDepartmentReportTable(dr);
             }
+            panel.getClearFilterButton().setVisible(true);
         });
     }
 }

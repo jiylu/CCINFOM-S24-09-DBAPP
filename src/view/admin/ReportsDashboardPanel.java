@@ -12,11 +12,11 @@ public class ReportsDashboardPanel extends JPanel{
     private JButton categoryReport;
     private JButton departmentReport;
 
+    private JButton clearFilter;
     private JButton filterByCategory;
     private JButton filterByYear;
     private JButton filterByDepartment;
     private JButton filterByDepartmentYear;
-
 
     private JTable table;
     private JScrollPane tableScrollPane;
@@ -35,6 +35,7 @@ public class ReportsDashboardPanel extends JPanel{
     }
 
     private void setupFilterButtons(){
+        setupClearFilterButton();
         setupFilterByCategoryButton();
         setupFilterByCategoryYearButton();
         setupFilterByDepartmentButton();
@@ -63,6 +64,13 @@ public class ReportsDashboardPanel extends JPanel{
         departmentReport = new JButton("View Department Issue Report");
         departmentReport.setBounds(770, 20, 220, 25);
         add(departmentReport);
+    }
+
+    private void setupClearFilterButton(){
+        clearFilter = new JButton("Clear Filter");
+        clearFilter.setBounds(320, 55, 150, 25);
+        clearFilter.setVisible(false);
+        add(clearFilter);
     }
 
     private void setupFilterByCategoryButton(){
@@ -138,8 +146,11 @@ public class ReportsDashboardPanel extends JPanel{
     }
 
     private void resetFilters(){
+        clearFilter.setVisible(false);
         filterByCategory.setVisible(false);
         filterByYear.setVisible(false);
+        filterByDepartment.setVisible(false);
+        filterByDepartmentYear.setVisible(false);
     }
 
     public void showCategoryReportFilters(){
@@ -168,6 +179,10 @@ public class ReportsDashboardPanel extends JPanel{
 
     public JButton getDepartmentReportButton() {
         return departmentReport;
+    }
+
+    public JButton getClearFilterButton() {
+        return clearFilter;
     }
 
     public JButton getFilterByCategoryButton(){
