@@ -88,8 +88,18 @@ public class EmployeeDashboardController{
         CategoryItem selectedCategory = (CategoryItem) createTicketPanel.getCategories().getSelectedItem();
 
 
-        if (subject.isEmpty() || selectedCategory == null || selectedCategory.getId() == -1) {
+        if (subject.isEmpty() || selectedCategory == null || selectedCategory.getId() == -1 || description.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Please fill in all required fields.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (subject.length() > 100) {
+            JOptionPane.showMessageDialog(frame, "Ticket's subject cannot exceed 100 characters. Kindly shorten your subject.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (description.length() > 250) {
+            JOptionPane.showMessageDialog(frame, "Ticket's description cannot exceed 250 characters. Kindly shorten your description.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
