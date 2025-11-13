@@ -16,6 +16,7 @@ public class LoginController {
     private DepartmentDAO deptDAO;
     private CategoriesDAO categoriesDAO;
     private TicketsDAO ticketsDAO;
+    private ReportDAO reportDAO;
     private LoginPanel panel;
     private JButton loginButton;
 
@@ -39,6 +40,7 @@ public class LoginController {
         this.deptDAO = new DepartmentDAO(conn);
         this.categoriesDAO = new CategoriesDAO(conn);
         this.ticketsDAO = new TicketsDAO(conn);
+        this.reportDAO = new ReportDAO(conn);
     }
 
     private void initListener(){
@@ -86,7 +88,7 @@ public class LoginController {
     }
 
     private void redirectToAdminDashboard(User user){
-        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO);
+        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO, reportDAO);
         adminDashboardController.init(); 
     }
 
