@@ -44,6 +44,7 @@ public class TechnicianDashboardPanel extends JPanel {
         cardPanel.add(resolveTicketTechnicianPanel, RESOLVE_TICKET);
         cardPanel.add(technicianTicketQueuePanel, TICKET_QUEUE);
         cardPanel.add(ticketHistoryPanel, TICKET_HISTORY);
+        cardPanel.add(cancelTicketPanel, CANCEL_TICKET);
 
         add(cardPanel);
     }
@@ -71,9 +72,28 @@ public class TechnicianDashboardPanel extends JPanel {
 
         resolveTicketButton = new JButton("Resolve Ticket");
         resolveTicketButton.setFont(buttonFont);
+<<<<<<< HEAD
         resolveTicketButton.setBounds(20, 150, 250, 50); // increased width & height
         add(resolveTicketButton);
 
+=======
+<<<<<<< Updated upstream
+        resolveTicketButton.setBounds(20, 150, 250, 50); 
+=======
+        resolveTicketButton.setBounds(20, 150, 250, 50);
+>>>>>>> Stashed changes
+        add(resolveTicketButton);
+
+        cancelTicketButton = new JButton("Cancel Ticket");
+        cancelTicketButton.setFont(buttonFont);
+<<<<<<< Updated upstream
+        cancelTicketButton.setBounds(20, 220, 250, 50);
+=======
+        cancelTicketButton.setBounds(20, 220, 250, 50); // increased width & height
+>>>>>>> Stashed changes
+        add(cancelTicketButton);
+
+>>>>>>> CancelTicket
         ticketHistoryButton = new JButton("View Ticket History");
         ticketHistoryButton.setFont(buttonFont);
         ticketHistoryButton.setBounds(20, 220, 250, 50);

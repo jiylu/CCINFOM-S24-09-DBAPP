@@ -78,7 +78,88 @@ public class TechnicianDashboardController {
             loadTicketHistory();
             panel.showPanel(TechnicianDashboardPanel.TICKET_HISTORY);
         });
+<<<<<<< HEAD
+=======
+
+        panel.getCancelTicketButton().addActionListener(e -> {
+<<<<<<< Updated upstream
+=======
+            loadActiveTicketForCancel();
+>>>>>>> Stashed changes
+            panel.showPanel(TechnicianDashboardPanel.CANCEL_TICKET);
+        });
+>>>>>>> CancelTicket
     }
+
+    private void loadActiveTicketForCancel() {
+    try {
+        int technicianId = techDAO.getTechnicianIdByUserId(user.getUserID());
+        Tickets activeTicket = ticketsDAO.getActiveTicketByTechnicianID(technicianId);
+
+        if (activeTicket != null) {
+            String details = String.format(
+                    "Ticket ID: %d\nSubject: %s\nEmployee ID: %d\nCategory ID: %d\nCreated: %s\nStatus: %s",
+                    activeTicket.getTicket_id(),
+                    activeTicket.getTicket_subject(),
+                    activeTicket.getEmployee_id(),
+                    activeTicket.getCategory_id(),
+                    activeTicket.getCreation_date(),
+                    activeTicket.getStatus()
+            );
+
+            cancelTicketPanel.setActiveTicket(details);
+
+            // Attach logic for cancellation
+            // Remove previous listeners to prevent duplicates
+            for (var listener : cancelTicketPanel.getCancelTicketButton().getActionListeners()) {
+                cancelTicketPanel.getCancelTicketButton().removeActionListener(listener);
+            }
+
+            // Add fresh listener
+            cancelTicketPanel.getCancelTicketButton().addActionListener(e -> {
+                int confirm = JOptionPane.showConfirmDialog(
+                        frame,
+                        "Are you sure you want to cancel this ticket?",
+                        "Confirm Cancellation",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+                if (confirm == JOptionPane.YES_OPTION) {
+                    cancelActiveTicket(activeTicket);
+                }
+            });
+
+        } else {
+            cancelTicketPanel.setActiveTicket("No active ticket found.");
+            cancelTicketPanel.getCancelTicketButton().setEnabled(false);
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+        JOptionPane.showMessageDialog(frame, "Failed to load active ticket.");
+    }
+}
+
+private void cancelActiveTicket(Tickets ticket) {
+    try {
+        ticket.setStatus("Cancelled");
+        ticket.setResolve_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        boolean success = ticketsDAO.updateTicket(ticket);
+
+        if (success) {
+            JOptionPane.showMessageDialog(frame, "Ticket successfully cancelled!");
+            activateNextEnqueuedTicket(); // activate next in queue
+            panel.showPanel(TechnicianDashboardPanel.EMPTY_PANEL);
+        } else {
+            JOptionPane.showMessageDialog(frame, "Failed to cancel the ticket. Try again.");
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(frame, "Error cancelling ticket!");
+    }
+}
 
     private void loadTicketQueue() {
         try {

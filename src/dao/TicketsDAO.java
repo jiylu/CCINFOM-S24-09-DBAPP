@@ -44,7 +44,7 @@ public class TicketsDAO {
         return ticketsList;
     }
 
-        public List<Tickets> getResolvedTickets(int technicianId) throws SQLException {
+    public List<Tickets> getResolvedTickets(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
         String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
@@ -130,6 +130,29 @@ public class TicketsDAO {
         }
 
         return ticketsList;
+    }
+
+    public Tickets getActiveTicketByTechnicianID(int technicianId) throws SQLException {
+        String query = "SELECT * FROM Tickets WHERE technician_id = ? AND status = 'Active' LIMIT 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, technicianId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return new Tickets(
+                    rs.getInt("ticket_id"),
+                    rs.getString("ticket_subject"),
+                    rs.getString("ticket_description"),
+                    rs.getInt("category_id"),
+                    rs.getInt("employee_id"),
+                    rs.getInt("technician_id"),
+                    rs.getString("creation_date"),
+                    rs.getString("resolve_date"),
+                    rs.getString("status")
+                );
+            }    
+        }
+        return null;
     }
 
     public boolean insertTicket(Tickets ticket) {
