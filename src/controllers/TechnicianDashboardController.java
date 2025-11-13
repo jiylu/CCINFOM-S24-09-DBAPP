@@ -236,7 +236,7 @@ public class TechnicianDashboardController {
             JOptionPane.showMessageDialog(frame, "No resolution selected — defaulting status to Active.");
             newStatus = "Active";
         }
-        
+
         selected.setStatus(newStatus);
 
         try {
@@ -245,7 +245,7 @@ public class TechnicianDashboardController {
                 JOptionPane.showMessageDialog(frame,
                         "Ticket updated successfully!");
 
-                if ("Resolved".equalsIgnoreCase(newStatus) || "Cancelled".equalsIgnoreCase(newStatus)) {
+                if ("Resolved".equalsIgnoreCase(newStatus)) {
                     activateNextEnqueuedTicket();
                 }
 

@@ -109,14 +109,14 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         statusLabel.setBounds(250, 340, 120, 25);
         add(statusLabel);
 
-        status = new JComboBox<>(new String[]{"Mark Ticket Resolution Status", "Resolved", "Cancelled"});
+        status = new JComboBox<>(new String[]{"Mark Ticket Resolution Status", "Resolved"});
         status.setBounds(370, 340, 250, 30);
         add(status);
     }
 
     private void setupStatusListener(){
         status.addActionListener(e -> {
-            boolean isClosed = "Resolved".equals(status.getSelectedItem()) || "Cancelled".equals(status.getSelectedItem());
+            boolean isClosed = "Resolved".equals(status.getSelectedItem());
 
             if (isClosed) {
                 java.time.LocalDateTime now = java.time.LocalDateTime.now();
