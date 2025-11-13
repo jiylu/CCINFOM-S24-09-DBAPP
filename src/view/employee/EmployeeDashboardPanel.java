@@ -1,6 +1,7 @@
 package view.employee;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Font;
 import javax.swing.*;
 
@@ -31,7 +32,6 @@ public class EmployeeDashboardPanel extends JPanel {
         titleLabel = new JLabel("Welcome, Employee!");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
         titleLabel.setBounds(10, 10, 500, 50);
-
         add(titleLabel);
     }
 
@@ -39,7 +39,11 @@ public class EmployeeDashboardPanel extends JPanel {
         JPanel emptyPanel = new JPanel();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        cardPanel.setBounds(250, 80, 550, 600);
+        cardPanel.setBounds(370, 10, 800, 750);
+        
+        cardPanel.setBackground(Color.WHITE);
+        createTicketPanel.setBackground(Color.WHITE); 
+        ticketHistoryPanel.setBackground(Color.WHITE); 
 
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(createTicketPanel, CREATE_TICKET);
@@ -58,12 +62,17 @@ public class EmployeeDashboardPanel extends JPanel {
     }
 
     private void setupButtons() {
+
+        Font buttonFont = new Font("Arial", Font.BOLD, 18);
+
         createTicketButton = new JButton("Create New Ticket");
-        createTicketButton.setBounds(10, 100, 200, 40);
+        createTicketButton.setFont(buttonFont);
+        createTicketButton.setBounds(40, 80, 250, 50);
         add(createTicketButton);
 
         ticketHistoryButton = new JButton("View Ticket History");
-        ticketHistoryButton.setBounds(10, 150, 200, 40);
+        ticketHistoryButton.setFont(buttonFont);
+        ticketHistoryButton.setBounds(40, 150, 250, 50);
         add(ticketHistoryButton);
     }
 

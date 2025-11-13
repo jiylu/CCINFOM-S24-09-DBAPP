@@ -19,9 +19,9 @@ public class TicketHistoryPanel extends JPanel {
     }
 
     private void initTitle() {
-        titleLabel = new JLabel("Ticket History");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setBounds(10, 10, 300, 30);
+        titleLabel = new JLabel("Your Ticket History");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 35));
+        titleLabel.setBounds(240, 50, 500, 35);
         add(titleLabel);
     }
 
@@ -32,7 +32,7 @@ public class TicketHistoryPanel extends JPanel {
         tableModel = new DefaultTableModel(columnNames, 0);
         ticketTable = new JTable(tableModel);
         scrollPane = new JScrollPane(ticketTable);
-        scrollPane.setBounds(10, 60, 500, 360);
+        scrollPane.setBounds(30, 115, 750, 400);
         add(scrollPane);
     }
 
