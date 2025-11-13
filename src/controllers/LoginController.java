@@ -88,7 +88,7 @@ public class LoginController {
     }
 
     private void redirectToAdminDashboard(User user){
-        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO, ticketsDAO, reportDAO);
+        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO, ticketsDAO, reportDAO, categoriesDAO);
         adminDashboardController.init(); 
     }
 

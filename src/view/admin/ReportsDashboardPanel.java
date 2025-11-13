@@ -2,10 +2,8 @@ package view.admin;
 
 
 import java.util.List;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import reports.CategoryReport;
 
 public class ReportsDashboardPanel extends JPanel{
@@ -77,6 +75,11 @@ public class ReportsDashboardPanel extends JPanel{
     }
 
     private DefaultTableModel setupTable(String[] cols){
+        if (tableScrollPane != null){
+            remove(tableScrollPane);
+        }
+
+        
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -136,7 +139,7 @@ public class ReportsDashboardPanel extends JPanel{
         return filterByCategory;
     }
 
-    public JButton getFilterByYeaButton(){
+    public JButton getFilterByYearButton(){
         return filterByYear;
     }
 }
