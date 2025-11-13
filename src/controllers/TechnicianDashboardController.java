@@ -90,13 +90,14 @@ public class TechnicianDashboardController {
 
         if (activeTicket != null) {
             String details = String.format(
-                    "Ticket ID: %d\nSubject: %s\nEmployee ID: %d\nCategory ID: %d\nCreated: %s\nStatus: %s",
+                    "Ticket ID: %d\nSubject: %s\nEmployee ID: %d\nCategory ID: %d\nCreated: %s\nStatus: %s\n\nDescription: %s",
                     activeTicket.getTicket_id(),
                     activeTicket.getTicket_subject(),
                     activeTicket.getEmployee_id(),
                     activeTicket.getCategory_id(),
                     activeTicket.getCreation_date(),
-                    activeTicket.getStatus()
+                    activeTicket.getStatus(),
+                    activeTicket.getTicket_description()
             );
 
             cancelTicketPanel.setActiveTicket(details);
