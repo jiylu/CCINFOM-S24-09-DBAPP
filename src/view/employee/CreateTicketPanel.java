@@ -56,9 +56,11 @@ public class CreateTicketPanel extends JPanel {
         add(lblDescription);
 
         descriptionArea = new JTextArea();
-        JScrollPane scrollPane = new JScrollPane(descriptionArea);
-        scrollPane.setBounds(190, 310, 510, 120);
-        add(scrollPane);
+        descriptionArea.setLineWrap(true);
+        descriptionArea.setWrapStyleWord(true);
+        descriptionArea.setBounds(190, 310, 510, 120);
+        descriptionArea.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        add(descriptionArea);
     }
 
     private void createTicketButton(){

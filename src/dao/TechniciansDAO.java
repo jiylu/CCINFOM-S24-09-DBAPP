@@ -31,7 +31,7 @@ public class TechniciansDAO {
             rs.close();
             statement.close();
 
-            return list;            
+            return list;
         } catch (SQLException e) {
             System.out.println("Error retrieving all technicians");
             return null;
@@ -42,14 +42,14 @@ public class TechniciansDAO {
         String query = "INSERT INTO Technicians(user_id, tech_lastName, tech_firstName) VALUES (?, ?, ?)";
 
         try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, tech.getUser_ID());          
+            pstmt.setInt(1, tech.getUser_ID());
             pstmt.setString(2, tech.getTech_lastName());
             pstmt.setString(3, tech.getTech_firstName());
 
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            e.printStackTrace();  
+            e.printStackTrace();
         }
     }
 
@@ -59,7 +59,7 @@ public class TechniciansDAO {
         try (PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, tech.getTech_lastName());
             ps.setString(2, tech.getTech_firstName());
-            ps.setInt(3, tech.getTechnician_id());    
+            ps.setInt(3, tech.getTechnician_id());
 
             int rowsAffected = ps.executeUpdate();
 
@@ -75,12 +75,14 @@ public class TechniciansDAO {
         }
     }
 
-    public int getTechnicianIdByUserId(int userId) throws SQLException {
+    public int getTechnicianIdByUserId(int userId) {
         String sql = "SELECT technician_id FROM Technicians WHERE user_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) return rs.getInt("technician_id");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return -1;
     }
