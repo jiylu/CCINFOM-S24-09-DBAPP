@@ -213,9 +213,7 @@ public class TicketsDAO {
         String sql = "SELECT ticket_id, ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
                 "FROM Tickets WHERE technician_id = ? AND status = 'Enqueued' ORDER BY creation_date ASC";
 
-        try (Connection conn = DBConnection.connect();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, technicianID);
 
             try (ResultSet rs = stmt.executeQuery()) {
@@ -236,5 +234,27 @@ public class TicketsDAO {
         }
 
         return tickets;
+    }
+
+    public List<Integer> getTicketYears(){
+        List<Integer> years = new ArrayList<>();
+
+        String query = "SELECT DISTINCT YEAR(creation_date) AS year FROM tickets ORDER BY year ASC";
+
+        try (Statement stmt = connection.createStatement()){
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()){
+                years.add(rs.getInt(1));
+            }
+
+            stmt.close();
+            rs.close();
+            
+            return years;
+        } catch (SQLException e){
+            System.out.println("Cannot retrieve ticket years.");
+            return null;
+        }
     }
 }

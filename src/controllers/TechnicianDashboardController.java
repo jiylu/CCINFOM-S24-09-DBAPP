@@ -29,10 +29,11 @@ public class TechnicianDashboardController {
     private TechnicianTicketQueue ticketQueuePanel;
     private TicketHistory ticketHistoryPanel;
     private TicketsDAO ticketsDAO;
+    private TechniciansDAO techDAO;
     private CategoriesDAO categoriesDAO;
     private List<Integer> categoryIds;
 
-    public TechnicianDashboardController(User user, Frame frame, TicketsDAO ticketsDAO, CategoriesDAO categoriesDAO){
+    public TechnicianDashboardController(User user, Frame frame, TicketsDAO ticketsDAO, TechniciansDAO techDAO, CategoriesDAO categoriesDAO){
         this.user = user;
         this.frame = frame;
         this.panel = frame.getTechnicianDashboardPanel();
@@ -40,6 +41,7 @@ public class TechnicianDashboardController {
         this.ticketHistoryPanel = panel.getTicketHistoryPanel();
         this.ticketQueuePanel = panel.getTechnicianTicketQueuePanel();
         this.ticketsDAO = ticketsDAO;
+        this.techDAO = techDAO;
         this.categoriesDAO = categoriesDAO;
     }
 
@@ -258,7 +260,7 @@ public class TechnicianDashboardController {
 
     private void activateNextEnqueuedTicket(){
         try {
-            int technicianID = new TechniciansDAO(DBConnection.connect()).getTechnicianIdByUserId(user.getUserID());
+            int technicianID = techDAO.getTechnicianIdByUserId(user.getUserID());
 
             List<Tickets> enqueuedTickets = ticketsDAO.getEnqueuedTicketsByTechnician(technicianID);
 

@@ -88,6 +88,10 @@ public class AdminDashboardPanel extends JPanel {
         return viewUsersPanel;
     }
 
+    public ReportsDashboardPanel getReportsDashboardPanel(){
+        return reportsDashboardPanel;
+    }
+
     public AddUserPanel getAddUserPanel(){
         return addUserPanel;
     }
