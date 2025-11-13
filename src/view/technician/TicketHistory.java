@@ -27,15 +27,7 @@ public class TicketHistory extends JPanel {
     private void initTable() {
         // Define columns
         String[] columnNames = {"Ticket Id", "Subject", "Category ID", "Employee ID", 
-<<<<<<< HEAD
-                                "Technician ID", "Creation Date", "Resolved Date", "Status"};
-=======
-<<<<<<< Updated upstream
-                                "Technician ID", "Creation Date", "Close Date", "Status"};
-=======
                                 "Technician ID", "Creation Date", "Closed Date", "Status"};
->>>>>>> Stashed changes
->>>>>>> CancelTicket
 
         // Create empty table model (editable = false)
         tableModel = new DefaultTableModel(columnNames, 0) {
