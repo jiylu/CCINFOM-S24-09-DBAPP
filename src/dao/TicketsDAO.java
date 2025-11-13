@@ -26,6 +26,7 @@ public class TicketsDAO {
                 Tickets ticket = new Tickets(
                     rs.getInt("ticket_id"),
                     rs.getString("ticket_subject"), 
+                    rs.getString("ticket_description"), 
                     rs.getInt("category_id"),
                     rs.getInt("employee_id"),
                     rs.getInt("technician_id"),
@@ -46,7 +47,7 @@ public class TicketsDAO {
         public List<Tickets> getResolvedTickets(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String query = "SELECT ticket_id, ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
+        String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
                        "FROM Tickets WHERE technician_id = ? AND status IN ('Resolved', 'Cancelled')";
                        
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -57,6 +58,7 @@ public class TicketsDAO {
                     Tickets ticket = new Tickets(
                             rs.getInt("ticket_id"),
                             rs.getString("ticket_subject"), 
+                            rs.getString("ticket_description"), 
                             rs.getInt("category_id"),
                             rs.getInt("employee_id"),
                             rs.getInt("technician_id"),
@@ -74,7 +76,7 @@ public class TicketsDAO {
     public List<Tickets> getTicketsByTechninicianID(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String query = "SELECT ticket_id, ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
+        String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
                        "FROM Tickets WHERE technician_id = ? AND status NOT IN ('Resolved', 'Cancelled')";
                        
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -85,6 +87,7 @@ public class TicketsDAO {
                     Tickets ticket = new Tickets(
                             rs.getInt("ticket_id"),
                             rs.getString("ticket_subject"), 
+                            rs.getString("ticket_description"), 
                             rs.getInt("category_id"),
                             rs.getInt("employee_id"),
                             rs.getInt("technician_id"),
@@ -102,7 +105,7 @@ public class TicketsDAO {
     public List<Tickets> getTicketsByTechnician(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String query = "SELECT ticket_id, ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
+        String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
                 "FROM Tickets WHERE technician_id = ? AND status = 'Active'";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -113,6 +116,7 @@ public class TicketsDAO {
                     Tickets ticket = new Tickets(
                             rs.getInt("ticket_id"),
                             rs.getString("ticket_subject"), 
+                            rs.getString("ticket_description"),
                             rs.getInt("category_id"),
                             rs.getInt("employee_id"),
                             rs.getInt("technician_id"),
@@ -130,16 +134,17 @@ public class TicketsDAO {
 
     public boolean insertTicket(Tickets ticket) {
         
-        String sql = "INSERT INTO Tickets (ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Tickets (ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, ticket.getTicket_subject());
-            stmt.setInt(2, ticket.getCategory_id());
-            stmt.setInt(3, ticket.getEmployee_id());
-            stmt.setInt(4, ticket.getTechnician_id());
-            stmt.setString(5, ticket.getCreation_date());
-            stmt.setString(6, ticket.getResolve_date());
-            stmt.setString(7, ticket.getStatus());
+            stmt.setString(2, ticket.getTicket_description()); 
+            stmt.setInt(3, ticket.getCategory_id());
+            stmt.setInt(4, ticket.getEmployee_id());
+            stmt.setInt(5, ticket.getTechnician_id());
+            stmt.setString(6, ticket.getCreation_date());
+            stmt.setString(7, ticket.getResolve_date());
+            stmt.setString(8, ticket.getStatus());
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -172,6 +177,7 @@ public class TicketsDAO {
                 Tickets ticket = new Tickets(
                             rs.getInt("ticket_id"),
                             rs.getString("ticket_subject"), 
+                            rs.getString("ticket_description"), 
                             rs.getInt("category_id"),
                             rs.getInt("employee_id"),
                             rs.getInt("technician_id"),
@@ -210,7 +216,7 @@ public class TicketsDAO {
     public List<Tickets> getEnqueuedTicketsByTechnician(int technicianID) throws SQLException {
         List<Tickets> tickets = new ArrayList<>();
 
-        String sql = "SELECT ticket_id, ticket_subject, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
+        String sql = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
                 "FROM Tickets WHERE technician_id = ? AND status = 'Enqueued' ORDER BY creation_date ASC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -221,6 +227,7 @@ public class TicketsDAO {
                     Tickets t = new Tickets(
                             rs.getInt("ticket_id"),
                             rs.getString("ticket_subject"),
+                            rs.getString("ticket_description"),
                             rs.getInt("category_id"),
                             rs.getInt("employee_id"),
                             rs.getInt("technician_id"),

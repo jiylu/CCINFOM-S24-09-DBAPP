@@ -76,7 +76,7 @@ public class CreateTicketPanel extends JPanel {
     return subjectField;
     }
 
-    public JTextArea getDescriptionArea() {
+    public JTextArea getDescription() {
         return descriptionArea;
     }
 

@@ -49,6 +49,7 @@ CREATE TABLE IF NOT EXISTS Categories (
 CREATE TABLE IF NOT EXISTS Tickets (
 	ticket_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_subject VARCHAR(100) NOT NULL,
+    ticket_description VARCHAR(250) NOT NULL, 
     category_id INT NOT NULL,
     employee_id INT NOT NULL,
     technician_id INT NOT NULL,

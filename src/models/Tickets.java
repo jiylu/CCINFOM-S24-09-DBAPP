@@ -6,15 +6,17 @@ public class Tickets {
     private int ticket_id;
     private int category_id;
     private String ticket_subject;
+    private String ticket_description; 
     private int employee_id;
     private int technician_id;
     private String creation_date;
     private String resolve_date;
     private String status;
 
-    public Tickets(int ticket_id, String ticket_subject, int category_id, int employee_id, int technician_id, String creation_date, String resolve_date, String status) {
+    public Tickets(int ticket_id, String ticket_subject, String ticket_description, int category_id, int employee_id, int technician_id, String creation_date, String resolve_date, String status) {
         this.ticket_id = ticket_id;
         this.ticket_subject = ticket_subject;
+        this.ticket_description = ticket_description;
         this.category_id = category_id;
         this.employee_id = employee_id;
         this.technician_id = technician_id;
@@ -37,6 +39,10 @@ public class Tickets {
 
     public String getTicket_subject() {
         return ticket_subject;
+    }
+
+    public String getTicket_description() {
+        return ticket_description;
     }
 
     public int getEmployee_id() {
@@ -62,6 +68,10 @@ public class Tickets {
     //setters
     public void setEmployee_id(int employee_id) {
         this.employee_id = employee_id;
+    }
+
+    public void setDescription(String desc) {
+        this.ticket_description = desc; 
     }
 
     public void setCreation_date(String date) {
