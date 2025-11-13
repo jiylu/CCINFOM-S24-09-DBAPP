@@ -9,7 +9,8 @@ public class CategoryReport {
     public CategoryReport(String category, int year, int totalSubmitted, int totalResolved){
         this.category = category;
         this.year = year;
-        this.totalSubmitted = totalResolved;
+        this.totalSubmitted = totalSubmitted;
+        this.totalResolved = totalResolved;
     }
 
     public String getCategory() {

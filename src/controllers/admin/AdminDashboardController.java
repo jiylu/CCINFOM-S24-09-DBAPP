@@ -4,6 +4,7 @@ import dao.DepartmentDAO;
 import dao.EmployeesDAO;
 import dao.ReportDAO;
 import dao.TechniciansDAO;
+import dao.TicketsDAO;
 import dao.UserDAO;
 import models.User;
 import view.Frame;
@@ -22,10 +23,11 @@ public class AdminDashboardController {
     private TechniciansDAO techDAO;
     private DepartmentDAO deptDAO;
     private ReportDAO reportDAO;
+    private TicketsDAO ticketsDAO;
     private UserManagementController viewUsersController;
     private ReportsDashboardController reportsDashboardController;
 
-    public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, ReportDAO reportDAO){
+    public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO){
         this.user = user;
         this.frame = frame;
         this.panel = frame.getAdminDashboardPanel();
@@ -34,6 +36,7 @@ public class AdminDashboardController {
         this.empDAO = empDAO;
         this.techDAO = techDAO;
         this.deptDAO = deptDAO;
+        this.ticketsDAO = ticketsDAO;
         this.reportDAO = reportDAO;
     }
 
@@ -41,7 +44,7 @@ public class AdminDashboardController {
         UserManagementPanel viewUsersPanel = panel.getViewUsersPanel();
         ReportsDashboardPanel reportsDashboardPanel = panel.getReportsDashboardPanel();
         this.viewUsersController = new UserManagementController(user, viewUsersPanel, userDAO, empDAO, techDAO, deptDAO);
-        this.reportsDashboardController = new ReportsDashboardController(reportDAO,reportsDashboardPanel);
+        this.reportsDashboardController = new ReportsDashboardController(reportDAO, empDAO, techDAO, deptDAO, ticketsDAO, reportsDashboardPanel);
         frame.showPanel(Frame.ADMIN_PANEL);
         initListeners();
     }

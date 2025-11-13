@@ -88,12 +88,12 @@ public class LoginController {
     }
 
     private void redirectToAdminDashboard(User user){
-        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO, reportDAO);
+        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO, ticketsDAO, reportDAO);
         adminDashboardController.init(); 
     }
 
     private void redirectToTechDashboard(User user){
-        TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, ticketsDAO, categoriesDAO);
+        TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, ticketsDAO, techDAO, categoriesDAO);
         technicianDashboardController.init();
     }
 }

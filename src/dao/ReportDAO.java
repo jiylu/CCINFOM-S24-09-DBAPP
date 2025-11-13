@@ -29,7 +29,7 @@ public class ReportDAO {
         query.append("JOIN tickets t ");
         query.append("ON t.category_id = c.category_id ");
         query.append("GROUP BY c.category_name, YEAR(t.creation_date) ");
-        query.append("ORDER BY year;");
+        query.append("ORDER BY year, num_tickets DESC, resolved_tickets DESC;");
         
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query.toString());
