@@ -4,7 +4,7 @@ package view.admin;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import reports.CategoryReport;
+import reports.*;
 
 public class ReportsDashboardPanel extends JPanel{
     private JButton technicianReport;
@@ -14,6 +14,8 @@ public class ReportsDashboardPanel extends JPanel{
 
     private JButton filterByCategory;
     private JButton filterByYear;
+    private JButton filterByDepartment;
+    private JButton filterByDepartmentYear;
 
 
     private JTable table;
@@ -34,8 +36,11 @@ public class ReportsDashboardPanel extends JPanel{
 
     private void setupFilterButtons(){
         setupFilterByCategoryButton();
-        setupFilterByYearButton();
+        setupFilterByCategoryYearButton();
+        setupFilterByDepartmentButton();
+        setupFilterByDepartmentYearButton();
     }
+
     private void setupTechnicianReportButton() {
         technicianReport = new JButton("View Technician Workload Report");
         technicianReport.setBounds(0, 20, 240, 25);
@@ -67,11 +72,25 @@ public class ReportsDashboardPanel extends JPanel{
         add(filterByCategory);
     }
 
-    private void setupFilterByYearButton(){
+    private void setupFilterByCategoryYearButton(){
         filterByYear = new JButton("Filter by Year");
         filterByYear.setBounds(160, 55, 150, 25);
         filterByYear.setVisible(false);
         add(filterByYear);
+    }
+
+    private void setupFilterByDepartmentButton(){
+        filterByDepartment = new JButton("Filter by Department");
+        filterByDepartment.setBounds(0, 55, 150, 25);
+        filterByDepartment.setVisible(false);
+        add(filterByDepartment);
+    }
+
+    private void setupFilterByDepartmentYearButton(){
+        filterByDepartmentYear = new JButton("Filter by Year");
+        filterByDepartmentYear.setBounds(160, 55, 150, 25);
+        filterByDepartmentYear.setVisible(false);
+        add(filterByDepartmentYear);
     }
 
     private DefaultTableModel setupTable(String[] cols){
@@ -108,6 +127,16 @@ public class ReportsDashboardPanel extends JPanel{
         }
     }
 
+        public void setupDepartmentReportTable(List<DepartmentReport> data){
+        String[] cols = {"Department Name", "Year", "Category Name", "Number of Tickets"};
+        DefaultTableModel model = setupTable(cols);
+
+        for (DepartmentReport dr : data){
+            Object[] row = new Object[] {dr.getDepartment(), dr.getYear(), dr.getCategory(), dr.getTotalTickets()};
+            model.addRow(row);
+        }
+    }
+
     private void resetFilters(){
         filterByCategory.setVisible(false);
         filterByYear.setVisible(false);
@@ -117,6 +146,12 @@ public class ReportsDashboardPanel extends JPanel{
         resetFilters();
         filterByCategory.setVisible(true);
         filterByYear.setVisible(true);
+    }
+
+    public void showDepartmentReportFilters(){
+        resetFilters();
+        filterByDepartment.setVisible(true);
+        filterByDepartmentYear.setVisible(true);
     }
 
     public JButton getTechnicianReportButton() {
@@ -141,5 +176,13 @@ public class ReportsDashboardPanel extends JPanel{
 
     public JButton getFilterByYearButton(){
         return filterByYear;
+    }
+
+    public JButton getFilterByDepartment() {
+        return filterByDepartment;
+    }
+
+    public JButton getFilterByDepartmentYear() {
+        return filterByDepartmentYear;
     }
 }

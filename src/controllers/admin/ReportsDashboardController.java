@@ -9,7 +9,7 @@ import dao.TicketsDAO;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-import reports.CategoryReport;
+import reports.*;
 import view.admin.AdminDashboardPanel;
 import view.admin.ReportsDashboardPanel;
 
@@ -44,6 +44,12 @@ public class ReportsDashboardController {
             panel.setupCategoryReportTable(cr);
             panel.showCategoryReportFilters();
         });
+
+        panel.getDepartmentReportButton().addActionListener(e->{
+            List<DepartmentReport> dr = reportDAO.generateDepartmentReport();
+            panel.setupDepartmentReportTable(dr);
+            panel.showDepartmentReportFilters();
+        });
     }
 
     private void initFilterListeners(){
@@ -67,6 +73,29 @@ public class ReportsDashboardController {
                 Integer year = (Integer) comboBox.getSelectedItem();
                 List<CategoryReport> cr = reportDAO.generateCategoryReportByYear(year);
                 panel.setupCategoryReportTable(cr);
+            }
+        });
+
+        panel.getFilterByDepartment().addActionListener(e -> {
+            JComboBox<String> comboBox = new JComboBox<>(deptDAO.getAllDepartmentNames(true).toArray(new String[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Department", JOptionPane.OK_CANCEL_OPTION);
+
+            if (res == JOptionPane.OK_OPTION){
+                String dept = (String) comboBox.getSelectedItem();
+                int deptID = deptDAO.getDepartmentIDByName(dept);
+                List<DepartmentReport> dr = reportDAO.generateDeptReportByDept(deptID);
+                panel.setupDepartmentReportTable(dr);
+            }        
+        });
+
+        panel.getFilterByDepartmentYear().addActionListener(e -> {
+            JComboBox<Integer> comboBox = new JComboBox<>(ticketsDAO.getTicketYears().toArray(new Integer[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Year", JOptionPane.OK_CANCEL_OPTION);
+
+            if (res == JOptionPane.OK_OPTION){
+                Integer year = (Integer) comboBox.getSelectedItem();
+                List<DepartmentReport> dr = reportDAO.generateDepartmentReportByYear(year);
+                panel.setupDepartmentReportTable(dr);
             }
         });
     }
