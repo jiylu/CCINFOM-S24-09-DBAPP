@@ -224,15 +224,19 @@ public class TechnicianDashboardController {
             selected.setCategory_id(selectedCategory.getId());
         }
 
-        if (!"Active".equals(newStatus)) {
-            selected.setResolve_date(java.time.LocalDateTime.now().toString());
+        String resolveDateText = resolveTicketTechnicianPanel.getResolveDateLabel().getText();
+
+        if (!"".equals(resolveDateText)) {
+            selected.setResolve_date(resolveDateText);
+        } else {
+            selected.setResolve_date(null);
         }
 
         if ("Mark Ticket Resolution Status".equals(newStatus)) {
-            JOptionPane.showMessageDialog(frame, "Please select a valid resolution status!");
-            return;
+            JOptionPane.showMessageDialog(frame, "No resolution selected — defaulting status to Active.");
+            newStatus = "Active";
         }
-
+        
         selected.setStatus(newStatus);
 
         try {

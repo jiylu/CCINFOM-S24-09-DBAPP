@@ -15,9 +15,6 @@ public class ResolveTicketTechnicianPanel extends JPanel {
     private JLabel resolveDateLabel;
     private JComboBox<String> status;
     private JButton saveButton;
-    private JComboBox<String> monthCombo;
-    private JComboBox<String> dayCombo;
-    private JComboBox<String> yearCombo;
     private List<Tickets> ticketsList;
 
     public ResolveTicketTechnicianPanel(){
@@ -95,40 +92,15 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         creationDateLabel.setBounds(370, 260, 400, 25);
         add(creationDateLabel);
 
-        resolveDateLabel = new JLabel("Resolve Date:");
-        resolveDateLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        resolveDateLabel.setBounds(250, 300, 120, 25);
+        JLabel resolveDateTitle = new JLabel("Resolve Date:");
+        resolveDateTitle.setFont(new Font("Arial", Font.BOLD, 16));
+        resolveDateTitle.setBounds(250, 300, 120, 25);
+        add(resolveDateTitle);
+
+        resolveDateLabel = new JLabel(""); // shows the date dynamically
+        resolveDateLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        resolveDateLabel.setBounds(370, 300, 200, 25);
         add(resolveDateLabel);
-
-        // Month dropdown (01-12)
-        String[] months = new String[12];
-        for (int i = 0; i < 12; i++) {
-            months[i] = String.format("%02d", i + 1);
-        }
-        monthCombo = new JComboBox<>(months);
-        monthCombo.setBounds(370, 300, 60, 30);
-        monthCombo.setEnabled(false);
-        add(monthCombo);
-
-        // Day dropdown (01-31)
-        String[] days = new String[31];
-        for (int i = 0; i < 31; i++) {
-            days[i] = String.format("%02d", i + 1);
-        }
-        dayCombo = new JComboBox<>(days);
-        dayCombo.setBounds(440, 300, 60, 30);
-        dayCombo.setEnabled(false);
-        add(dayCombo);
-
-        // Year dropdown (2020-2035 example)
-        String[] years = new String[16];
-        for (int i = 0; i < 16; i++) {
-            years[i] = String.valueOf(2020 + i);
-        }
-        yearCombo = new JComboBox<>(years);
-        yearCombo.setBounds(510, 300, 80, 30);
-        yearCombo.setEnabled(false);
-        add(yearCombo);
     }
 
     private void setupStatus(){
@@ -145,19 +117,16 @@ public class ResolveTicketTechnicianPanel extends JPanel {
     private void setupStatusListener(){
         status.addActionListener(e -> {
             boolean isClosed = "Resolved".equals(status.getSelectedItem()) || "Cancelled".equals(status.getSelectedItem());
-            monthCombo.setEnabled(isClosed);
-            dayCombo.setEnabled(isClosed);
-            yearCombo.setEnabled(isClosed);
-            resolveDateLabel.setEnabled(isClosed);
-            resolveDateLabel.setEnabled(isClosed);
 
-            if(isClosed){
-                java.time.LocalDate today = java.time.LocalDate.now();
+            if (isClosed) {
+                java.time.LocalDateTime now = java.time.LocalDateTime.now();
+                java.time.format.DateTimeFormatter formatter =
+                        java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-                // Auto-set Month, Day, Year based on current date
-                monthCombo.setSelectedItem(String.format("%02d", today.getMonthValue()));
-                dayCombo.setSelectedItem(String.format("%02d", today.getDayOfMonth()));
-                yearCombo.setSelectedItem(String.valueOf(today.getYear()));
+                String formattedDateTime = now.format(formatter);
+                resolveDateLabel.setText(formattedDateTime);
+            } else {
+                resolveDateLabel.setText("—");
             }
         });
     }
@@ -169,15 +138,6 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         saveButton.setFont(buttonFont);
         saveButton.setBounds(520, 390, 100, 35);
         add(saveButton);
-    }
-
-    public String getResolveDate() {
-        if (!monthCombo.isEnabled()) {
-            return null; // No date selected
-        }
-        return monthCombo.getSelectedItem() + "-" +
-                dayCombo.getSelectedItem() + "-" +
-                yearCombo.getSelectedItem();
     }
 
     public JComboBox<String> getTicketsToResolve(){
@@ -208,16 +168,8 @@ public class ResolveTicketTechnicianPanel extends JPanel {
         return ticketsSubjectLabel;
     }
 
-    public JComboBox<String> getDayCombo() {
-        return dayCombo;
-    }
-
-    public JComboBox<String> getMonthCombo() {
-        return monthCombo;
-    }
-
-    public JComboBox<String> getYearCombo() {
-        return yearCombo;
+    public JLabel getResolveDateLabel() {
+        return resolveDateLabel;
     }
 
     public List<Tickets> getTicketsList() {
