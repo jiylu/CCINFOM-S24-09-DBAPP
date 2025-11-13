@@ -141,7 +141,6 @@ private void cancelActiveTicket(Tickets ticket) {
         boolean success = ticketsDAO.updateTicket(ticket);
 
         if (success) {
-            JOptionPane.showMessageDialog(frame, "Ticket successfully cancelled!");
             activateNextEnqueuedTicket(); // activate next in queue
             panel.showPanel(TechnicianDashboardPanel.EMPTY_PANEL);
         } else {
