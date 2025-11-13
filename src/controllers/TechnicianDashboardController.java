@@ -9,11 +9,7 @@ import models.Categories;
 import models.Tickets;
 import models.User;
 import view.Frame;
-import view.technician.CategoryItem;
-import view.technician.ResolveTicketTechnicianPanel;
-import view.technician.TechnicianDashboardPanel;
-import view.technician.TechnicianTicketQueue;
-import view.technician.TicketHistory;
+import view.technician.*;
 
 import javax.swing.*;
 import java.time.LocalDateTime;
@@ -26,6 +22,7 @@ public class TechnicianDashboardController {
     private Frame frame;
     private TechnicianDashboardPanel panel;
     private ResolveTicketTechnicianPanel resolveTicketTechnicianPanel;
+    private CancelTicketTechnicianPanel cancelTicketPanel;
     private TechnicianTicketQueue ticketQueuePanel;
     private TicketHistory ticketHistoryPanel;
     private TicketsDAO ticketsDAO;
@@ -38,6 +35,7 @@ public class TechnicianDashboardController {
         this.frame = frame;
         this.panel = frame.getTechnicianDashboardPanel();
         this.resolveTicketTechnicianPanel = panel.getResolveTicketTechnicianPanel();
+        this.cancelTicketPanel = panel.getCancelTicketPanel();
         this.ticketHistoryPanel = panel.getTicketHistoryPanel();
         this.ticketQueuePanel = panel.getTechnicianTicketQueuePanel();
         this.ticketsDAO = ticketsDAO;
@@ -77,6 +75,10 @@ public class TechnicianDashboardController {
             ticketHistoryPanel.clearTickets();
             loadTicketHistory();
             panel.showPanel(TechnicianDashboardPanel.TICKET_HISTORY);
+        });
+
+        panel.getCancelTicketButton().addActionListener(e -> {
+            panel.showPanel(TechnicianDashboardPanel.CANCEL_TICKET);
         });
     }
 
