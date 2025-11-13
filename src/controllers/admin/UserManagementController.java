@@ -1,6 +1,8 @@
 package controllers.admin;
 
 import dao.*;
+
+import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -21,17 +23,19 @@ public class UserManagementController {
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
     private DepartmentDAO deptDAO;
+    private TicketsDAO ticketsDAO;
 
     private AddUserPanel addUserPanel;
     private AddUserController addUserController;
 
-    public UserManagementController(User user, UserManagementPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
+    public UserManagementController(User user, UserManagementPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO){
         this.user = user;
         this.panel = panel;
         this.userDAO = userDAO;
         this.empDAO = empDAO;
         this.techDAO = techDAO;
         this.deptDAO = deptDAO;
+        this.ticketsDAO = ticketsDAO;
         this.addUserController = new AddUserController(userDAO, empDAO, techDAO, deptDAO);
     }
 
@@ -114,25 +118,33 @@ public class UserManagementController {
 
     private void initDeactivateEmployee(JTable table){
         table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
-            int userID = (int) table.getValueAt(row, 0); 
-            Object status = table.getValueAt(row, 7); 
-            
-            // apra di mag self deactivate
-            if (userID == user.getUserID()){
-                JOptionPane.showMessageDialog(null, "You cannot deactivate yourself.");
-                return;
+            int userID = (int) table.getValueAt(row, 0);
+            int empID = 0;
+
+            try {
+                empID = empDAO.getEmployeeByUserId(userID).getEmpID();
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-            
-            if (status != null && status.toString().equals("Inactive")) {
-                JOptionPane.showMessageDialog(null, "User is already inactive.");
+
+            if (empID == -1) {
+                JOptionPane.showMessageDialog(null, "Employee record not found for this user.");
                 return;
             }
 
-
-            int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to deactivate this user?","Confirm Deactivation",JOptionPane.YES_NO_OPTION);
+            if(ticketsDAO.hasActiveOrEnqueuedTickets(empID)) {
+                JOptionPane.showMessageDialog(null,
+                        "This Employee still has Active or Enqueued Tickets.", "Cannot Deactivate Employee",
+                                JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+                        
+            int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to deactivate this user?",
+                    "Confirm Deactivation",JOptionPane.YES_NO_OPTION);
+            
             if (choice == JOptionPane.YES_OPTION){
                 userDAO.deactivateUser(userID);
-                JOptionPane.showMessageDialog(null, "Deactivated Emp ID " + userID);
+                JOptionPane.showMessageDialog(null, "Deactivated User ID " + userID);
                 
                 // refresh table
                 List<Employees> empList = empDAO.getAllEmployees();
@@ -167,8 +179,22 @@ public class UserManagementController {
     private void initDeactivateTechnician(JTable table){
         table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
             int userID = (int) table.getValueAt(row, 0);
+            int technicianID = techDAO.getTechnicianIdByUserId(userID);
+
+            if (technicianID == -1) {
+                JOptionPane.showMessageDialog(null, "Technician record not found for this user.");
+                return;
+            }
+
+            if(ticketsDAO.hasActiveOrEnqueuedTickets(technicianID)) {
+                JOptionPane.showMessageDialog(null,
+                        "This Technician still has Active or Enqueued Tickets.", "Cannot Deactivate Technician",
+                                JOptionPane.WARNING_MESSAGE);
+                return;
+            }
                         
-            int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to deactivate this user?","Confirm Deactivation",JOptionPane.YES_NO_OPTION);
+            int choice = JOptionPane.showConfirmDialog(null,"Are you sure you want to deactivate this user?",
+                    "Confirm Deactivation",JOptionPane.YES_NO_OPTION);
             
             if (choice == JOptionPane.YES_OPTION){
                 userDAO.deactivateUser(userID);
