@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS Technicians (
 
 CREATE TABLE IF NOT EXISTS Categories (
 	category_id INT AUTO_INCREMENT PRIMARY KEY,  
-    category_name VARCHAR(50)
+    category_name VARCHAR(50) NOT NULL UNIQUE
 );
 
 CREATE TABLE IF NOT EXISTS Tickets (
