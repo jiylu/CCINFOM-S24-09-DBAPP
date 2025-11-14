@@ -49,10 +49,11 @@ public class DepartmentManagementPanel extends JPanel{
     }
 
     public void setupDeptTable(List<Department> deptList){
-        String[] cols = {"Department ID", "Department Name", "Edit", "Deactivate"};
+        String[] cols = {"Department ID", "Department Name","Active","Edit", "Deactivate"};
         DefaultTableModel model = setupTable(cols);
         for (Department d : deptList){
-            Object[] row = {d.getDepartmentID(), d.getDepartmentName(), "Edit", "Deactivate"};
+            String active = d.getActive() ? "Active" : "Inactive";
+            Object[] row = {d.getDepartmentID(), d.getDepartmentName(), active,  "Edit", "Deactivate"};
             model.addRow(row);
         }
 

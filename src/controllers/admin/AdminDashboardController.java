@@ -51,7 +51,7 @@ public class AdminDashboardController {
         DepartmentManagementPanel departmentManagementPanel = panel.getDeptManagementPanel();
         this.viewUsersController = new UserManagementController(user, viewUsersPanel, userDAO, empDAO, techDAO, deptDAO, ticketsDAO);
         this.reportsDashboardController = new ReportsDashboardController(reportDAO, empDAO, techDAO, deptDAO, ticketsDAO, categoriesDAO, reportsDashboardPanel);
-        this.departmentManagementController = new DepartmentManagementController(departmentManagementPanel, deptDAO);
+        this.departmentManagementController = new DepartmentManagementController(departmentManagementPanel, deptDAO, empDAO);
         frame.showPanel(Frame.ADMIN_PANEL);
         initListeners();
     }

@@ -14,7 +14,7 @@ public class DepartmentDAO {
 
     public List<Department> getAllDepartments(){
         List<Department> list = new ArrayList<>();
-        String query = "SELECT * FROM departments ORDER BY department_id";
+        String query = "SELECT * FROM departments ORDER BY active DESC, department_id";
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
@@ -22,7 +22,8 @@ public class DepartmentDAO {
             while (rs.next()){
                 list.add(new Department(
                     rs.getInt("department_id"),
-                    rs.getString("department_name")
+                    rs.getString("department_name"),
+                    rs.getBoolean("active")
                 ));
             }
 
@@ -68,7 +69,10 @@ public class DepartmentDAO {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()){
-                return new Department(rs.getInt(1), rs.getString(2));
+                return new Department(
+                    rs.getInt(1), 
+                    rs.getString(2),
+                    rs.getBoolean(3));
             }
 
             System.out.println("Department not found.");
@@ -112,6 +116,41 @@ public class DepartmentDAO {
             ps.close();
         } catch (SQLException e) {
             System.out.println("Error inserting department.");
+        }
+    }
+
+    public void editDepartment(int deptID, String departmentName){
+        String query = "UPDATE departments SET department_name = ? WHERE department_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, departmentName);
+            ps.setInt(2, deptID);
+            
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0){
+                System.out.println("Successful editDepartment");
+            } else {
+                System.out.println("No rows returned");
+            }
+        } catch (SQLException e) {
+            System.out.println("editDepartment Error.");
+        }
+    }
+
+    public void deactivateDepartment(int deptID){
+        String query = "UPDATE departments SET active = 0 WHERE department_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setInt(1, deptID);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0){
+                System.out.println("Sucessfully deactivated dept_id: " + deptID);
+            } else {
+                System.out.println("Unsucessfuly deactivated dept_id: " +  deptID);
+            }
+
+        } catch (SQLException e){
+            System.out.println("deactivateDepartment error");
         }
     }
 }
