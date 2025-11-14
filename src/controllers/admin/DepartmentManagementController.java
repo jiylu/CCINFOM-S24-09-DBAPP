@@ -1,13 +1,10 @@
 package controllers.admin;
 
-import java.sql.SQLException;
-import java.util.List;
-
-import javax.swing.*;
 import dao.DepartmentDAO;
+import dao.EmployeesDAO;
+import java.util.List;
+import javax.swing.*;
 import models.Department;
-import models.Employees;
-import models.User;
 import util.ButtonEditor;
 import util.ButtonRenderer;
 import view.admin.AdminDashboardPanel;
@@ -16,10 +13,11 @@ import view.admin.DepartmentManagementPanel;
 public class DepartmentManagementController {
     private DepartmentManagementPanel panel;
     private DepartmentDAO deptDAO;
-
-    public DepartmentManagementController(DepartmentManagementPanel panel, DepartmentDAO deptDAO){
+    private EmployeesDAO empDAO;
+    public DepartmentManagementController(DepartmentManagementPanel panel, DepartmentDAO deptDAO, EmployeesDAO empDAO){
         this.panel = panel;
         this.deptDAO = deptDAO;
+        this.empDAO = empDAO;
     }
 
     public void init(AdminDashboardPanel adminPanel){
@@ -96,7 +94,18 @@ public class DepartmentManagementController {
 
     private void initDeactivateDept(JTable table){
         table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
+            int deptID = (int) table.getValueAt(row, 0);
+            if (!empDAO.getEmployeesByDepartment(deptID).isEmpty()){
+                JOptionPane.showMessageDialog(null, "This department has employees.", "Cannot deactivate department", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
             int res = JOptionPane.showConfirmDialog(null, "Are you sure you want to deactivate this department", null, JOptionPane.OK_CANCEL_OPTION);
+
+            if (res == JOptionPane.YES_OPTION){
+                deptDAO.deactivateDepartment(deptID);
+                loadDeptTable(deptDAO.getAllDepartments());
+            }
         }));
     }
 

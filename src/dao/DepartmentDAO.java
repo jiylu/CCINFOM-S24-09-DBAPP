@@ -14,7 +14,7 @@ public class DepartmentDAO {
 
     public List<Department> getAllDepartments(){
         List<Department> list = new ArrayList<>();
-        String query = "SELECT * FROM departments ORDER BY department_id";
+        String query = "SELECT * FROM departments ORDER BY active DESC, department_id";
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
@@ -134,6 +134,23 @@ public class DepartmentDAO {
             }
         } catch (SQLException e) {
             System.out.println("editDepartment Error.");
+        }
+    }
+
+    public void deactivateDepartment(int deptID){
+        String query = "UPDATE departments SET active = 0 WHERE department_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setInt(1, deptID);
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0){
+                System.out.println("Sucessfully deactivated dept_id: " + deptID);
+            } else {
+                System.out.println("Unsucessfuly deactivated dept_id: " +  deptID);
+            }
+
+        } catch (SQLException e){
+            System.out.println("deactivateDepartment error");
         }
     }
 }
