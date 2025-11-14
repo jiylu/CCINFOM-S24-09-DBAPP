@@ -8,17 +8,21 @@ public class AdminDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
     public final static String VIEW_USERS = "viewUsers";
     public final static String VIEW_REPORTS = "viewReports";
+    public final static String VIEW_DEPT = "viewDept";
+
 
     private JLabel titleLabel;
     private JButton viewUsersButton; 
+    private JButton manageDepartmentsButton;
+    private JButton manageCategoriesButton;
     private JButton reportsButton; 
-    // private JButton deleteUserButton; 
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private AddUserPanel addUserPanel;
     private UserManagementPanel viewUsersPanel;
     private ReportsDashboardPanel reportsDashboardPanel;
+    private DepartmentManagementPanel deptManagementPanel;
 
     public AdminDashboardPanel(){
         setLayout(null);
@@ -31,16 +35,18 @@ public class AdminDashboardPanel extends JPanel {
     private void initPanels(){
         viewUsersPanel = new UserManagementPanel();
         reportsDashboardPanel = new ReportsDashboardPanel();
+        deptManagementPanel = new DepartmentManagementPanel();
     }
 
     private void setupCardLayout(){
         JPanel emptyPanel = new JPanel();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        cardPanel.setBounds(10, 75, 1180, 710);
+        cardPanel.setBounds(10, 85, 1180, 710);
         
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(viewUsersPanel, VIEW_USERS);
+        cardPanel.add(deptManagementPanel, VIEW_DEPT);
         cardPanel.add(reportsDashboardPanel, VIEW_REPORTS);
         add(cardPanel);
     }
@@ -62,9 +68,18 @@ public class AdminDashboardPanel extends JPanel {
         viewUsersButton.setBounds(10, 60, 150, 25);
         add(viewUsersButton);
 
+        manageDepartmentsButton = new JButton("Manage Departments");
+        manageDepartmentsButton.setBounds(170, 60, 180, 25);
+        add(manageDepartmentsButton);
+
+        manageCategoriesButton = new JButton("Manage Categories");
+        manageCategoriesButton.setBounds(360, 60, 150, 25);
+        add(manageCategoriesButton);
+
         reportsButton = new JButton("View Reports");
-        reportsButton.setBounds(170, 60, 150, 25);
+        reportsButton.setBounds(520, 60, 150, 25);
         add(reportsButton);
+
 
     }
 
@@ -80,9 +95,13 @@ public class AdminDashboardPanel extends JPanel {
         return reportsButton;
     }
 
-    // public JButton getDeleteUserButton(){
-    //     return deleteUserButton;
-    // }
+    public JButton getManageDepartmentsButton(){
+        return manageDepartmentsButton;
+    }
+
+    public JButton getManageCategoriesButton(){
+        return manageCategoriesButton;
+    }
 
     public UserManagementPanel getViewUsersPanel(){
         return viewUsersPanel;
@@ -90,6 +109,10 @@ public class AdminDashboardPanel extends JPanel {
 
     public ReportsDashboardPanel getReportsDashboardPanel(){
         return reportsDashboardPanel;
+    }
+
+    public DepartmentManagementPanel getDeptManagementPanel(){
+        return deptManagementPanel;
     }
 
     public AddUserPanel getAddUserPanel(){

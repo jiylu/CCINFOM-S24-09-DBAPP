@@ -117,6 +117,7 @@ public class ReportsDashboardPanel extends JPanel{
         table = new JTable(model);
         tableScrollPane = new JScrollPane(table);
         tableScrollPane.setBounds(0, 90, 1160, 550);
+        tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(tableScrollPane);
 
         revalidate();
@@ -135,7 +136,7 @@ public class ReportsDashboardPanel extends JPanel{
         }
     }
 
-        public void setupDepartmentReportTable(List<DepartmentReport> data){
+    public void setupDepartmentReportTable(List<DepartmentReport> data){
         String[] cols = {"Department Name", "Year", "Category Name", "Number of Tickets"};
         DefaultTableModel model = setupTable(cols);
 
