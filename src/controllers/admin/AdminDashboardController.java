@@ -11,6 +11,7 @@ import models.User;
 import view.Frame;
 import view.admin.AddUserPanel;
 import view.admin.AdminDashboardPanel;
+import view.admin.DepartmentManagementPanel;
 import view.admin.ReportsDashboardPanel;
 import view.admin.UserManagementPanel;
 
@@ -27,6 +28,7 @@ public class AdminDashboardController {
     private TicketsDAO ticketsDAO;
     private CategoriesDAO categoriesDAO;
     private UserManagementController viewUsersController;
+    private DepartmentManagementController departmentManagementController;
     private ReportsDashboardController reportsDashboardController;
 
     public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO, CategoriesDAO categoriesDAO){
@@ -46,8 +48,10 @@ public class AdminDashboardController {
     public void init(){
         UserManagementPanel viewUsersPanel = panel.getViewUsersPanel();
         ReportsDashboardPanel reportsDashboardPanel = panel.getReportsDashboardPanel();
+        DepartmentManagementPanel departmentManagementPanel = panel.getDeptManagementPanel();
         this.viewUsersController = new UserManagementController(user, viewUsersPanel, userDAO, empDAO, techDAO, deptDAO, ticketsDAO);
         this.reportsDashboardController = new ReportsDashboardController(reportDAO, empDAO, techDAO, deptDAO, ticketsDAO, categoriesDAO, reportsDashboardPanel);
+        this.departmentManagementController = new DepartmentManagementController(departmentManagementPanel, deptDAO);
         frame.showPanel(Frame.ADMIN_PANEL);
         initListeners();
     }
@@ -56,11 +60,16 @@ public class AdminDashboardController {
     private void initListeners(){
         viewUsersController.initListeners();
         reportsDashboardController.initListeners();
-
+        departmentManagementController.initListener();
+        
         panel.getViewUsersButton().addActionListener(e->{
             viewUsersController.init(panel);
         });
         
+        panel.getManageDepartmentsButton().addActionListener(e->{
+            departmentManagementController.init(panel);
+        });
+
         panel.getReportsButton().addActionListener(e->{
             reportsDashboardController.init(panel);
         });

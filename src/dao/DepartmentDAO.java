@@ -14,7 +14,7 @@ public class DepartmentDAO {
 
     public List<Department> getAllDepartments(){
         List<Department> list = new ArrayList<>();
-        String query = "SELECT * FROM departments";
+        String query = "SELECT * FROM departments ORDER BY department_id";
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
@@ -100,6 +100,18 @@ public class DepartmentDAO {
         } catch (SQLException e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void insertDepartment(String departmentName){
+        String query = "INSERT INTO departments (department_name) VALUES (?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, departmentName);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Error inserting department.");
         }
     }
 }

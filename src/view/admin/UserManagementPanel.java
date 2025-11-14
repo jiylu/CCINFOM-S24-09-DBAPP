@@ -75,6 +75,7 @@ public class UserManagementPanel extends JPanel{
         table = new JTable(model);
         tableScrollPane = new JScrollPane(table);
         tableScrollPane.setBounds(0, 60, 1160, 630);
+        tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(tableScrollPane);
 
         revalidate();
