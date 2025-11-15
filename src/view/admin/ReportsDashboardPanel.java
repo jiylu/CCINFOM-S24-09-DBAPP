@@ -210,4 +210,12 @@ public class ReportsDashboardPanel extends JPanel{
     public JButton getFilterByDepartmentYear() {
         return filterByDepartmentYear;
     }
+
+    public JButton getDownloadButton(){
+        return downloadButton;
+    }
+
+    public JTable getTable(){
+        return table;
+    }
 }

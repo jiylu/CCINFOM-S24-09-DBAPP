@@ -9,7 +9,9 @@ import dao.TicketsDAO;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import reports.*;
+import util.PDFExport;
 import view.admin.AdminDashboardPanel;
 import view.admin.ReportsDashboardPanel;
 
@@ -21,6 +23,11 @@ public class ReportsDashboardController {
     private DepartmentDAO deptDAO;
     private TicketsDAO ticketsDAO;
     private CategoriesDAO categoriesDAO;
+    
+    // para sa filename ng pdf
+    private String report;
+    private String filter;
+    private String pdfTitle;
 
     public ReportsDashboardController(ReportDAO reportDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, CategoriesDAO categoriesDAO, ReportsDashboardPanel reportsDashboardPanel) {
         this.reportDAO = reportDAO;
@@ -30,8 +37,11 @@ public class ReportsDashboardController {
         this.ticketsDAO = ticketsDAO;
         this.categoriesDAO = categoriesDAO;
         this.panel = reportsDashboardPanel;
+        this.pdfTitle = null;
+        this.report = null;
+        this.filter = null;
     }
-
+    
     public void init(AdminDashboardPanel adminPanel){
         adminPanel.showPanel(AdminDashboardPanel.VIEW_REPORTS);
     }
@@ -40,20 +50,45 @@ public class ReportsDashboardController {
         initFilterListeners();
 
         panel.getCategoryReportButton().addActionListener(e->{
+            report = "category_report";
+            pdfTitle = "Category Report";
+            filter = null;
             List<CategoryReport> cr = reportDAO.generateCategoryReport();
             panel.setupCategoryReportTable(cr);
             panel.showCategoryReportFilters();
         });
 
         panel.getDepartmentReportButton().addActionListener(e->{
+            report = "department_report";
+            pdfTitle = "Department Report";
+            filter = null;
             List<DepartmentReport> dr = reportDAO.generateDepartmentReport();
             panel.setupDepartmentReportTable(dr);
             panel.showDepartmentReportFilters();
+        });
+
+        panel.getDownloadButton().addActionListener(e->{
+            JTable table = panel.getTable();
+
+            if (table == null){
+                JOptionPane.showMessageDialog(null, "No table found");
+                return;
+            }
+
+            String filename = "reports/" + report;
+
+            if (filter != null){
+                filename = filename.concat(filter);
+            }
+
+            PDFExport.exportTableToPDF(table, filename + ".pdf", pdfTitle);
         });
     }
 
     private void initFilterListeners(){
         panel.getClearFilterButton().addActionListener(e -> {
+            filter = null;
+
             if (panel.getFilterByCategoryButton().isVisible()) {
                 List<CategoryReport> cr = reportDAO.generateCategoryReport();
                 panel.setupCategoryReportTable(cr);
@@ -67,9 +102,10 @@ public class ReportsDashboardController {
         panel.getFilterByCategoryButton().addActionListener(e->{
             JComboBox<String> comboBox = new JComboBox<>(categoriesDAO.getAllCategoryNames().toArray(new String[0]));
             int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Category", JOptionPane.OK_CANCEL_OPTION);
-
+            
             if (res == JOptionPane.OK_OPTION){
                 String category = (String) comboBox.getSelectedItem();
+                filter = "_filter_category_" + category;
                 int categoryID = categoriesDAO.getCategoryIDByName(category);
                 List<CategoryReport> cr = reportDAO.generateCategoryReportByCategory(categoryID);
                 panel.setupCategoryReportTable(cr);
@@ -83,6 +119,7 @@ public class ReportsDashboardController {
 
             if (res == JOptionPane.OK_OPTION){
                 Integer year = (Integer) comboBox.getSelectedItem();
+                filter = "_filter_year_ " + year.toString();
                 List<CategoryReport> cr = reportDAO.generateCategoryReportByYear(year);
                 panel.setupCategoryReportTable(cr);
             }
@@ -95,6 +132,7 @@ public class ReportsDashboardController {
 
             if (res == JOptionPane.OK_OPTION){
                 String dept = (String) comboBox.getSelectedItem();
+                filter = "_filter_department_" + dept;
                 int deptID = deptDAO.getDepartmentIDByName(dept);
                 List<DepartmentReport> dr = reportDAO.generateDeptReportByDept(deptID);
                 panel.setupDepartmentReportTable(dr);
@@ -108,6 +146,7 @@ public class ReportsDashboardController {
 
             if (res == JOptionPane.OK_OPTION){
                 Integer year = (Integer) comboBox.getSelectedItem();
+                filter = "_filter_year_" + year.toString().trim();
                 List<DepartmentReport> dr = reportDAO.generateDepartmentReportByYear(year);
                 panel.setupDepartmentReportTable(dr);
             }
