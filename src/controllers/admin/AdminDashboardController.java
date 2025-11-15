@@ -14,6 +14,7 @@ import view.admin.AdminDashboardPanel;
 import view.admin.DepartmentManagementPanel;
 import view.admin.ReportsDashboardPanel;
 import view.admin.UserManagementPanel;
+import view.admin.ManageCategoriesPanel;
 
 public class AdminDashboardController {
     private User user;
@@ -29,6 +30,7 @@ public class AdminDashboardController {
     private CategoriesDAO categoriesDAO;
     private UserManagementController viewUsersController;
     private DepartmentManagementController departmentManagementController;
+    private ManageCategoriesController manageCategoriesController;
     private ReportsDashboardController reportsDashboardController;
 
     public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO, CategoriesDAO categoriesDAO){
@@ -47,11 +49,13 @@ public class AdminDashboardController {
 
     public void init(){
         UserManagementPanel viewUsersPanel = panel.getViewUsersPanel();
+        ManageCategoriesPanel categoriesPanel = panel.getManageCategoriesPanel();
         ReportsDashboardPanel reportsDashboardPanel = panel.getReportsDashboardPanel();
         DepartmentManagementPanel departmentManagementPanel = panel.getDeptManagementPanel();
         this.viewUsersController = new UserManagementController(user, viewUsersPanel, userDAO, empDAO, techDAO, deptDAO, ticketsDAO);
+        this.manageCategoriesController = new ManageCategoriesController(categoriesPanel, categoriesDAO, ticketsDAO);
         this.reportsDashboardController = new ReportsDashboardController(reportDAO, empDAO, techDAO, deptDAO, ticketsDAO, categoriesDAO, reportsDashboardPanel);
-        this.departmentManagementController = new DepartmentManagementController(departmentManagementPanel, deptDAO);
+        this.departmentManagementController = new DepartmentManagementController(departmentManagementPanel, deptDAO, empDAO);
         frame.showPanel(Frame.ADMIN_PANEL);
         initListeners();
     }
@@ -59,11 +63,16 @@ public class AdminDashboardController {
     
     private void initListeners(){
         viewUsersController.initListeners();
+        manageCategoriesController.initListeners();
         reportsDashboardController.initListeners();
         departmentManagementController.initListener();
         
         panel.getViewUsersButton().addActionListener(e->{
             viewUsersController.init(panel);
+        });
+
+        panel.getManageCategoriesButton().addActionListener(e->{
+            manageCategoriesController.init(panel);
         });
         
         panel.getManageDepartmentsButton().addActionListener(e->{

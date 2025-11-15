@@ -20,6 +20,8 @@ public class ReportsDashboardPanel extends JPanel{
     private JButton filterByTech;
     private JButton filterByTechYear;
 
+    private JButton downloadButton;
+    
     private JTable table;
     private JScrollPane tableScrollPane;
     
@@ -34,6 +36,7 @@ public class ReportsDashboardPanel extends JPanel{
         setupEmployeeReportButton();
         setupCategoryReportButton();
         setupDepartmentIssueButton();
+        setupDownloadButton();
     }
 
     private void setupFilterButtons(){
@@ -121,6 +124,10 @@ public class ReportsDashboardPanel extends JPanel{
         filterByTechYear.setBounds(160, 55, 150, 25);
         filterByTechYear.setVisible(false);
         add(filterByTechYear);
+    private void setupDownloadButton(){
+        downloadButton = new JButton("Download");
+        downloadButton.setBounds(0, 600, 150, 25);
+        add(downloadButton);
     }
 
     private DefaultTableModel setupTable(String[] cols){
@@ -138,7 +145,7 @@ public class ReportsDashboardPanel extends JPanel{
 
         table = new JTable(model);
         tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setBounds(0, 90, 1160, 550);
+        tableScrollPane.setBounds(0, 90, 1160, 500);
         tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(tableScrollPane);
 
