@@ -17,6 +17,8 @@ public class ReportsDashboardPanel extends JPanel{
     private JButton filterByYear;
     private JButton filterByDepartment;
     private JButton filterByDepartmentYear;
+    private JButton filterByTech;
+    private JButton filterByTechYear;
 
     private JTable table;
     private JScrollPane tableScrollPane;
@@ -40,8 +42,11 @@ public class ReportsDashboardPanel extends JPanel{
         setupFilterByCategoryYearButton();
         setupFilterByDepartmentButton();
         setupFilterByDepartmentYearButton();
+        setupFilterByTechnicianButton();
+        setupFilterbyTechnicianYearButton();
     }
 
+    //----------------Report Buttons-------------------//
     private void setupTechnicianReportButton() {
         technicianReport = new JButton("View Technician Workload Report");
         technicianReport.setBounds(0, 20, 240, 25);
@@ -73,6 +78,7 @@ public class ReportsDashboardPanel extends JPanel{
         add(clearFilter);
     }
 
+    //----------------- Category Filters -----------------//
     private void setupFilterByCategoryButton(){
         filterByCategory = new JButton("Filter by Category");
         filterByCategory.setBounds(0, 55, 150, 25);
@@ -87,6 +93,7 @@ public class ReportsDashboardPanel extends JPanel{
         add(filterByYear);
     }
 
+    //---------------------- Department Filters ---------------------//
     private void setupFilterByDepartmentButton(){
         filterByDepartment = new JButton("Filter by Department");
         filterByDepartment.setBounds(0, 55, 150, 25);
@@ -99,6 +106,21 @@ public class ReportsDashboardPanel extends JPanel{
         filterByDepartmentYear.setBounds(160, 55, 150, 25);
         filterByDepartmentYear.setVisible(false);
         add(filterByDepartmentYear);
+    }
+
+    //----------------- Technician Filters ----------------------// 
+    private void setupFilterByTechnicianButton(){
+        filterByTech = new JButton("Filter by Technician");
+        filterByTech.setBounds(0, 55, 150, 25);
+        filterByTech.setVisible(false);
+        add(filterByTech);
+    }
+
+    private void setupFilterbyTechnicianYearButton(){
+        filterByTechYear = new JButton("Filter by Year");
+        filterByTechYear.setBounds(160, 55, 150, 25);
+        filterByTechYear.setVisible(false);
+        add(filterByTechYear);
     }
 
     private DefaultTableModel setupTable(String[] cols){
@@ -126,6 +148,7 @@ public class ReportsDashboardPanel extends JPanel{
         return model;
     }
 
+    // ---------------------- Report Tables ---------------------------- //
     public void setupCategoryReportTable(List<CategoryReport> data){
         String[] cols = {"Category Name", "Year", "Number of Tickets", "Number of Resolved Tickets"};
         DefaultTableModel model = setupTable(cols);
@@ -146,12 +169,56 @@ public class ReportsDashboardPanel extends JPanel{
         }
     }
 
+    public void setupTechWorkloadReportTable(List<TechWorkloadReport> data){
+        String[] cols = {"Year", "Technician Name", "Total Assigned Tickets", "Total Tickets Resolved", "Average Resolution Time"};
+        DefaultTableModel model = setupTable(cols);
+
+        for (TechWorkloadReport techWR : data){
+            Object[] row = new Object[] {techWR.getYear(), techWR.getTechnician(), techWR.getAssignedTickets(), techWR.getResolvedTickets(), techWR.getAverageTime()};
+            model.addRow(row);
+        }
+    }
+
+    public void setupTechnicianSummaryTable(List<TechWorkloadReport> data) {
+        String[] columns = {"Year", "Total Assigned", "Total Resolved", "Average Resolution Time"};
+
+        DefaultTableModel model = setupTable(columns); 
+
+        for (TechWorkloadReport TWReport : data) {
+            model.addRow(new Object[]{
+                TWReport.getYear(),
+                TWReport.getAssignedTickets(),
+                TWReport.getResolvedTickets(),
+                TWReport.getAverageTime()
+            });
+        }
+    }
+
+
+    public void setupYearSummaryTable(List<TechWorkloadReport> data) {
+        String[] columns = {"Technician", "Total Assigned", "Total Resolved", "Average Resolution Time"};
+        
+        DefaultTableModel model = setupTable(columns); 
+
+        for (TechWorkloadReport TWReport : data) {
+            model.addRow(new Object[]{
+                TWReport.getTechnician(),
+                TWReport.getAssignedTickets(),
+                TWReport.getResolvedTickets(),
+                TWReport.getAverageTime()
+            });
+        }
+    }
+
+
     private void resetFilters(){
         clearFilter.setVisible(false);
         filterByCategory.setVisible(false);
         filterByYear.setVisible(false);
         filterByDepartment.setVisible(false);
         filterByDepartmentYear.setVisible(false);
+        filterByTech.setVisible(false);
+        filterByTechYear.setVisible(false);
     }
 
     public void showCategoryReportFilters(){
@@ -164,6 +231,12 @@ public class ReportsDashboardPanel extends JPanel{
         resetFilters();
         filterByDepartment.setVisible(true);
         filterByDepartmentYear.setVisible(true);
+    }
+
+    public void showTechWorkloadReportFilters(){
+        resetFilters();
+        filterByTech.setVisible(true);
+        filterByTechYear.setVisible(true);
     }
 
     public JButton getTechnicianReportButton() {
@@ -200,5 +273,13 @@ public class ReportsDashboardPanel extends JPanel{
 
     public JButton getFilterByDepartmentYear() {
         return filterByDepartmentYear;
+    }
+
+    public JButton getFilterByTechButton() {
+        return filterByTech;
+    }
+
+    public JButton getFilterByTechYearButton() {
+        return filterByTechYear;
     }
 }
