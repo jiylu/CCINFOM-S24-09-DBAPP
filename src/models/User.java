@@ -5,7 +5,7 @@ public class User {
     private String username;
     private String password;
     private Role role;
-    private Boolean isActive;
+    private boolean isActive;
 
     public enum Role{
         ADMIN,
@@ -13,12 +13,12 @@ public class User {
         EMPLOYEE
     }
 
-    public User(int userID, String username, String password, Role role){
+    public User(int userID, String username, String password, Role role, boolean isActive){
         this.userID = userID;
         this.username = username;
         this.password = password;
         this.role = role;
-        this.isActive = true;
+        this.isActive = isActive;
     }
 
     public int getUserID() {
@@ -37,7 +37,7 @@ public class User {
         return role;
     }
 
-    public Boolean getIsActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 

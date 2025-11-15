@@ -30,7 +30,8 @@ public class UserDAO {
                     rs.getInt(1),
                     rs.getString(2),
                     rs.getString(3),
-                    User.Role.valueOf(rs.getString(4).toUpperCase())
+                    User.Role.valueOf(rs.getString(4).toUpperCase()),
+                    rs.getBoolean(5)
                 );
                 
                 u.setActive(rs.getBoolean(5));
@@ -87,15 +88,12 @@ public class UserDAO {
 
             if (rs.next()){
                 
-                if (!rs.getBoolean(5)){
-                    return null;
-                }
-
                 return new User(
                     rs.getInt(1), 
                     username, 
                     password, 
-                    Role.valueOf(rs.getString(4).toUpperCase()));
+                    Role.valueOf(rs.getString(4).toUpperCase()),
+                    rs.getBoolean(5));
             }
 
             rs.close();
@@ -125,7 +123,8 @@ public class UserDAO {
                     rs.getInt(1), 
                     username, 
                     rs.getString(3), 
-                    Role.valueOf(rs.getString(4).toUpperCase()));
+                    Role.valueOf(rs.getString(4).toUpperCase()),
+                    rs.getBoolean(5));
             }
 
             rs.close();

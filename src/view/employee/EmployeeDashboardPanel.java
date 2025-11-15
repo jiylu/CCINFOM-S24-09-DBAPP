@@ -29,7 +29,7 @@ public class EmployeeDashboardPanel extends JPanel {
     }
 
     private void initTitle() {
-        titleLabel = new JLabel("Welcome, Employee!");
+        titleLabel = new JLabel("Employee Dashboard");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
         titleLabel.setBounds(10, 10, 500, 50);
         add(titleLabel);

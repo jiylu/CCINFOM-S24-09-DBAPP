@@ -148,7 +148,7 @@ public class EditUserController {
         String newUsername = editPanel.getUsernameField().getText();
         String newPassword = editPanel.getPasswordField().getText();
 
-        User user = new User(userID, newUsername, newPassword, userRole);
+        User user = new User(userID, newUsername, newPassword, userRole, true);
         userDAO.editUser(user);
 
         return user;

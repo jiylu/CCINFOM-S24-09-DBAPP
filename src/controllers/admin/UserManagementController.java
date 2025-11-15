@@ -1,7 +1,6 @@
 package controllers.admin;
 
 import dao.*;
-
 import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JCheckBox;
@@ -118,8 +117,20 @@ public class UserManagementController {
 
     private void initDeactivateEmployee(JTable table){
         table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
+            String status = table.getValueAt(row, 7).toString().trim();
+            
+            if (status.contentEquals("Inactive")){
+                JOptionPane.showMessageDialog(null, "User is already deactivated.");
+                return;
+            }
+            
             int userID = (int) table.getValueAt(row, 0);
             int empID = 0;
+
+            if (userID == user.getUserID()){
+                JOptionPane.showMessageDialog(null, "Cannot deactivate yourself.");
+                return;
+            }
 
             try {
                 empID = empDAO.getEmployeeByUserId(userID).getEmpID();
@@ -178,6 +189,13 @@ public class UserManagementController {
 
     private void initDeactivateTechnician(JTable table){
         table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
+            String status = table.getValueAt(row, 5).toString().trim();
+            
+            if (status.contentEquals("Inactive")){
+                JOptionPane.showMessageDialog(null, "User is already deactivated.");
+                return;
+            }
+            
             int userID = (int) table.getValueAt(row, 0);
             int technicianID = techDAO.getTechnicianIdByUserId(userID);
 

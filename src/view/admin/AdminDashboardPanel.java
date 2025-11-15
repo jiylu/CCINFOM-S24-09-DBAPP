@@ -59,7 +59,7 @@ public class AdminDashboardPanel extends JPanel {
     }
 
     private void initTitle(){
-        titleLabel = new JLabel("Welcome, User!");
+        titleLabel = new JLabel("Admin Dashboard");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 32)); 
         titleLabel.setBounds(10, 10, 500, 50);
 

@@ -34,7 +34,13 @@ VALUES
     ('samuel_lee', 'password123', 'Technician'),
     ('emma_kim', 'password123', 'Technician'),
     ('dante_rivera', 'password123', 'Technician'),
-    ('dante_gulapa', 'password123', 'Technician');
+    ('dante_gulapa', 'password123', 'Technician'), -- 10032
+    ('fiona_apple', 'password123', 'Employee'), -- 10033
+    ('hev_abi', 'password123', 'Technician'), -- 10034
+    ('admin', 'password123', 'Admin'); -- 10035
+
+UPDATE users SET active = 0 WHERE user_id = 10033;
+UPDATE users SET active = 0 WHERE user_id = 10034;
 
 INSERT IGNORE INTO Departments (department_name)
 VALUES
@@ -67,7 +73,9 @@ VALUES
     (10018, 'Diaz', 'Camila', 1, 'HR Coordinator'),
     (10019, 'Silva', 'Javier', 2, 'Finance Analyst'),
     (10020, 'Torres', 'Adriana', 3, 'Customer Support Specialist'),
-    (10021, 'Mendoza', 'Ricardo', 5, 'Operations Manager');
+    (10021, 'Mendoza', 'Ricardo', 5, 'Operations Manager'),
+    (10033, 'Apple', 'Fiona', 3, 'Customer Support Specialist'),
+    (10035, 'Admin', 'Admin', 7, 'Admin');
 
 
 INSERT IGNORE INTO Technicians(user_id, tech_lastName, tech_firstName)
@@ -85,7 +93,8 @@ VALUES
     (10029, 'Lee', 'Samuel'),
     (10030, 'Kim', 'Emma'),
     (10031, 'Rivera', 'Dante'),
-    (10032, 'Gulapa', 'Dante');
+    (10032, 'Gulapa', 'Dante'),
+    (10034, 'Abi', 'Hev');
 
 INSERT IGNORE INTO Categories (category_name)
 VALUES
