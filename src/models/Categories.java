@@ -3,10 +3,12 @@ package models;
 public class Categories {
     private int category_id;
     private String category_name;
+    private boolean active;
 
-    public Categories(int category_id, String category_name) {
+    public Categories(int category_id, String category_name, boolean active) {
         this.category_id = category_id;
         this.category_name = category_name;
+        this.active = active;
     }
 
     // getters
@@ -15,6 +17,9 @@ public class Categories {
     }
     public String getCategoryName() {
         return category_name;
+    }
+    public boolean getActive() {
+        return active;
     }
     
     // setters for update

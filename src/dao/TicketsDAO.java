@@ -7,6 +7,7 @@ import java.util.List;
 import com.mysql.cj.conf.DatabaseUrlContainer;
 import com.mysql.cj.xdevapi.PreparableStatement;
 import db.DBConnection;
+import models.Employees;
 import models.Tickets;
 
 public class TicketsDAO {
@@ -43,6 +44,35 @@ public class TicketsDAO {
         }
         
         return ticketsList;
+    }
+
+    public List<Tickets> getTicketsByCategoryID(int categoryID) throws SQLException {
+        List<Tickets> list = new ArrayList<>();
+        String query = "SELECT * FROM tickets t WHERE t.category_id = ?";
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, categoryID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    list.add(new Tickets(
+                        rs.getInt("ticket_id"),
+                        rs.getString("ticket_subject"), 
+                        rs.getString("ticket_description"), 
+                        rs.getInt("category_id"),
+                        rs.getInt("employee_id"),
+                        rs.getInt("technician_id"),
+                        rs.getString("creation_date"),
+                        rs.getString("resolve_date"),
+                        rs.getString("status")
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error executing getTicketsByCategoryID(): " + e.getMessage());
+            throw e;
+        }
+
+        return list;
     }
 
     public List<Tickets> getResolvedTickets(int technicianId) throws SQLException {

@@ -7,43 +7,61 @@ import models.Categories;
 
 public class CategoriesDAO {
     private Connection conn;
-    
-    public CategoriesDAO(Connection conn){
+
+    public CategoriesDAO(Connection conn) {
         this.conn = conn;
     }
 
     public List<Categories> getAllCategories() {
         List<Categories> list = new ArrayList<>();
         String query = "SELECT * FROM categories ORDER BY category_id";
+        try (Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
 
-        try (Statement stmt = conn.createStatement()){
-            ResultSet rs = stmt.executeQuery(query);
-
-            while (rs.next()){
+            while (rs.next()) {
                 list.add(new Categories(
-                    rs.getInt("category_id"),
-                    rs.getString("category_name")
-                ));
+                        rs.getInt("category_id"),
+                        rs.getString("category_name"),
+                        rs.getBoolean("active")));
             }
 
-            rs.close();
-            stmt.close();
-            return list;
-            
         } catch (SQLException e) {
-            System.out.println("Error retrieving all categories.");
-            return null;
+            System.err.println("Error retrieving all categories: " + e.getMessage());
         }
+
+        return list;
     }
 
-    public List<String> getAllCategoryNames(){
+    public List<Categories> getAllCategoryNameID() {
+        List<Categories> list = new ArrayList<>();
+        String query = "SELECT category_id, category_name FROM categories WHERE active = 1 ORDER BY category_id";
+
+        try (Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                list.add(new Categories(
+                        rs.getInt("category_id"),
+                        rs.getString("category_name"),
+                        true
+                        ));
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error retrieving all categories: " + e.getMessage());
+        }
+
+        return list;
+    }
+
+    public List<String> getAllCategoryNames() {
         List<String> list = new ArrayList<>();
         String query = "SELECT category_name FROM categories ORDER BY category_id";
 
-        try (Statement stmt = conn.createStatement()){
+        try (Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(query);
 
-            while (rs.next()){
+            while (rs.next()) {
                 list.add(rs.getString("category_name"));
             }
 
@@ -51,7 +69,7 @@ public class CategoriesDAO {
             stmt.close();
             return list;
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error retrieving category names");
             return null;
         }
@@ -81,14 +99,14 @@ public class CategoriesDAO {
         return null;
     }
 
-    public Integer getCategoryIDByName(String name){
+    public Integer getCategoryIDByName(String name) {
         String query = "SELECT category_id FROM Categories WHERE category_name = ?";
-        
+
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
 
-            if (rs.next()){
+            if (rs.next()) {
                 return rs.getInt(1);
             }
 
@@ -99,15 +117,29 @@ public class CategoriesDAO {
         }
     }
 
-    public void insertCategory(String categorytName){
+    public void insertCategory(String categorytName) {
         String query = "INSERT INTO categories (category_name) VALUES (?)";
 
-        try (PreparedStatement ps = conn.prepareStatement(query)){
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, categorytName);
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
             System.out.println("Error inserting category.");
+        }
+    }
+
+    public void deactivateCategories(List<Integer> ids) {
+        String query = "UPDATE categories SET active = 0 WHERE category_id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            for (Integer id : ids) {
+                ps.setInt(1, id);
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        } catch (SQLException e) {
+            System.err.println("Error deactivating categories: " + e.getMessage());
         }
     }
 }
