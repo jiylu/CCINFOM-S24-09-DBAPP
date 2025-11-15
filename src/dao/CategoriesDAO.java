@@ -142,4 +142,22 @@ public class CategoriesDAO {
             System.err.println("Error deactivating categories: " + e.getMessage());
         }
     }
+
+    public void editCategoryByID(int categoryID, String categoryName){
+        String query = "UPDATE categories SET category_name = ? WHERE category_id = ?";
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, categoryName);
+            ps.setInt(2, categoryID);
+            
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0){
+                System.out.println("Successful editCategory");
+            } else {
+                System.out.println("No rows returned");
+            }
+        } catch (SQLException e) {
+            System.out.println("editCategory Error.");
+        }
+    }
 }

@@ -3,6 +3,7 @@ package controllers.admin;
 import java.sql.SQLException;
 import java.util.*;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import dao.TicketsDAO;
 import models.Categories;
 import models.Department;
+import util.ButtonEditor;
 import util.ButtonRenderer;
 import dao.CategoriesDAO;
 import view.admin.ManageCategoriesPanel;
@@ -22,7 +24,7 @@ public class ManageCategoriesController {
     private ManageCategoriesPanel panel;
     private CategoriesDAO categoryDAO;
     private TicketsDAO ticketsDAO;
-    private boolean showSelectColumn; 
+    private boolean showSelectColumn;
 
     public ManageCategoriesController(ManageCategoriesPanel panel, CategoriesDAO categoryDAO, TicketsDAO ticketsDAO) {
         this.panel = panel;
@@ -34,7 +36,7 @@ public class ManageCategoriesController {
     public void init(AdminDashboardPanel adminPanel) {
         adminPanel.showPanel(AdminDashboardPanel.VIEW_CATEGORIES);
         List<Categories> categoryList = categoryDAO.getAllCategoryNameID();
-        loadCategoryTable(categoryList, showSelectColumn);        
+        loadCategoryTable(categoryList, showSelectColumn);
     }
 
     public void initListeners() {
@@ -56,29 +58,61 @@ public class ManageCategoriesController {
     private void loadCategoryTable(List<Categories> list, boolean withSelectColumn) {
         if (withSelectColumn) {
             panel.setupCategoryTableWithSelect(list);
-            
         } else {
             panel.setupCategoryTable(list);
         }
+
+        JTable table = panel.getCategoryTable();
+        table.getColumn("Edit").setCellRenderer(new ButtonRenderer("Edit"));
+        initEditCategory(table);
+    }
+
+    private void initEditCategory(JTable table){
+        table.getColumn("Edit").setCellEditor(new ButtonEditor(new JCheckBox(), "Edit", row -> {
+            JPanel panel = new JPanel();
+            JLabel label = new JLabel("Edit Column name");
+            JTextField textField = new JTextField(20);
+            int categoryID = (int) table.getValueAt(row, 0);
+            String currCategoryName = table.getValueAt(row, 1).toString();
+
+            textField.setText(currCategoryName);
+            panel.add(label);
+            panel.add(textField);
+
+            int res = JOptionPane.showConfirmDialog(null, panel, "Edit Category", JOptionPane.OK_CANCEL_OPTION);
+
+            if (res == JOptionPane.YES_OPTION){
+                String input = textField.getText().trim();
+    
+                if (isExistingCategory(input)){
+                    return;
+                }
+
+                categoryDAO.editCategoryByID(categoryID, input);
+                JOptionPane.showMessageDialog(null, "Successfully edited CategoryID: " + categoryID);
+                loadCategoryTable(categoryDAO.getAllCategoryNameID(), false);
+            }
+        }));
     }
 
     private void addCategory() {
         JPanel panel = new JPanel();
         JLabel catNameLabel = new JLabel("Enter Category Name");
-        JTextField textField = new JTextField(20); 
+        JTextField textField = new JTextField(20);
         panel.add(catNameLabel);
         panel.add(textField);
 
         int res = JOptionPane.showConfirmDialog(null, panel, "Add Catrgory", JOptionPane.OK_CANCEL_OPTION);
 
-        if (res == JOptionPane.YES_OPTION){
+        if (res == JOptionPane.YES_OPTION) {
             String catName = textField.getText().trim();
-            
+
             if (catName.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Category name cannot be empty.", "Input Error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Category name cannot be empty.", "Input Error",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            if (isExistingCategory(catName)){
+            if (isExistingCategory(catName)) {
                 return;
             }
 
@@ -86,7 +120,7 @@ public class ManageCategoriesController {
             JOptionPane.showMessageDialog(null, "Inserted " + catName);
             loadCategoryTable(categoryDAO.getAllCategoryNameID(), false);
             this.panel.getDeleteCategoryButton().setVisible(false);
-        }  
+        }
     }
 
     private void deleteSelectedCategories() {
@@ -108,8 +142,8 @@ public class ManageCategoriesController {
                 } catch (SQLException e) {
                     e.printStackTrace();
                     JOptionPane.showMessageDialog(null,
-                        "Error checking tickets for category ID " + categoryId,
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                            "Error checking tickets for category ID " + categoryId,
+                            "Error", JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
                 idsToDelete.add(categoryId);
@@ -118,8 +152,9 @@ public class ManageCategoriesController {
 
         if (!blockedCategories.isEmpty()) {
             JOptionPane.showMessageDialog(null,
-                "Cannot delete " + String.join(", ", blockedCategories) + ". There are tickets containing this category (Issue Type).",
-                "Warning", JOptionPane.WARNING_MESSAGE);
+                    "Cannot delete " + String.join(", ", blockedCategories)
+                            + ". There are tickets containing this category (Issue Type).",
+                    "Warning", JOptionPane.WARNING_MESSAGE);
         }
 
         if (idsToDelete.isEmpty()) {
@@ -141,13 +176,13 @@ public class ManageCategoriesController {
         }
     }
 
-    public boolean isExistingCategory(String cat){
-        if (categoryDAO.getCategoryIDByName(cat) != null){
+    public boolean isExistingCategory(String cat) {
+        if (categoryDAO.getCategoryIDByName(cat) != null) {
             JOptionPane.showMessageDialog(null, "Category already exists!", "Input error", JOptionPane.WARNING_MESSAGE);
             return true;
-        }        
+        }
 
         return false;
     }
-    
+
 }

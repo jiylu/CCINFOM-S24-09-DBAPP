@@ -28,7 +28,7 @@ public class ManageCategoriesPanel extends JPanel {
     }
 
     private void setupSelectColumnButton() {
-        selectColumnButton = new JButton("Select Column To Edit/Delete");
+        selectColumnButton = new JButton("Select Column To Delete");
         selectColumnButton.setBounds(150, 20, 220, 25);
         add(selectColumnButton);
     }
@@ -39,6 +39,8 @@ public class ManageCategoriesPanel extends JPanel {
         deleteCategoryButton.setVisible(false);
         add(deleteCategoryButton);
     }
+
+    
 
     private DefaultTableModel setupTable(String[] cols) {
         if (tableScrollPane != null) {
@@ -55,7 +57,7 @@ public class ManageCategoriesPanel extends JPanel {
 
             public boolean isCellEditable(int row, int column) {
                 String colName = getColumnName(column);
-                return "Select".equals(colName);
+                return colName.equals("Edit") || colName.equals("Select");
             }
         };
 
@@ -73,11 +75,11 @@ public class ManageCategoriesPanel extends JPanel {
     }
 
     public void setupCategoryTable(List<Categories> catList) {
-        String[] cols = { "Category ID", "Category Name" };
+        String[] cols = { "Category ID", "Category Name", "Edit" };
         DefaultTableModel model = setupTable(cols);
 
         for (Categories cat : catList) {
-            Object[] row = { cat.getCategoryID(), cat.getCategoryName()};
+            Object[] row = { cat.getCategoryID(), cat.getCategoryName(), "Edit"};
             model.addRow(row);
         }
 
@@ -85,11 +87,11 @@ public class ManageCategoriesPanel extends JPanel {
     }
 
     public void setupCategoryTableWithSelect(List<Categories> catList) {
-        String[] cols = { "Select", "Category ID", "Category Name" };
+        String[] cols = { "Select", "Category ID", "Category Name", "Edit" };
         DefaultTableModel model = setupTable(cols);
 
         for (Categories cat : catList) {
-            Object[] row = { false, cat.getCategoryID(), cat.getCategoryName()};
+            Object[] row = { false, cat.getCategoryID(), cat.getCategoryName(), "Edit"};
             model.addRow(row);
         }
 
