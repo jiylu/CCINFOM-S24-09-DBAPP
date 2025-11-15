@@ -69,7 +69,7 @@ public class AddUserController {
         String selectedRole = (String) addUserPanel.getRoles().getSelectedItem();
         User.Role role = User.Role.valueOf(selectedRole.toUpperCase());
         
-        User u = new User(0,username,password,role);
+        User u = new User(0,username,password,role, true);
         return userDAO.insertUser(u);
     }
 

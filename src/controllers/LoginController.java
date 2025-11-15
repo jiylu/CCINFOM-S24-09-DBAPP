@@ -47,7 +47,6 @@ public class LoginController {
         loginButton.addActionListener(e->{
             User u = loginUser();
             if (u != null){
-                JOptionPane.showMessageDialog(null, "Hello!");
                 switch (u.getRole()){
                     case ADMIN -> redirectToAdminDashboard(u); 
                     case EMPLOYEE -> redirectToEmployeeDashboard(u);
