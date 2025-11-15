@@ -44,7 +44,8 @@ CREATE TABLE IF NOT EXISTS Technicians (
 
 CREATE TABLE IF NOT EXISTS Categories (
 	category_id INT AUTO_INCREMENT PRIMARY KEY,  
-    category_name VARCHAR(50) NOT NULL UNIQUE
+    category_name VARCHAR(50) NOT NULL UNIQUE,
+    active BOOLEAN DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS Tickets (
@@ -61,15 +62,3 @@ CREATE TABLE IF NOT EXISTS Tickets (
     CONSTRAINT fk_employee_ticket FOREIGN KEY (employee_id) REFERENCES Employees(emp_id),
     CONSTRAINT fk_technician_ticket FOREIGN KEY (technician_id) REFERENCES Technicians(technician_id)
 ) AUTO_INCREMENT = 40000;
-
-SELECT
-	d.department_name,
-    YEAR(t.creation_date) AS year,
-    c.category_name,
-    COUNT(t.ticket_id) AS total_tickets
-FROM departments d
-JOIN employees e ON d.department_id = e.dept_id
-JOIN tickets t ON e.emp_id = t.employee_id
-JOIN categories c ON t.category_id = c.category_id
-GROUP BY d.department_name, YEAR(t.creation_date), c.category_name
-ORDER BY d.department_name, year;

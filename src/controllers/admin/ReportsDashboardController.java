@@ -82,12 +82,18 @@ public class ReportsDashboardController {
             }
 
             PDFExport.exportTableToPDF(table, filename + ".pdf", pdfTitle);
+        panel.getTechnicianReportButton().addActionListener(e->{
+            panel.showTechWorkloadReportFilters();
+            List<TechWorkloadReport> techWR = reportDAO.generateTechWorkloadReport();
+            panel.setupTechWorkloadReportTable (techWR);
         });
     }
 
     private void initFilterListeners(){
         panel.getClearFilterButton().addActionListener(e -> {
             filter = null;
+            
+            panel.clearLabels(); //for technician report labels
 
             if (panel.getFilterByCategoryButton().isVisible()) {
                 List<CategoryReport> cr = reportDAO.generateCategoryReport();
@@ -95,6 +101,9 @@ public class ReportsDashboardController {
             } else if (panel.getFilterByDepartment().isVisible()) {
                 List<DepartmentReport> dr = reportDAO.generateDepartmentReport();
                 panel.setupDepartmentReportTable(dr);
+            } else if (panel.getFilterByTechButton().isVisible()) {
+                List<TechWorkloadReport> TechWR = reportDAO.generateTechWorkloadReport();
+                panel.setupTechWorkloadReportTable(TechWR);
             }
             panel.getClearFilterButton().setVisible(false);
         });
@@ -152,5 +161,33 @@ public class ReportsDashboardController {
             }
             panel.getClearFilterButton().setVisible(true);
         });
+
+        panel.getFilterByTechButton().addActionListener(e -> {
+            JComboBox<String> comboBox = new JComboBox<>(techDAO.getAllTechnicianNames().toArray(new String[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Technician", JOptionPane.OK_CANCEL_OPTION);
+
+            if (res == JOptionPane.OK_OPTION){
+                String techName = (String) comboBox.getSelectedItem();
+                int techID = techDAO.getTechnicianIDByName(techName);
+                List<TechWorkloadReport> list = reportDAO.generateTechYearsSummary(techID);
+                panel.setupTechnicianSummaryTable(list, techName);
+            }
+
+            panel.getClearFilterButton().setVisible(true);
+        });
+
+        panel.getFilterByTechYearButton().addActionListener(e -> {
+            JComboBox<Integer> comboBox = new JComboBox<>(ticketsDAO.getTicketYears().toArray(new Integer[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Year", JOptionPane.OK_CANCEL_OPTION);
+
+            if (res == JOptionPane.OK_OPTION){
+                int year = (Integer) comboBox.getSelectedItem();
+                List<TechWorkloadReport> list = reportDAO.generateYearTechsSummary(year);
+                panel.setupYearSummaryTable(list, year);
+            }
+
+            panel.getClearFilterButton().setVisible(true);
+        });
+
     }
 }

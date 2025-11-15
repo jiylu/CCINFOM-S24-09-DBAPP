@@ -38,6 +38,27 @@ public class TechniciansDAO {
         }
     }
 
+    public List<String> getAllTechnicianNames() {
+        List<String> technicianNames = new ArrayList<>();
+        
+        String query = "SELECT CONCAT(tech_firstName, ' ', tech_lastName) AS full_name FROM technicians";
+
+        try (Statement statement = conn.createStatement()){
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()){
+                technicianNames.add(rs.getString("full_name"));
+            }
+            return technicianNames;
+        } catch (SQLException e) {
+            System.out.println("Error retrieving all technician names.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    
+
     public void insertTechnician(Technicians tech){
         String query = "INSERT INTO Technicians(user_id, tech_lastName, tech_firstName) VALUES (?, ?, ?)";
 
@@ -85,5 +106,23 @@ public class TechniciansDAO {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public int getTechnicianIDByName(String name) {
+        String sql = "SELECT technician_id FROM technicians" +
+        " WHERE CONCAT(tech_firstName, ' ', tech_lastName) = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, name);
+
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("technician_id");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return -1;
     }
 }

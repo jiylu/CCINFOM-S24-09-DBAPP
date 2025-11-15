@@ -9,7 +9,7 @@ public class AdminDashboardPanel extends JPanel {
     public final static String VIEW_USERS = "viewUsers";
     public final static String VIEW_REPORTS = "viewReports";
     public final static String VIEW_DEPT = "viewDept";
-
+    public final static String VIEW_CATEGORIES = "viewCategories";
 
     private JLabel titleLabel;
     private JButton viewUsersButton; 
@@ -21,6 +21,7 @@ public class AdminDashboardPanel extends JPanel {
     private JPanel cardPanel;
     private AddUserPanel addUserPanel;
     private UserManagementPanel viewUsersPanel;
+    private ManageCategoriesPanel manageCategoriesPanel;
     private ReportsDashboardPanel reportsDashboardPanel;
     private DepartmentManagementPanel deptManagementPanel;
 
@@ -34,6 +35,7 @@ public class AdminDashboardPanel extends JPanel {
 
     private void initPanels(){
         viewUsersPanel = new UserManagementPanel();
+        manageCategoriesPanel = new ManageCategoriesPanel();
         reportsDashboardPanel = new ReportsDashboardPanel();
         deptManagementPanel = new DepartmentManagementPanel();
     }
@@ -46,6 +48,7 @@ public class AdminDashboardPanel extends JPanel {
         
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(viewUsersPanel, VIEW_USERS);
+        cardPanel.add(manageCategoriesPanel, VIEW_CATEGORIES);
         cardPanel.add(deptManagementPanel, VIEW_DEPT);
         cardPanel.add(reportsDashboardPanel, VIEW_REPORTS);
         add(cardPanel);
@@ -117,5 +120,9 @@ public class AdminDashboardPanel extends JPanel {
 
     public AddUserPanel getAddUserPanel(){
         return addUserPanel;
+    }
+
+    public ManageCategoriesPanel getManageCategoriesPanel() {
+        return manageCategoriesPanel;
     }
 }

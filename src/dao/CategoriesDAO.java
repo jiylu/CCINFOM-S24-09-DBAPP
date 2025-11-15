@@ -14,7 +14,7 @@ public class CategoriesDAO {
 
     public List<Categories> getAllCategories() {
         List<Categories> list = new ArrayList<>();
-        String query = "SELECT * FROM categories";
+        String query = "SELECT * FROM categories ORDER BY category_id";
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
@@ -38,7 +38,7 @@ public class CategoriesDAO {
 
     public List<String> getAllCategoryNames(){
         List<String> list = new ArrayList<>();
-        String query = "SELECT category_name FROM categories";
+        String query = "SELECT category_name FROM categories ORDER BY category_id";
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
@@ -96,6 +96,18 @@ public class CategoriesDAO {
         } catch (SQLException e) {
             System.out.println("Error getCategoryIDByName()");
             return null;
+        }
+    }
+
+    public void insertCategory(String categorytName){
+        String query = "INSERT INTO categories (category_name) VALUES (?)";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, categorytName);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Error inserting category.");
         }
     }
 }

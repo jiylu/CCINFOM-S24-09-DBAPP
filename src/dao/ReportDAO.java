@@ -15,6 +15,131 @@ public class ReportDAO {
     public ReportDAO(Connection conn){
         this.conn = conn;
     }
+    // Technician Workload Report
+    public List<TechWorkloadReport> generateTechWorkloadReport(){
+        List<TechWorkloadReport> list = new ArrayList<>();
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT ");
+        query.append("CONCAT(t.tech_firstName, ' ', t.tech_lastName) AS technician_name, ");
+        query.append("YEAR(tk.creation_date) AS year, ");
+        query.append("COUNT(tk.ticket_id) AS assigned_tickets, ");
+        query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
+        query.append("AVG(CASE WHEN tk.status = 'Resolved' THEN TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date) ELSE NULL END) AS average_resolution_time ");
+        query.append("FROM Technicians t ");
+        query.append("JOIN Tickets tk ON t.technician_id = tk.technician_id ");
+        query.append("GROUP BY t.technician_id, technician_name, year ");
+        query.append("ORDER BY t.technician_id, year;");
+
+        
+        try (java.sql.PreparedStatement ps = conn.prepareStatement(query.toString())){ 
+        
+            try (java.sql.ResultSet rs = ps.executeQuery()){
+
+                while (rs.next()){
+                    TechWorkloadReport TechWR = new TechWorkloadReport(
+                        rs.getInt("year"), 
+                        rs.getString("technician_name"),
+                        rs.getInt("assigned_tickets"), 
+                        rs.getInt("resolved_tickets"), 
+                        rs.getInt("average_resolution_time"));
+
+                    list.add(TechWR);
+                }
+            }
+            return list;
+
+        } catch (SQLException e) {
+            System.out.println("Error generating technician report.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<TechWorkloadReport> generateTechYearsSummary(int technicianId){ //list of years of a chosen technician
+        List<TechWorkloadReport> list = new ArrayList<>();
+        StringBuilder query = new StringBuilder();
+        
+        query.append("SELECT ");
+        query.append("YEAR(tk.creation_date) AS year, ");
+        query.append("COUNT(tk.ticket_id) AS assigned_tickets, ");        
+        query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets,");
+        query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date)) AS average_resolution_time");
+        query.append(" FROM tickets tk");
+        query.append(" WHERE tk.technician_id = ? ");
+        query.append(" GROUP BY year");
+        query.append(" ORDER BY year ASC");
+        
+        try (PreparedStatement ps = conn.prepareStatement(query.toString())){
+            ps.setInt(1, technicianId);
+            ResultSet rs = ps.executeQuery();
+
+            String technician = "ID: " + technicianId ;
+
+            while (rs.next()){
+                int year = rs.getInt("year");
+                int assignedTickets = rs.getInt("assigned_tickets");
+                int resolvedTickets = rs.getInt("resolved_tickets");
+                int average_resolution_time = rs.getInt("average_resolution_time");
+                
+                list.add(new TechWorkloadReport(
+                year,
+                technician, 
+                assignedTickets,
+                resolvedTickets,
+                average_resolution_time
+            ));
+            }
+            
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Error generating technician report.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    
+    public List<TechWorkloadReport> generateYearTechsSummary(int year) { //list of technicians in a chosen year
+        List<TechWorkloadReport> list = new ArrayList<>();
+        StringBuilder query = new StringBuilder();
+        
+        query.append("SELECT ");
+        query.append("CONCAT(t.tech_firstName, ' ', t.tech_lastName) AS technician_name, ");
+        query.append("COUNT(tk.ticket_id) AS assigned_tickets, ");
+        query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
+        query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date)) AS average_time");
+        query.append(" FROM tickets tk");
+        query.append(" JOIN technicians t ON t.technician_id = tk.technician_id");
+        query.append(" WHERE YEAR(tk.creation_date) = ?"); // Use placeholder for parameterized execution
+        query.append(" GROUP BY t.technician_id, technician_name");
+        query.append(" ORDER BY technician_name");
+        
+        try (PreparedStatement ps = conn.prepareStatement(query.toString())){
+                ps.setInt(1, year);
+                ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                String technician = rs.getString("technician_name");
+                int assignedTickets = rs.getInt("assigned_tickets");
+                int resolvedTickets = rs.getInt("resolved_tickets");
+                int averageTime = rs.getInt("average_time");
+
+                list.add(new TechWorkloadReport(
+                    year,
+                    technician,
+                    assignedTickets,
+                    resolvedTickets,
+                    averageTime
+                ));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
 
     // Category Report DAOs
     public List<CategoryReport> generateCategoryReport(){
