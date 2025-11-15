@@ -70,7 +70,7 @@ public class ManageCategoriesController {
     private void initEditCategory(JTable table){
         table.getColumn("Edit").setCellEditor(new ButtonEditor(new JCheckBox(), "Edit", row -> {
             JPanel panel = new JPanel();
-            JLabel label = new JLabel("Edit Column name");
+            JLabel label = new JLabel("Edit Category name");
             JTextField textField = new JTextField(20);
             int categoryID = (int) table.getValueAt(row, 0);
             String currCategoryName = table.getValueAt(row, 1).toString();

@@ -87,11 +87,11 @@ public class ManageCategoriesPanel extends JPanel {
     }
 
     public void setupCategoryTableWithSelect(List<Categories> catList) {
-        String[] cols = { "Select", "Category ID", "Category Name", "Edit" };
+        String[] cols = { "Select", "Category ID", "Category Name" };
         DefaultTableModel model = setupTable(cols);
 
         for (Categories cat : catList) {
-            Object[] row = { false, cat.getCategoryID(), cat.getCategoryName(), "Edit"};
+            Object[] row = { false, cat.getCategoryID(), cat.getCategoryName()};
             model.addRow(row);
         }
 
