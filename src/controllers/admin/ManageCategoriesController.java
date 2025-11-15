@@ -85,6 +85,7 @@ public class ManageCategoriesController {
             categoryDAO.insertCategory(catName);
             JOptionPane.showMessageDialog(null, "Inserted " + catName);
             loadCategoryTable(categoryDAO.getAllCategoryNameID(), false);
+            this.panel.getDeleteCategoryButton().setVisible(false);
         }  
     }
 
@@ -124,6 +125,7 @@ public class ManageCategoriesController {
         if (idsToDelete.isEmpty()) {
             JOptionPane.showMessageDialog(null, "No categories selected for deletion.");
             loadCategoryTable(categoryDAO.getAllCategoryNameID(), false);
+            panel.getDeleteCategoryButton().setVisible(false);
             return;
         }
 
