@@ -109,8 +109,8 @@ public class TechniciansDAO {
     }
 
     public int getTechnicianIDByName(String name) {
-        String sql = "SELECT technician_id FROM Technicians"
-        + "WHERE CONCAT(tech_firstName + ' ' + tech_lastName) = ?";
+        String sql = "SELECT technician_id FROM technicians" +
+        " WHERE CONCAT(tech_firstName, ' ', tech_lastName) = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, name);

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import reports.*;
+import java.awt.Font;
 
 public class ReportsDashboardPanel extends JPanel{
     private JButton technicianReport;
@@ -19,6 +20,8 @@ public class ReportsDashboardPanel extends JPanel{
     private JButton filterByDepartmentYear;
     private JButton filterByTech;
     private JButton filterByTechYear;
+    private JLabel technicianLabel;
+    private JLabel yearLabel;
 
     private JButton downloadButton;
     
@@ -124,6 +127,8 @@ public class ReportsDashboardPanel extends JPanel{
         filterByTechYear.setBounds(160, 55, 150, 25);
         filterByTechYear.setVisible(false);
         add(filterByTechYear);
+    }
+
     private void setupDownloadButton(){
         downloadButton = new JButton("Download");
         downloadButton.setBounds(0, 600, 150, 25);
@@ -134,7 +139,6 @@ public class ReportsDashboardPanel extends JPanel{
         if (tableScrollPane != null){
             remove(tableScrollPane);
         }
-
         
         DefaultTableModel model = new DefaultTableModel(cols, 0) {
             @Override
@@ -154,6 +158,34 @@ public class ReportsDashboardPanel extends JPanel{
 
         return model;
     }
+
+    private DefaultTableModel setupFilteredTechTable(String[] cols){
+        if (tableScrollPane != null){
+            remove(tableScrollPane);
+        }
+
+        clearLabels();
+        
+        DefaultTableModel filteredTechModel = new DefaultTableModel(cols, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table = new JTable(filteredTechModel);
+        tableScrollPane = new JScrollPane(table);
+        tableScrollPane.setBounds(0, 130, 1160, 400);
+        tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        add(tableScrollPane);
+
+        revalidate();
+        repaint();
+
+        return filteredTechModel;
+    }
+
+    
 
     // ---------------------- Report Tables ---------------------------- //
     public void setupCategoryReportTable(List<CategoryReport> data){
@@ -181,31 +213,48 @@ public class ReportsDashboardPanel extends JPanel{
         DefaultTableModel model = setupTable(cols);
 
         for (TechWorkloadReport techWR : data){
-            Object[] row = new Object[] {techWR.getYear(), techWR.getTechnician(), techWR.getAssignedTickets(), techWR.getResolvedTickets(), techWR.getAverageTime()};
+            Object[] row = new Object[] {
+                techWR.getYear(),
+                techWR.getTechnician(),
+                techWR.getAssignedTickets(),
+                techWR.getResolvedTickets(),
+                techWR.getAverageTime()};
             model.addRow(row);
         }
     }
 
-    public void setupTechnicianSummaryTable(List<TechWorkloadReport> data) {
+    public void setupTechnicianSummaryTable(List<TechWorkloadReport> data, String techNameString) {
         String[] columns = {"Year", "Total Assigned", "Total Resolved", "Average Resolution Time"};
 
-        DefaultTableModel model = setupTable(columns); 
+        DefaultTableModel model = setupFilteredTechTable(columns); 
+
+        clearLabels();
+        this.technicianLabel = new JLabel("Technician: " + techNameString);
+        this.technicianLabel.setBounds(0, 100, 400, 20); 
+        this.technicianLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        this.add(technicianLabel);
 
         for (TechWorkloadReport TWReport : data) {
-            model.addRow(new Object[]{
+            Object[] row = new Object[] {
                 TWReport.getYear(),
                 TWReport.getAssignedTickets(),
                 TWReport.getResolvedTickets(),
-                TWReport.getAverageTime()
-            });
+                TWReport.getAverageTime()};
+            model.addRow(row);
         }
     }
 
 
-    public void setupYearSummaryTable(List<TechWorkloadReport> data) {
+    public void setupYearSummaryTable(List<TechWorkloadReport> data, int year) {
         String[] columns = {"Technician", "Total Assigned", "Total Resolved", "Average Resolution Time"};
         
-        DefaultTableModel model = setupTable(columns); 
+        DefaultTableModel model = setupFilteredTechTable(columns); 
+        
+        clearLabels();
+        this.yearLabel = new JLabel("Year: " + year);
+        this.yearLabel.setBounds(0, 100, 400, 20);
+        this.yearLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        this.add(yearLabel);
 
         for (TechWorkloadReport TWReport : data) {
             model.addRow(new Object[]{
@@ -215,6 +264,20 @@ public class ReportsDashboardPanel extends JPanel{
                 TWReport.getAverageTime()
             });
         }
+    }
+
+   public void clearLabels() {
+        if (technicianLabel != null) {
+            remove(technicianLabel);
+            technicianLabel = null;
+        }
+        if (yearLabel != null) {
+            remove(yearLabel);
+            yearLabel = null;
+        }
+        
+        revalidate(); 
+        repaint();
     }
 
 
