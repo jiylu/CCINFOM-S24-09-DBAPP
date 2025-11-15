@@ -192,6 +192,8 @@ public class ReportsDashboardPanel extends JPanel{
         String[] cols = {"Category Name", "Year", "Number of Tickets", "Number of Resolved Tickets"};
         DefaultTableModel model = setupTable(cols);
 
+        clearLabels();
+        
         for (CategoryReport cr : data){
             Object[] row = new Object[] {cr.getCategory(), cr.getYear(), cr.getTotalSubmitted(), cr.getTotalResolved()};
             model.addRow(row);
@@ -202,6 +204,8 @@ public class ReportsDashboardPanel extends JPanel{
         String[] cols = {"Department Name", "Year", "Category Name", "Number of Tickets"};
         DefaultTableModel model = setupTable(cols);
 
+        clearLabels();
+
         for (DepartmentReport dr : data){
             Object[] row = new Object[] {dr.getDepartment(), dr.getYear(), dr.getCategory(), dr.getTotalTickets()};
             model.addRow(row);
@@ -211,6 +215,8 @@ public class ReportsDashboardPanel extends JPanel{
     public void setupTechWorkloadReportTable(List<TechWorkloadReport> data){
         String[] cols = {"Year", "Technician Name", "Total Assigned Tickets", "Total Tickets Resolved", "Average Resolution Time"};
         DefaultTableModel model = setupTable(cols);
+
+        clearLabels();
 
         for (TechWorkloadReport techWR : data){
             Object[] row = new Object[] {
