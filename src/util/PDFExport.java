@@ -23,7 +23,7 @@ public class PDFExport {
             PDPageContentStream content = new PDPageContentStream(doc, page);
 
             PDFont font = PDType1Font.HELVETICA;
-            float fontSize = 10;
+            float fontSize = 8;
 
             float margin = 40;
             float y = page.getMediaBox().getHeight() - margin;

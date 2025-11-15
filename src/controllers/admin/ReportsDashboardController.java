@@ -67,6 +67,15 @@ public class ReportsDashboardController {
             panel.showDepartmentReportFilters();
         });
 
+        panel.getTechnicianReportButton().addActionListener(e->{
+            report = "technician_report";
+            pdfTitle = "Technician Report";
+            filter = null;
+            panel.showTechWorkloadReportFilters();
+            List<TechWorkloadReport> techWR = reportDAO.generateTechWorkloadReport();
+            panel.setupTechWorkloadReportTable (techWR);
+        });
+
         panel.getDownloadButton().addActionListener(e->{
             JTable table = panel.getTable();
 
@@ -82,10 +91,6 @@ public class ReportsDashboardController {
             }
 
             PDFExport.exportTableToPDF(table, filename + ".pdf", pdfTitle);
-        panel.getTechnicianReportButton().addActionListener(e->{
-            panel.showTechWorkloadReportFilters();
-            List<TechWorkloadReport> techWR = reportDAO.generateTechWorkloadReport();
-            panel.setupTechWorkloadReportTable (techWR);
         });
     }
 
@@ -168,7 +173,8 @@ public class ReportsDashboardController {
 
             if (res == JOptionPane.OK_OPTION){
                 String techName = (String) comboBox.getSelectedItem();
-                int techID = techDAO.getTechnicianIDByName(techName);
+                Integer techID = techDAO.getTechnicianIDByName(techName);
+                filter = "_filter_techID_" + techID.toString().trim();
                 List<TechWorkloadReport> list = reportDAO.generateTechYearsSummary(techID);
                 panel.setupTechnicianSummaryTable(list, techName);
             }
@@ -181,8 +187,9 @@ public class ReportsDashboardController {
             int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Year", JOptionPane.OK_CANCEL_OPTION);
 
             if (res == JOptionPane.OK_OPTION){
-                int year = (Integer) comboBox.getSelectedItem();
+                Integer year = (Integer) comboBox.getSelectedItem();
                 List<TechWorkloadReport> list = reportDAO.generateYearTechsSummary(year);
+                filter = "_filter_year_" + year.toString().trim();
                 panel.setupYearSummaryTable(list, year);
             }
 

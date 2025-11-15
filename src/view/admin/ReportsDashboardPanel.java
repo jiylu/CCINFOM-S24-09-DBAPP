@@ -1,11 +1,11 @@
 package view.admin;
 
 
+import java.awt.Font;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import reports.*;
-import java.awt.Font;
 
 public class ReportsDashboardPanel extends JPanel{
     private JButton technicianReport;
@@ -351,6 +351,8 @@ public class ReportsDashboardPanel extends JPanel{
 
     public JTable getTable(){
         return table;
+    }
+    
     public JButton getFilterByTechButton() {
         return filterByTech;
     }
