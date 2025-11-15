@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import reports.*;
 
@@ -134,6 +135,130 @@ public class ReportDAO {
                 ));
             }
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    // Employee Ticket Resolution Report
+    public List<EmployeeTicketResolutionReport> generateEmpTicketResReport(){
+        List<EmployeeTicketResolutionReport> list = new ArrayList<>();
+
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT ");
+        query.append("CONCAT(e.first_name, ' ', e.last_name) AS employee_name, ");
+        query.append("YEAR(tk.creation_date) AS year, ");
+        query.append("COUNT(tk.ticket_id) AS submitted_tickets, ");
+        query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
+        query.append("SUM(CASE WHEN tk.status = 'Cancelled' THEN 1 ELSE 0 END) AS cancelled_tickets ");
+        query.append("FROM employees e ");
+        query.append("JOIN Tickets tk ON e.emp_id = tk.employee_id ");
+        query.append("GROUP BY e.emp_id, employee_name, year ");
+        query.append("ORDER BY e.emp_id, year;");
+
+        try (java.sql.PreparedStatement ps = conn.prepareStatement(query.toString())) {
+            try (java.sql.ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    EmployeeTicketResolutionReport report = new EmployeeTicketResolutionReport(
+                            rs.getInt("year"),
+                            rs.getString("employee_name"),
+                            rs.getInt("submitted_tickets"),
+                            rs.getInt("resolved_tickets"),
+                            rs.getInt("cancelled_tickets")
+                    );
+
+                    list.add(report);
+                }
+            }
+
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Error generating employee ticket resolution report.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<EmployeeTicketResolutionReport> generateEmpYearsSummary(int employeeId) {
+        List<EmployeeTicketResolutionReport> list = new ArrayList<>();
+
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT ");
+        query.append("YEAR(tk.creation_date) AS year, ");
+        query.append("COUNT(tk.ticket_id) AS submitted_tickets, ");
+        query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
+        query.append("SUM(CASE WHEN tk.status = 'Cancelled' THEN 1 ELSE 0 END) AS cancelled_tickets ");
+        query.append("FROM Tickets tk ");
+        query.append("WHERE tk.employee_id = ? ");
+        query.append("GROUP BY year ");
+        query.append("ORDER BY year ASC");
+
+        try(PreparedStatement ps = conn.prepareStatement(query.toString())){
+            ps.setInt(1, employeeId);
+            ResultSet rs = ps.executeQuery();
+
+            String employee = "ID: " + employeeId;
+
+            while(rs.next()) {
+                int year = rs.getInt("year");
+                int submittedTickets = rs.getInt("submitted_tickets");
+                int resolvedTickets = rs.getInt("resolved_tickets");
+                int cancelledTickets = rs.getInt("cancelled_tickets");
+
+                list.add(new EmployeeTicketResolutionReport(
+                    year,
+                    employee,
+                    submittedTickets,
+                    resolvedTickets,
+                    cancelledTickets
+                ));
+            }
+
+            return list;
+        } catch (SQLException e) {
+            System.out.println("Error generating employee yearly summary report.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<EmployeeTicketResolutionReport> generateYearEmpsSummary(int year) {
+        List<EmployeeTicketResolutionReport> list = new ArrayList<>();
+        StringBuilder query = new StringBuilder();
+
+        query.append("SELECT ");
+        query.append("CONCAT(e.first_name, ' ', e.last_name) AS employee_name, ");
+        query.append("COUNT(tk.ticket_id) AS submitted_tickets, ");
+        query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
+        query.append("SUM(CASE WHEN tk.status = 'Cancelled' THEN 1 ELSE 0 END) AS cancelled_tickets ");
+        query.append("FROM Tickets tk ");
+        query.append("JOIN Employees e ON e.emp_id = tk.employee_id ");
+        query.append("WHERE YEAR(tk.creation_date) = ? ");
+        query.append("GROUP BY e.emp_id, employee_name ");
+        query.append("ORDER BY employee_name ASC");
+
+        try (PreparedStatement ps = conn.prepareStatement(query.toString())) {
+            ps.setInt(1, year);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                String employee = rs.getString("employee_name");
+                int submittedTickets = rs.getInt("submitted_tickets");
+                int resolvedTickets = rs.getInt("resolved_tickets");
+                int cancelledTickets = rs.getInt("cancelled_tickets");
+
+                list.add(new EmployeeTicketResolutionReport(
+                        year,
+                        employee,
+                        submittedTickets,
+                        resolvedTickets,
+                        cancelledTickets
+                ));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

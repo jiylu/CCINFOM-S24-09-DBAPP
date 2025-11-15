@@ -142,7 +142,40 @@ public class EmployeesDAO {
         }
     }
 
-    // DELETE
+    public List<String> getAllEmployeeNames() {
+        List<String> employeesNames = new ArrayList<>();
 
+        String query = "SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM employees";
 
+        try (Statement statement = conn.createStatement()){
+            ResultSet rs = statement.executeQuery(query);
+
+            while (rs.next()){
+                employeesNames.add(rs.getString("full_name"));
+            }
+            return employeesNames;
+        } catch (SQLException e) {
+            System.out.println("Error retrieving all employee names.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public int getEmployeeIDByName(String name) {
+        String sql = "SELECT emp_id FROM employees" +
+                " WHERE CONCAT(first_name, ' ', last_name) = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, name);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("emp_id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
 }

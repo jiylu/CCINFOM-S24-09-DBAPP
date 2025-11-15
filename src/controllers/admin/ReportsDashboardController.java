@@ -76,6 +76,15 @@ public class ReportsDashboardController {
             panel.setupTechWorkloadReportTable (techWR);
         });
 
+        panel.getEmployeeReportButton().addActionListener(e -> {
+            report = "employee_report";
+            pdfTitle = "Employee Report";
+            filter = null;
+            panel.showEmpTicketResReportFilters();
+            List<EmployeeTicketResolutionReport> empWR = reportDAO.generateEmpTicketResReport();
+            panel.setupEmpTicketResReportTable(empWR);
+        });
+
         panel.getDownloadButton().addActionListener(e->{
             JTable table = panel.getTable();
 
@@ -99,6 +108,7 @@ public class ReportsDashboardController {
             filter = null;
             
             panel.clearLabels(); //for technician report labels
+            panel.clearEmpLabels(); // for employee report labels
 
             if (panel.getFilterByCategoryButton().isVisible()) {
                 List<CategoryReport> cr = reportDAO.generateCategoryReport();
@@ -109,6 +119,9 @@ public class ReportsDashboardController {
             } else if (panel.getFilterByTechButton().isVisible()) {
                 List<TechWorkloadReport> TechWR = reportDAO.generateTechWorkloadReport();
                 panel.setupTechWorkloadReportTable(TechWR);
+            } else if (panel.getFilterByEmployeeButton().isVisible()) {
+                List<EmployeeTicketResolutionReport> emp = reportDAO.generateEmpTicketResReport();
+                panel.setupEmpTicketResReportTable(emp);
             }
             panel.getClearFilterButton().setVisible(false);
         });
@@ -196,5 +209,31 @@ public class ReportsDashboardController {
             panel.getClearFilterButton().setVisible(true);
         });
 
+        panel.getFilterByEmployeeButton().addActionListener(e -> {
+            JComboBox<String> comboBox = new JComboBox<>(empDAO.getAllEmployeeNames().toArray(new String[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Employee", JOptionPane.OK_CANCEL_OPTION);
+
+            if(res == JOptionPane.OK_OPTION) {
+                String empName = (String) comboBox.getSelectedItem();
+                Integer empID = empDAO.getEmployeeIDByName(empName);
+                filter = "_filter_empID_" + empID.toString().trim() + "_" + empName;
+                List<EmployeeTicketResolutionReport> list = reportDAO.generateEmpYearsSummary(empID);
+                panel.setupEmpSummaryTable(list, empName);
+            }
+
+            panel.getClearFilterButton().setVisible(true);
+        });
+
+        panel.getFilterByEmployeeYearButton().addActionListener(e -> {
+            JComboBox<Integer> comboBox = new JComboBox<>(ticketsDAO.getTicketYears().toArray(new Integer[0]));
+            int res = JOptionPane.showConfirmDialog(null, comboBox, "Select Year", JOptionPane.OK_CANCEL_OPTION);
+
+            if(res == JOptionPane.OK_OPTION) {
+                Integer year = (Integer) comboBox.getSelectedItem();
+                List<EmployeeTicketResolutionReport> list = reportDAO.generateYearEmpsSummary(year);
+                filter = "_filter_year_" + year.toString().trim();
+                panel.setupEmpYearSummaryTable(list, year);
+            }
+        });
     }
 }

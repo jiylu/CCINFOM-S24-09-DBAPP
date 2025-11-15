@@ -23,6 +23,11 @@ public class ReportsDashboardPanel extends JPanel{
     private JLabel technicianLabel;
     private JLabel yearLabel;
 
+    private JButton filterByEmployee;
+    private JButton filterByEmployeeYear;
+    private JLabel employeeLabel;
+    private JLabel empYearLabel;
+
     private JButton downloadButton;
     
     private JTable table;
@@ -50,6 +55,8 @@ public class ReportsDashboardPanel extends JPanel{
         setupFilterByDepartmentYearButton();
         setupFilterByTechnicianButton();
         setupFilterbyTechnicianYearButton();
+        setupFilterByEmployeeButton();
+        setupFilterByEmpYearButton();
     }
 
     //----------------Report Buttons-------------------//
@@ -129,6 +136,21 @@ public class ReportsDashboardPanel extends JPanel{
         add(filterByTechYear);
     }
 
+    //-------------------- Employee Filters --------------------//
+    private void setupFilterByEmployeeButton() {
+        filterByEmployee = new JButton("Filter by Employee");
+        filterByEmployee.setBounds(0, 55, 150, 25);
+        filterByEmployee.setVisible(false);
+        add(filterByEmployee);
+    }
+
+    private void setupFilterByEmpYearButton() {
+        filterByEmployeeYear = new JButton("Filter by Year");
+        filterByEmployeeYear.setBounds(160, 55, 150, 25);
+        filterByEmployeeYear.setVisible(false);
+        add(filterByEmployeeYear);
+    }
+
     private void setupDownloadButton(){
         downloadButton = new JButton("Download");
         downloadButton.setBounds(0, 600, 150, 25);
@@ -185,6 +207,31 @@ public class ReportsDashboardPanel extends JPanel{
         return filteredTechModel;
     }
 
+    private DefaultTableModel setupFilteredEmpTable(String[] cols){
+        if (tableScrollPane != null){
+            remove(tableScrollPane);
+        }
+
+        clearEmpLabels();
+
+        DefaultTableModel filteredEmpModel = new DefaultTableModel(cols, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        table = new JTable(filteredEmpModel);
+        tableScrollPane = new JScrollPane(table);
+        tableScrollPane.setBounds(0, 130, 1160, 400);
+        tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        add(tableScrollPane);
+
+        revalidate();
+        repaint();
+
+        return filteredEmpModel;
+    }
     
 
     // ---------------------- Report Tables ---------------------------- //
@@ -223,6 +270,22 @@ public class ReportsDashboardPanel extends JPanel{
         }
     }
 
+    public void setupEmpTicketResReportTable(List<EmployeeTicketResolutionReport> data) {
+        String[] cols = {"Year", "Employee Name", "Total Submitted Tickets", "Total Tickets Resolved", "Total Cancelled Tickets"};
+        DefaultTableModel model = setupTable(cols);
+
+        for (EmployeeTicketResolutionReport empWR : data) {
+            Object[] row = new Object[] {
+                    empWR.getYear(),
+                    empWR.getEmployee(),
+                    empWR.getSubmittedTickets(),
+                    empWR.getResolvedTickets(),
+                    empWR.getCancelledTickets(),
+            };
+            model.addRow(row);
+        }
+    }
+
     public void setupTechnicianSummaryTable(List<TechWorkloadReport> data, String techNameString) {
         String[] columns = {"Year", "Total Assigned", "Total Resolved", "Average Resolution Time"};
 
@@ -240,6 +303,29 @@ public class ReportsDashboardPanel extends JPanel{
                 TWReport.getAssignedTickets(),
                 TWReport.getResolvedTickets(),
                 TWReport.getAverageTime()};
+            model.addRow(row);
+        }
+    }
+
+    public void setupEmpSummaryTable(List<EmployeeTicketResolutionReport> data, String empName) {
+        String[] columns = {"Year", "Total Submitted", "Total Resolved", "Total Cancelled"};
+
+        DefaultTableModel model = setupFilteredEmpTable(columns);
+
+        clearEmpLabels();
+        this.employeeLabel = new JLabel("Employee: " + empName);
+        this.employeeLabel.setBounds(0, 100, 400, 20);
+        this.employeeLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        this.add(employeeLabel);
+
+        for (EmployeeTicketResolutionReport report : data) {
+            Object[] row = new Object[] {
+                    report.getYear(),
+                    report.getSubmittedTickets(),
+                    report.getResolvedTickets(),
+                    report.getCancelledTickets()
+            };
+
             model.addRow(row);
         }
     }
@@ -266,6 +352,27 @@ public class ReportsDashboardPanel extends JPanel{
         }
     }
 
+    public void setupEmpYearSummaryTable(List<EmployeeTicketResolutionReport> data, int year) {
+        String[] columns = {"Employee", "Total Assigned", "Total Resolved", "Total Cancelled"};
+
+        DefaultTableModel model = setupFilteredEmpTable(columns);
+
+        clearEmpLabels();
+        this.empYearLabel = new JLabel("Year: " + year);
+        this.empYearLabel.setBounds(0, 100, 400, 20);
+        this.empYearLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        this.add(empYearLabel);
+
+        for (EmployeeTicketResolutionReport report : data) {
+            model.addRow(new Object[]{
+                    report.getEmployee(),
+                    report.getSubmittedTickets(),
+                    report.getResolvedTickets(),
+                    report.getCancelledTickets()
+            });
+        }
+    }
+
    public void clearLabels() {
         if (technicianLabel != null) {
             remove(technicianLabel);
@@ -280,6 +387,20 @@ public class ReportsDashboardPanel extends JPanel{
         repaint();
     }
 
+    public void clearEmpLabels() {
+        if (employeeLabel != null) {
+            remove(employeeLabel);
+            employeeLabel = null;
+        }
+
+        if(empYearLabel != null) {
+            remove(empYearLabel);
+            empYearLabel = null;
+        }
+
+        revalidate();
+        repaint();
+    }
 
     private void resetFilters(){
         clearFilter.setVisible(false);
@@ -289,6 +410,8 @@ public class ReportsDashboardPanel extends JPanel{
         filterByDepartmentYear.setVisible(false);
         filterByTech.setVisible(false);
         filterByTechYear.setVisible(false);
+        filterByEmployee.setVisible(false);
+        filterByEmployeeYear.setVisible(false);
     }
 
     public void showCategoryReportFilters(){
@@ -307,6 +430,12 @@ public class ReportsDashboardPanel extends JPanel{
         resetFilters();
         filterByTech.setVisible(true);
         filterByTechYear.setVisible(true);
+    }
+
+    public void showEmpTicketResReportFilters() {
+        resetFilters();
+        filterByEmployee.setVisible(true);
+        filterByEmployeeYear.setVisible(true);
     }
 
     public JButton getTechnicianReportButton() {
@@ -359,5 +488,13 @@ public class ReportsDashboardPanel extends JPanel{
 
     public JButton getFilterByTechYearButton() {
         return filterByTechYear;
+    }
+
+    public JButton getFilterByEmployeeButton() {
+        return filterByEmployee;
+    }
+
+    public JButton getFilterByEmployeeYearButton() {
+        return filterByEmployeeYear;
     }
 }
