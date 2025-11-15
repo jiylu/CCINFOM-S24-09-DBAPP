@@ -65,9 +65,9 @@ public class ReportDAO {
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets,");
         query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date)) AS average_resolution_time");
         query.append(" FROM tickets tk");
-        query.append("WHERE tk.technician_id = ? ");
-        query.append("GROUP BY year");
-        query.append("ORDER BY year DESC");
+        query.append(" WHERE tk.technician_id = ? ");
+        query.append(" GROUP BY year");
+        query.append(" ORDER BY year ASC");
         
         try (PreparedStatement ps = conn.prepareStatement(query.toString())){
             ps.setInt(1, technicianId);
@@ -76,17 +76,17 @@ public class ReportDAO {
             String technician = "ID: " + technicianId ;
 
             while (rs.next()){
-                int year = rs.getInt("summary_year");
+                int year = rs.getInt("year");
                 int assignedTickets = rs.getInt("assigned_tickets");
                 int resolvedTickets = rs.getInt("resolved_tickets");
-                int averageTime = rs.getInt("average_resolution_time");
+                int average_resolution_time = rs.getInt("average_resolution_time");
                 
                 list.add(new TechWorkloadReport(
                 year,
                 technician, 
                 assignedTickets,
                 resolvedTickets,
-                averageTime
+                average_resolution_time
             ));
             }
             

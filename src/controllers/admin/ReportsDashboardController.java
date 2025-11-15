@@ -60,6 +60,9 @@ public class ReportsDashboardController {
 
     private void initFilterListeners(){
         panel.getClearFilterButton().addActionListener(e -> {
+            
+            panel.clearLabels(); //for technician report labels
+
             if (panel.getFilterByCategoryButton().isVisible()) {
                 List<CategoryReport> cr = reportDAO.generateCategoryReport();
                 panel.setupCategoryReportTable(cr);
@@ -131,7 +134,7 @@ public class ReportsDashboardController {
                 String techName = (String) comboBox.getSelectedItem();
                 int techID = techDAO.getTechnicianIDByName(techName);
                 List<TechWorkloadReport> list = reportDAO.generateTechYearsSummary(techID);
-                panel.setupYearSummaryTable(list);
+                panel.setupTechnicianSummaryTable(list, techName);
             }
 
             panel.getClearFilterButton().setVisible(true);
@@ -144,7 +147,7 @@ public class ReportsDashboardController {
             if (res == JOptionPane.OK_OPTION){
                 int year = (Integer) comboBox.getSelectedItem();
                 List<TechWorkloadReport> list = reportDAO.generateYearTechsSummary(year);
-                panel.setupTechnicianSummaryTable(list);
+                panel.setupYearSummaryTable(list, year);
             }
 
             panel.getClearFilterButton().setVisible(true);
