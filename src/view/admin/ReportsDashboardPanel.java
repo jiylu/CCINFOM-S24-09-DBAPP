@@ -213,7 +213,7 @@ public class ReportsDashboardPanel extends JPanel{
     }
 
     public void setupTechWorkloadReportTable(List<TechWorkloadReport> data){
-        String[] cols = {"Year", "Technician Name", "Total Assigned Tickets", "Total Tickets Resolved", "Average Resolution Time"};
+        String[] cols = {"Year", "Technician Name", "Total Assigned Tickets", "Total Tickets Resolved", "Average Resolution Time (hours)"};
         DefaultTableModel model = setupTable(cols);
 
         clearLabels();
@@ -230,7 +230,7 @@ public class ReportsDashboardPanel extends JPanel{
     }
 
     public void setupTechnicianSummaryTable(List<TechWorkloadReport> data, String techNameString) {
-        String[] columns = {"Year", "Total Assigned", "Total Resolved", "Average Resolution Time"};
+        String[] columns = {"Year", "Total Assigned", "Total Resolved", "Average Resolution Time (hours)"};
 
         DefaultTableModel model = setupFilteredTechTable(columns); 
 
@@ -252,7 +252,7 @@ public class ReportsDashboardPanel extends JPanel{
 
 
     public void setupYearSummaryTable(List<TechWorkloadReport> data, int year) {
-        String[] columns = {"Technician", "Total Assigned", "Total Resolved", "Average Resolution Time"};
+        String[] columns = {"Technician", "Total Assigned", "Total Resolved", "Average Resolution Time (hours)"};
         
         DefaultTableModel model = setupFilteredTechTable(columns); 
         
