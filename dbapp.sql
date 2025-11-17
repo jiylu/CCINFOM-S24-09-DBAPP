@@ -2,7 +2,7 @@ CREATE SCHEMA IF NOT EXISTS ticketing_system;
 USE ticketing_system;
 
 DROP TABLE IF EXISTS EmployeeCreatesTicket;
-DROP TABLE IF EXISTS TechnicianResolvesTicket;
+DROP TABLE IF EXISTS TechnicianResolvesCancelsTicket;
 DROP TABLE IF EXISTS Tickets;
 DROP TABLE IF EXISTS EmployeeUsers;
 DROP TABLE IF EXISTS TechnicianUsers;
@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS EmployeeCreatesTicket (
     CONSTRAINT fk_employee_id FOREIGN KEY (emp_id) REFERENCES Employees(emp_id)
 ) AUTO_INCREMENT = 150000; 
 
-CREATE TABLE IF NOT EXISTS TechnicianResolvesTicket (
+CREATE TABLE IF NOT EXISTS TechnicianResolvesCancelsTicket (
 	resolve_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_id INT NOT NULL UNIQUE,
     resolve_date DATETIME,
