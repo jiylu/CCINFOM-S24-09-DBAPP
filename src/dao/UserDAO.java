@@ -99,7 +99,7 @@ public class UserDAO {
     }
 
     public TechUser getTechUserByID(int userID){
-        String query = "SELECT * FROM TechnicianUsers WHERE tech_user_id = ?";
+        String query = "SELECT * FROM TechnicianUsers WHERE user_id = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(query)){
             ps.setInt(1, userID);

@@ -1,4 +1,4 @@
-USE ticketing_system;
+	USE ticketing_system;
 
 INSERT IGNORE INTO UserAccounts(username, password, role)
 VALUES
