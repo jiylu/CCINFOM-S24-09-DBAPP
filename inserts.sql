@@ -69,6 +69,29 @@ VALUES
     ('Torres', 'Adriana', 3, 'Customer Support Specialist'),
     ('Mendoza', 'Ricardo', 5, 'Operations Manager');
 
+INSERT IGNORE INTO EmployeeUsers(user_id, emp_id)
+VALUES
+    (50000, 90000),
+    (50001, 90001),
+    (50002, 90002),
+    (50003, 90003),
+    (50004, 90004),
+    (50005, 90005),
+    (50006, 90006),
+    (50007, 90007),
+    (50008, 90008),
+    (50012, 90009),
+    (50013, 90010),
+    (50014, 90011),
+    (50015, 90012),
+    (50016, 90013),
+    (50017, 90014),
+    (50018, 90015),
+    (50019, 90016),
+    (50020, 90017),
+    (50021, 90018),
+    (50033, 90019),
+    (50035, 90020);
 
 INSERT IGNORE INTO Technicians(tech_lastName, tech_firstName)
 VALUES 
@@ -86,6 +109,24 @@ VALUES
     ('Kim', 'Emma'),
     ('Rivera', 'Dante'),
     ('Gulapa', 'Dante');
+
+INSERT IGNORE INTO TechnicianUsers(user_id, technician_id)
+VALUES
+    (50009, 30000),
+    (50010, 30001),
+    (50011, 30002),
+    (50022, 30003),
+    (50023, 30004),
+    (50024, 30005),
+    (50025, 30006),
+    (50026, 30007),
+    (50027, 30008),
+    (50028, 30009),
+    (50029, 30010),
+    (50030, 30011),
+    (50031, 30012),
+    (50032, 30013),
+    (50034, 30014);
 
 INSERT IGNORE INTO Categories (category_name)
 VALUES
