@@ -86,6 +86,7 @@ CREATE TABLE IF NOT EXISTS ResolvedTickets (
 CREATE TABLE IF NOT EXISTS CancelledTickets (
 	cancel_id INT AUTO_INCREMENT PRIMARY KEY, 
     ticket_id INT NOT NULL UNIQUE,
-    cancel_date DATETIME, 
+    cancel_date DATETIME NOT NULL,
+    cancel_reason VARCHAR (100) NOT NULL, 
     CONSTRAINT fk_ticket_cancel_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id)
 ) AUTO_INCREMENT = 170000;
