@@ -47,7 +47,6 @@ public class TicketHistoryPanel extends JPanel {
                 ticket.getEmployee_id(),
                 ticket.getTechnician_id(),
                 ticket.getCreation_date(),
-                ticket.getResolve_date(),
                 ticket.getStatus()
             });
         }

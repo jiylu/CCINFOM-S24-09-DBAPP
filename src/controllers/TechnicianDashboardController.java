@@ -135,11 +135,13 @@ public class TechnicianDashboardController {
 private void cancelActiveTicket(Tickets ticket) {
     try {
         ticket.setStatus("Cancelled");
-        ticket.setResolve_date(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        String reason = cancelTicketPanel.getCancelReason();
+        String resolve_date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         boolean success = ticketsDAO.updateTicket(ticket);
 
         if (success) {
+            ticketsDAO.insertToCancelledTickets(ticket.getTicket_id(), resolve_date, reason);
             activateNextEnqueuedTicket(); // activate next in queue
             panel.showPanel(TechnicianDashboardPanel.EMPTY_PANEL);
         } else {
@@ -189,7 +191,6 @@ private void cancelActiveTicket(Tickets ticket) {
                     String.valueOf(t.getEmployee_id()),
                     String.valueOf(t.getTechnician_id()),
                     t.getCreation_date(),
-                    t.getResolve_date(),
                     t.getStatus()
                 );
             }

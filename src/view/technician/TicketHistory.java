@@ -27,7 +27,7 @@ public class TicketHistory extends JPanel {
     private void initTable() {
         // Define columns
         String[] columnNames = {"Ticket Id", "Subject", "Category ID", "Employee ID", 
-                                "Technician ID", "Creation Date", "Closed Date", "Status"};
+                                "Technician ID", "Creation Date", "Status"};
 
         // Create empty table model (editable = false)
         tableModel = new DefaultTableModel(columnNames, 0) {
@@ -52,8 +52,8 @@ public class TicketHistory extends JPanel {
 
     // Utility method to add a ticket row
     public void addTicket(String ticketId, String ticketSubject, String categoryId, String employeeId,
-                          String technicianId, String creationDate, String resolvedDate, String status) {
-        tableModel.addRow(new Object[]{ticketId, ticketSubject, categoryId, employeeId, technicianId, creationDate, resolvedDate, status});
+                          String technicianId, String creationDate, String status) {
+        tableModel.addRow(new Object[]{ticketId, ticketSubject, categoryId, employeeId, technicianId, creationDate, status});
     }
 
     // Optional: clear table
