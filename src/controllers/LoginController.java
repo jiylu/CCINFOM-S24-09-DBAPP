@@ -4,7 +4,11 @@ import controllers.admin.AdminDashboardController;
 import dao.*;
 import java.sql.Connection;
 import javax.swing.*;
-import models.User;
+import models.EmpUser;
+import models.Employees;
+import models.TechUser;
+import models.Technicians;
+import models.UserAccount;
 import view.Frame;
 import view.LoginPanel;
 
@@ -45,53 +49,68 @@ public class LoginController {
 
     private void initListener(){
         loginButton.addActionListener(e->{
-            User u = loginUser();
+            UserAccount u = loginUser();
             if (u != null){
+                System.out.println("Role returned: '" + u.getRole() + "'");
                 switch (u.getRole()){
-                    case ADMIN -> redirectToAdminDashboard(u); 
-                    case EMPLOYEE -> redirectToEmployeeDashboard(u);
-                    case TECHNICIAN -> redirectToTechDashboard(u);
+                    case UserAccount.ADMIN_ROLE -> redirectToAdminDashboard(u); 
+                    case UserAccount.EMP_ROLE -> redirectToEmployeeDashboard(u);
+                    case UserAccount.TECH_ROLE -> redirectToTechDashboard(u);
                 }
             }
         });
     }
 
-    private User loginUser(){
+    private UserAccount loginUser(){
         String usernameInput = panel.getUsernameField().getText().trim();
         String passwordInput = new String(panel.getPasswordField().getPassword()).trim();
 
-        // validate first if username input or password input is not empty
         if (usernameInput.isEmpty()|| passwordInput.isEmpty()){
             JOptionPane.showMessageDialog(null, "Username or Password cannot be empty.", "Invalid", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
-        User user = userDAO.getUserByLogin(usernameInput, passwordInput);
+        UserAccount user = userDAO.getUserByLogin(usernameInput, passwordInput);
 
         if (user == null){
             JOptionPane.showMessageDialog(null, "Username or Password is incorrect.", "Invalid", JOptionPane.ERROR_MESSAGE);
             return null;
         }
 
-        if (!user.getIsActive()){
-            JOptionPane.showMessageDialog(null, "User is deactivated.", "Invalid", JOptionPane.ERROR_MESSAGE);
-            return null;
+        if (user.getRole().contentEquals(UserAccount.EMP_ROLE) || user.getRole().contentEquals(UserAccount.ADMIN_ROLE)){
+            Employees emp = empDAO.getEmployeeByUserID(user.getUserID());
+            if (!emp.isActive()){
+                JOptionPane.showMessageDialog(null, "User is deactivated.", "Invalid", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }
+
+        if (user.getRole().contentEquals(UserAccount.TECH_ROLE)){
+            Technicians tech = techDAO.getTechnicianByUserID(user.getUserID());
+            if (!tech.isActive()){
+                JOptionPane.showMessageDialog(null, "User is deactivated.", "Invalid", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
         }
 
         return user;
     }
+    
 
-    private void redirectToEmployeeDashboard(User user){
+    private void redirectToEmployeeDashboard(UserAccount u){
+        EmpUser user = userDAO.getEmpUserByID(u.getUserID());
         EmployeeDashboardController empDashboardController = new EmployeeDashboardController(user, frame, userDAO, empDAO, techDAO, ticketsDAO, categoriesDAO);
         empDashboardController.init();
     }
 
-    private void redirectToAdminDashboard(User user){
+    private void redirectToAdminDashboard(UserAccount u){
+        EmpUser user = userDAO.getEmpUserByID(u.getUserID());
         AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO, ticketsDAO, reportDAO, categoriesDAO);
         adminDashboardController.init(); 
     }
 
-    private void redirectToTechDashboard(User user){
+    private void redirectToTechDashboard(UserAccount u){
+        TechUser user = userDAO.getTechUserByID(u.getUserID());
         TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, ticketsDAO, techDAO, categoriesDAO);
         technicianDashboardController.init();
     }

@@ -3,11 +3,6 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mysql.cj.conf.DatabaseUrlContainer;
-import com.mysql.cj.xdevapi.PreparableStatement;
-import db.DBConnection;
-import models.Employees;
 import models.Tickets;
 
 public class TicketsDAO {

@@ -4,13 +4,13 @@ public class Technicians {
     private int technician_id;
     private String tech_lastName;
     private String tech_firstName;
-    private int user_id;
+    private boolean active;
 
-    public Technicians(int technician_id, int user_id, String tech_lastName, String tech_firstName){
+    public Technicians(int technician_id, String tech_lastName, String tech_firstName, boolean active){
         this.technician_id = technician_id;
-        this.user_id = user_id;
         this.tech_lastName = tech_lastName;
         this.tech_firstName = tech_firstName;
+        this.active = active;
     }
 
     public int getTechnician_id(){
@@ -25,7 +25,11 @@ public class Technicians {
         return tech_firstName;
     }
 
-    public int getUser_ID(){
-        return user_id;
+    public boolean isActive(){
+        return active;
+    }
+
+    public void setTechID(int techID){
+        this.technician_id = techID;
     }
 }

@@ -3,22 +3,20 @@ package controllers;
 import dao.CategoriesDAO;
 import dao.TechniciansDAO;
 import dao.TicketsDAO;
-import dao.UserDAO;
 import db.DBConnection;
-import models.Categories;
-import models.Tickets;
-import models.User;
-import view.Frame;
-import view.technician.*;
-
-import javax.swing.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
+import models.Categories;
+import models.TechUser;
+import models.Tickets;
+import view.Frame;
+import view.technician.*;
 
 public class TechnicianDashboardController {
-    private User user;
+    private TechUser user;
     private Frame frame;
     private TechnicianDashboardPanel panel;
     private ResolveTicketTechnicianPanel resolveTicketTechnicianPanel;
@@ -30,7 +28,7 @@ public class TechnicianDashboardController {
     private CategoriesDAO categoriesDAO;
     private List<Integer> categoryIds;
 
-    public TechnicianDashboardController(User user, Frame frame, TicketsDAO ticketsDAO, TechniciansDAO techDAO, CategoriesDAO categoriesDAO){
+    public TechnicianDashboardController(TechUser user, Frame frame, TicketsDAO ticketsDAO, TechniciansDAO techDAO, CategoriesDAO categoriesDAO){
         this.user = user;
         this.frame = frame;
         this.panel = frame.getTechnicianDashboardPanel();

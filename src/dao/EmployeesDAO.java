@@ -15,14 +15,13 @@ public class EmployeesDAO {
 
     // CREATE 
     public void insertEmployee(Employees emp) {
-        String query = "INSERT INTO employees (user_id, last_name, first_name, dept_id, job_title) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO employees (last_name, first_name, dept_id, job_title) VALUES (?, ?, ?, ?)";
         
         try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
-            pstmt.setInt(1, emp.getUserID());
-            pstmt.setString(2, emp.getLastName());
-            pstmt.setString(3, emp.getFirstName());
-            pstmt.setInt(4, emp.getDeptID());
-            pstmt.setString(5, emp.getJobTitle());
+            pstmt.setString(1, emp.getLastName());
+            pstmt.setString(2, emp.getFirstName());
+            pstmt.setInt(3, emp.getDeptID());
+            pstmt.setString(4, emp.getJobTitle());
             pstmt.executeUpdate();
 
             ResultSet rs = pstmt.getGeneratedKeys();
@@ -42,6 +41,37 @@ public class EmployeesDAO {
     }
 
 
+
+    public Employees getEmployeeByUserID(int userID){
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM Employees e ");
+        query.append("JOIN EmployeeUsers eu ON eu.emp_id = e.emp_id ");
+        query.append("WHERE eu.user_id = ? ");
+
+        try (PreparedStatement ps = conn.prepareStatement(query.toString())){
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                return new Employees(
+                    rs.getInt(1), 
+                    rs.getString(2), 
+                    rs.getString(3), 
+                    rs.getInt(4), 
+                    rs.getString(5), 
+                    rs.getBoolean(6)
+                );
+            }
+
+            System.out.println("No employee found with userID " + userID);
+            return null;
+        } catch (SQLException e){
+            System.out.println("getEmployeeByUserID error.");
+            return null;
+        }
+    }
+
+
     // READ (onlu active employees)
     public List<Employees> getAllEmployees() {
         List<Employees> list = new ArrayList<>();
@@ -52,12 +82,12 @@ public class EmployeesDAO {
 
             while (rs.next()){
                 list.add(new Employees(
-                    rs.getInt("emp_id"),
-                    rs.getInt("user_id"),
-                    rs.getString("last_name"),
-                    rs.getString("first_name"),
-                    rs.getInt("dept_id"),
-                    rs.getString("job_title")
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4),
+                    rs.getString(5),
+                    rs.getBoolean(6)
                 ));
             }
 
@@ -78,12 +108,12 @@ public class EmployeesDAO {
 
             if (rs.next()) {
                 return new Employees(
-                    rs.getInt("emp_id"),
-                    rs.getInt("user_id"),
-                    rs.getString("last_name"),
-                    rs.getString("first_name"),
-                    rs.getInt("dept_id"),
-                    rs.getString("job_title")
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4),
+                    rs.getString(5),
+                    rs.getBoolean(6)
                 );
             }
         }
@@ -101,12 +131,12 @@ public class EmployeesDAO {
 
             while (rs.next()){
                 list.add(new Employees(
-                    rs.getInt("emp_id"),
-                    rs.getInt("user_id"),
-                    rs.getString("last_name"),
-                    rs.getString("first_name"),
-                    rs.getInt("dept_id"),
-                    rs.getString("job_title")
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4),
+                    rs.getString(5),
+                    rs.getBoolean(6)
                 ));
             }
 
@@ -177,5 +207,24 @@ public class EmployeesDAO {
         }
 
         return -1;
+    }
+
+    public void deactivateEmployee(int empID) {
+        String query = "UPDATE employees SET active = FALSE WHERE emp_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setInt(1, empID);
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Employee " + empID + " deactivated successfully.");
+            } else {
+                System.out.println("No employee found with ID " + empID);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error deactivating employee.");
+            e.printStackTrace();
+        }
     }
 }

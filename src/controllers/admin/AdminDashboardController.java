@@ -7,17 +7,17 @@ import dao.ReportDAO;
 import dao.TechniciansDAO;
 import dao.TicketsDAO;
 import dao.UserDAO;
-import models.User;
+import models.EmpUser;
 import view.Frame;
 import view.admin.AddUserPanel;
 import view.admin.AdminDashboardPanel;
 import view.admin.DepartmentManagementPanel;
+import view.admin.ManageCategoriesPanel;
 import view.admin.ReportsDashboardPanel;
 import view.admin.UserManagementPanel;
-import view.admin.ManageCategoriesPanel;
 
 public class AdminDashboardController {
-    private User user;
+    private EmpUser user;
     private Frame frame;
     private AdminDashboardPanel panel;
     private AddUserPanel addUserPanel;
@@ -33,7 +33,7 @@ public class AdminDashboardController {
     private ManageCategoriesController manageCategoriesController;
     private ReportsDashboardController reportsDashboardController;
 
-    public AdminDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO, CategoriesDAO categoriesDAO){
+    public AdminDashboardController(EmpUser user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO, CategoriesDAO categoriesDAO){
         this.user = user;
         this.frame = frame;
         this.panel = frame.getAdminDashboardPanel();

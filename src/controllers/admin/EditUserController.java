@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import models.Employees;
 import models.Technicians;
-import models.User;
+import models.UserAccount;
 import util.ButtonEditor;
 import view.admin.AddUserPanel;
 
@@ -23,11 +23,12 @@ public class EditUserController {
 
     private int userID;
     private int specID;
-    private User.Role userRole;
+
     private String username;
     private String password;
     private String lastName;
     private String firstName; 
+    private String userRole;
     private int deptID;
 
     public EditUserController (UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
@@ -58,12 +59,12 @@ public class EditUserController {
                 return;
             }
 
-            User user = updateUserData();
+            UserAccount user = updateUserData();
 
             switch (user.getRole()){
-                case ADMIN -> updateAdminData(user);
-                case EMPLOYEE -> updateEmployeeData(user);
-                case TECHNICIAN -> updateTechnicianData(user);
+                case UserAccount.ADMIN_ROLE -> updateAdminData(user);
+                case UserAccount.EMP_ROLE -> updateEmployeeData(user);
+                case UserAccount.TECH_ROLE -> updateTechnicianData(user);
             }
 
             JOptionPane.showMessageDialog(null, "Sucessfuly Updated " + user.getUserID());
@@ -77,7 +78,6 @@ public class EditUserController {
     private void extractRowData(JTable table, int row){
         userID = (int) table.getValueAt(row, 0);
         specID = (int) table.getValueAt(row, 1);
-
         username = table.getValueAt(row, 2).toString();
         password = table.getValueAt(row, 3).toString();
         String fullName = table.getValueAt(row, 4).toString();
@@ -90,13 +90,13 @@ public class EditUserController {
         Object roleValue = table.getValueAt(row, 6);
 
         if (roleValue != null && roleValue.toString().equalsIgnoreCase("Admin")) {
-            userRole = User.Role.ADMIN;
+            userRole = UserAccount.ADMIN_ROLE;
             deptID = (int) table.getValueAt(row, 5);
         } else if (table.getValueAt(row, 5) instanceof Integer) { 
-            userRole = User.Role.EMPLOYEE;
+            userRole = UserAccount.EMP_ROLE;
             deptID = (int) table.getValueAt(row, 5);
         } else {
-            userRole = User.Role.TECHNICIAN;
+            userRole = UserAccount.TECH_ROLE;
         }
     }
 
@@ -106,13 +106,12 @@ public class EditUserController {
         editPanel.getPasswordField().setText(password);
         editPanel.getFirstNameField().setText(firstName);
         editPanel.getLastNameField().setText(lastName);
-
-        String role = userRole.name().toLowerCase();
+        String role = userRole;
+        
         editPanel.getRoles().setSelectedItem(Character.toUpperCase(role.charAt(0)) + role.substring(1));
-
         dropBoxFunctionality();
 
-        if (userRole == User.Role.EMPLOYEE) {
+        if (userRole.contentEquals(UserAccount.EMP_ROLE)) {
             String[] departments = deptDAO.getAllDepartmentNames(false).toArray(new String[0]);
             editPanel.transformToEmployeeFields(departments);
 
@@ -121,8 +120,7 @@ public class EditUserController {
             editPanel.getEmployeeRole().setText(table.getValueAt(row, 6).toString());
         } 
 
-
-        if (userRole == User.Role.EMPLOYEE || userRole == User.Role.ADMIN){
+        if (userRole.contentEquals(UserAccount.EMP_ROLE) || userRole.contentEquals(UserAccount.ADMIN_ROLE)){
             editPanel.getRoles().removeItem("Technician");
         } else {
             editPanel.getRoles().setEnabled(false);
@@ -135,50 +133,49 @@ public class EditUserController {
             String[] departmentList = deptDAO.getAllDepartmentNames(true).toArray(new String[0]);
             
             if (selectedRole.contentEquals("Employee")){
-                userRole = User.Role.EMPLOYEE;
+                userRole = UserAccount.EMP_ROLE;
                 editPanel.transformToEmployeeFields(departmentList);
             } else {
-                userRole = User.Role.ADMIN;
+                userRole = UserAccount.ADMIN_ROLE;
                 editPanel.revert();
             }
         });
     }
 
-    private User updateUserData(){
+    private UserAccount updateUserData(){
         String newUsername = editPanel.getUsernameField().getText();
         String newPassword = editPanel.getPasswordField().getText();
 
-        User user = new User(userID, newUsername, newPassword, userRole, true);
+        UserAccount user = new UserAccount(userID, userRole, newUsername, newPassword);
         userDAO.editUser(user);
-
         return user;
     }
 
-    private void updateEmployeeData(User user){
+    private void updateEmployeeData(UserAccount user){
         String newLastName = editPanel.getLastNameField().getText().trim();
         String newFirstName = editPanel.getLastNameField().getText().trim();
         String newRole = editPanel.getEmployeeRole().getText().trim();
         String newDept = editPanel.getDepartmentBox().getSelectedItem().toString();
         int newDeptID = deptDAO.getDepartmentIDByName(newDept);
 
-        Employees emp = new Employees(specID, user.getUserID(), newLastName, newFirstName, newDeptID, newRole);
+        Employees emp = new Employees(specID, newLastName, newFirstName, newDeptID, newRole, true);
         empDAO.updateEmployee(emp);
     }
 
-    private void updateAdminData(User user){
+    private void updateAdminData(UserAccount user){
         String newLastName = editPanel.getLastNameField().getText().trim();
         String newFirstName = editPanel.getLastNameField().getText().trim();
         int fieldDeptID = deptDAO.getDepartmentIDByName("Administration");
 
-        Employees emp = new Employees(specID, user.getUserID(), newLastName, newFirstName, fieldDeptID, "Admin");
+        Employees emp = new Employees(specID, newLastName, newFirstName, fieldDeptID, "Admin", true);
         empDAO.updateEmployee(emp);
     }
 
-    private void updateTechnicianData(User user){
+    private void updateTechnicianData(UserAccount user){
         String newLastName = editPanel.getLastNameField().getText().trim();
         String newFirstName = editPanel.getFirstNameField().getText().trim();
 
-        Technicians tech = new Technicians(specID, user.getUserID(), newLastName, newFirstName);
+        Technicians tech = new Technicians(specID, newLastName, newFirstName, true);
         techDAO.updateTechnician(tech);
     }
 
@@ -188,7 +185,8 @@ public class EditUserController {
             return false;
         }
         
-        if (userRole == User.Role.EMPLOYEE && !isValidEmpFieldInput(errors)){
+        // emp
+        if (userRole.contentEquals(UserAccount.EMP_ROLE) && !isValidEmpFieldInput(errors)){
             JOptionPane.showMessageDialog(null, errors.toString(),"Input Error",JOptionPane.ERROR_MESSAGE);
             return false;
         }
