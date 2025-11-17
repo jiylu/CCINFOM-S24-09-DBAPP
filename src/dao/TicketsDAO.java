@@ -457,18 +457,19 @@ public class TicketsDAO {
     }
 
     public boolean hasActiveOrEnqueuedTickets(int technicianId) {
-        String query = "SELECT COUNT(*) FROM tickets WHERE tech_id = ? AND status IN ('Active', 'Enqueued')";
+        String query = "SELECT COUNT(*) FROM Tickets WHERE tech_id = ? AND status IN ('Active', 'Enqueued')";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, technicianId);
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                return rs.getInt(1) > 0;
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return false;
     }
 }
