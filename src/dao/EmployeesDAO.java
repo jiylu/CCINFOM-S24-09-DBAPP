@@ -69,6 +69,34 @@ public class EmployeesDAO {
         }
     }
 
+        public Employees getEmployeeByUserId(int userId) {
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT e.emp_id, e.last_name, e.first_name, e.dept_id, e.job_title, e.active ");
+            query.append("FROM Employees e ");
+            query.append("JOIN EmployeeUsers eu ON e.emp_id = eu.emp_id ");
+            query.append("WHERE eu.user_id = ?");
+
+            try (PreparedStatement ps = conn.prepareStatement(query.toString())) {
+                ps.setInt(1, userId);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    return new Employees(
+                        rs.getInt("emp_id"),
+                        rs.getString("last_name"),
+                        rs.getString("first_name"),
+                        rs.getInt("dept_id"),
+                        rs.getString("job_title"),
+                        rs.getBoolean("active")
+                    );
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
 
     public List<Employees> getEmployeesByDepartment(int departmentID){
         List<Employees> list = new ArrayList<>();
@@ -176,4 +204,5 @@ public class EmployeesDAO {
             e.printStackTrace();
         }
     }
+
 }
