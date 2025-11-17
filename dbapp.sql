@@ -1,7 +1,6 @@
 CREATE SCHEMA IF NOT EXISTS ticketing_system;
 USE ticketing_system;
 
-DROP TABLE IF EXISTS EmployeeCreatesTicket;
 DROP TABLE IF EXISTS TechnicianResolvesTicket;
 DROP TABLE IF EXISTS TechnicianCancelsTicket;
 DROP TABLE IF EXISTS Tickets;
