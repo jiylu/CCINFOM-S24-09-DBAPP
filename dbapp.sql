@@ -66,9 +66,11 @@ CREATE TABLE IF NOT EXISTS Categories (
 CREATE TABLE IF NOT EXISTS Tickets (
 	ticket_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_subject VARCHAR(100) NOT NULL,
-    ticket_description VARCHAR(250) NOT NULL, 
+    ticket_description VARCHAR(250) NOT NULL,
+    tech_id INT NOT NULL,
     category_id INT NOT NULL,
     status ENUM('Enqueued', 'Active', 'Resolved', 'Cancelled') NOT NULL,
+    CONSTRAINT fk_tech_ticket FOREIGN KEY (tech_id) REFERENCES Technicians(technician_id), 
     CONSTRAINT fk_category_ticket FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 ) AUTO_INCREMENT = 40000;
 
@@ -85,16 +87,12 @@ CREATE TABLE IF NOT EXISTS TechnicianResolvesTicket (
 	resolve_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_id INT NOT NULL UNIQUE,
     resolve_date DATETIME,
-    tech_id INT NOT NULL UNIQUE,
-    CONSTRAINT fk_ticket_resolve_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
-    CONSTRAINT fk_tech_resolve_id FOREIGN KEY (tech_id) REFERENCES Technicians(technician_id)
+    CONSTRAINT fk_ticket_resolve_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id)
 ) AUTO_INCREMENT = 160000; 
 
 CREATE TABLE IF NOT EXISTS TechnicianCancelsTicket (
 	cancel_id INT AUTO_INCREMENT PRIMARY KEY, 
     ticket_id INT NOT NULL UNIQUE,
     cancel_date DATETIME, 
-    tech_id INT NOT NULL UNIQUE,
-    CONSTRAINT fk_ticket_cancel_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
-    CONSTRAINT fk_tech_cancel_id FOREIGN KEY (tech_id) REFERENCES Technicians(technician_id)
+    CONSTRAINT fk_ticket_cancel_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id)
 ) AUTO_INCREMENT = 170000;
