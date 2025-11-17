@@ -2,7 +2,8 @@ CREATE SCHEMA IF NOT EXISTS ticketing_system;
 USE ticketing_system;
 
 DROP TABLE IF EXISTS EmployeeCreatesTicket;
-DROP TABLE IF EXISTS TechnicianResolvesCancelsTicket;
+DROP TABLE IF EXISTS TechnicianResolvesTicket;
+DROP TABLE IF EXISTS TechnicianCancelsTicket;
 DROP TABLE IF EXISTS Tickets;
 DROP TABLE IF EXISTS EmployeeUsers;
 DROP TABLE IF EXISTS TechnicianUsers;
@@ -80,11 +81,20 @@ CREATE TABLE IF NOT EXISTS EmployeeCreatesTicket (
     CONSTRAINT fk_employee_id FOREIGN KEY (emp_id) REFERENCES Employees(emp_id)
 ) AUTO_INCREMENT = 150000; 
 
-CREATE TABLE IF NOT EXISTS TechnicianResolvesCancelsTicket (
+CREATE TABLE IF NOT EXISTS TechnicianResolvesTicket (
 	resolve_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_id INT NOT NULL UNIQUE,
     resolve_date DATETIME,
     tech_id INT NOT NULL UNIQUE,
     CONSTRAINT fk_ticket_resolve_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
-    CONSTRAINT fk_tech_id FOREIGN KEY (tech_id) REFERENCES Technicians(technician_id)
+    CONSTRAINT fk_tech_resolve_id FOREIGN KEY (tech_id) REFERENCES Technicians(technician_id)
 ) AUTO_INCREMENT = 160000; 
+
+CREATE TABLE IF NOT EXISTS TechnicianCancelsTicket (
+	cancel_id INT AUTO_INCREMENT PRIMARY KEY, 
+    ticket_id INT NOT NULL UNIQUE,
+    cancel_date DATETIME, 
+    tech_id INT NOT NULL UNIQUE,
+    CONSTRAINT fk_ticket_cancel_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
+    CONSTRAINT fk_tech_cancel_id FOREIGN KEY (tech_id) REFERENCES Technicians(technician_id)
+) AUTO_INCREMENT = 170000;
