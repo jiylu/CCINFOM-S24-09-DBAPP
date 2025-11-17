@@ -12,33 +12,81 @@ public class TicketsDAO {
         this.connection = connection;
     }
 
-    public List<Tickets> getAllTickets() throws SQLException {
+    // INSERTS
+
+    public void insertToTicketsTable(Tickets ticket){
+        String query = "INSERT INTO Tickets (ticket_subject, ticket_description, category_id, creation_date, emp_id, tech_id, status) VALUES = (?, ?, ?, ?, ?, ?, ?)";
+        
+        try (PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setString(1, ticket.getTicket_subject());
+            ps.setString(2, ticket.getTicket_description());
+            ps.setInt(3, ticket.getCategory_id());
+            ps.setString(4, ticket.getCreation_date());
+            ps.setInt(5, ticket.getEmployee_id());
+            ps.setInt(6, ticket.getTechnician_id());
+            ps.setString(7, ticket.getStatus());
+            ps.executeUpdate();
+        } catch (SQLException e){
+            System.out.println("insertToTicketsTable error");
+            e.printStackTrace();
+        }
+    }
+
+    public void insertToCancelledTickets(int ticketID, String cancelDate, String cancelReason){
+        String query = "INSERT INTO CancelledTickets (ticket_id, cancel_date, cancel_reason) VALUES (?, ?, ?)";
+        
+        try (PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setInt(1, ticketID);
+            ps.setString(2, cancelDate);
+            ps.setString(3, cancelReason);
+            ps.executeUpdate();
+        } catch (SQLException e){
+            System.out.println("insertToCancelledTickets error");
+            e.printStackTrace();
+        }
+    }
+
+    public void insertToResolvedTickets(int ticketID, String resolveDate){
+        String query = "INSERT INTO ResolvedTickets (ticket_id, resolve_date) VALUES (?, ?)";
+        
+        try (PreparedStatement ps = connection.prepareStatement(query)){
+            ps.setInt(1, ticketID);
+            ps.setString(2, resolveDate);
+            ps.executeUpdate();
+        } catch (SQLException e){
+            System.out.println("insertToResolvedTickets error");
+            e.printStackTrace();
+        }
+    }
+
+
+    public List<Tickets> getAllTickets() {
         List<Tickets> ticketsList = new ArrayList<>();
         String query = "SELECT * FROM Tickets";
 
         try (Statement stmt = connection.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+            ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 Tickets ticket = new Tickets(
-                    rs.getInt("ticket_id"),
-                    rs.getString("ticket_subject"), 
-                    rs.getString("ticket_description"), 
-                    rs.getInt("category_id"),
-                    rs.getInt("employee_id"),
-                    rs.getInt("technician_id"),
-                    rs.getString("creation_date"),
-                    rs.getString("resolve_date"),
-                    rs.getString("status")
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4),
+                    rs.getDate(5).toString(),
+                    rs.getInt(6),
+                    rs.getInt(7),
+                    rs.getString(8)
                 );
+
                 ticketsList.add(ticket);
             }
+
+            return ticketsList;
         } catch (SQLException e) {
             System.out.println("Error retrieving all tickets.");
             return null;
         }
-        
-        return ticketsList;
     }
 
     public List<Tickets> getTicketsByCategoryID(int categoryID) throws SQLException {
@@ -50,15 +98,14 @@ public class TicketsDAO {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     list.add(new Tickets(
-                        rs.getInt("ticket_id"),
-                        rs.getString("ticket_subject"), 
-                        rs.getString("ticket_description"), 
-                        rs.getInt("category_id"),
-                        rs.getInt("employee_id"),
-                        rs.getInt("technician_id"),
-                        rs.getString("creation_date"),
-                        rs.getString("resolve_date"),
-                        rs.getString("status")
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getDate(5).toString(),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getString(8)
                     ));
                 }
             }
@@ -82,15 +129,14 @@ public class TicketsDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Tickets ticket = new Tickets(
-                            rs.getInt("ticket_id"),
-                            rs.getString("ticket_subject"), 
-                            rs.getString("ticket_description"), 
-                            rs.getInt("category_id"),
-                            rs.getInt("employee_id"),
-                            rs.getInt("technician_id"),
-                            rs.getString("creation_date"),
-                            rs.getString("resolve_date"),
-                            rs.getString("status")
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getInt(4),
+                            rs.getDate(5).toString(),
+                            rs.getInt(6),
+                            rs.getInt(7),
+                            rs.getString(8)
                     );
                     ticketsList.add(ticket);
                 }
@@ -111,15 +157,14 @@ public class TicketsDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Tickets ticket = new Tickets(
-                            rs.getInt("ticket_id"),
-                            rs.getString("ticket_subject"), 
-                            rs.getString("ticket_description"), 
-                            rs.getInt("category_id"),
-                            rs.getInt("employee_id"),
-                            rs.getInt("technician_id"),
-                            rs.getString("creation_date"),
-                            rs.getString("resolve_date"),
-                            rs.getString("status")
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getInt(4),
+                            rs.getDate(5).toString(),
+                            rs.getInt(6),
+                            rs.getInt(7),
+                            rs.getString(8)
                     );
                     ticketsList.add(ticket);
                 }
@@ -140,15 +185,14 @@ public class TicketsDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Tickets ticket = new Tickets(
-                            rs.getInt("ticket_id"),
-                            rs.getString("ticket_subject"), 
-                            rs.getString("ticket_description"),
-                            rs.getInt("category_id"),
-                            rs.getInt("employee_id"),
-                            rs.getInt("technician_id"),
-                            rs.getString("creation_date"),
-                            rs.getString("resolve_date"),
-                            rs.getString("status")
+                            rs.getInt(1),
+                            rs.getString(2),
+                            rs.getString(3),
+                            rs.getInt(4),
+                            rs.getDate(5).toString(),
+                            rs.getInt(6),
+                            rs.getInt(7),
+                            rs.getString(8)
                     );
                     ticketsList.add(ticket);
                 }
@@ -166,41 +210,40 @@ public class TicketsDAO {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return new Tickets(
-                    rs.getInt("ticket_id"),
-                    rs.getString("ticket_subject"),
-                    rs.getString("ticket_description"),
-                    rs.getInt("category_id"),
-                    rs.getInt("employee_id"),
-                    rs.getInt("technician_id"),
-                    rs.getString("creation_date"),
-                    rs.getString("resolve_date"),
-                    rs.getString("status")
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getDate(5).toString(),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getString(8) 
                 );
             }    
         }
         return null;
     }
 
-    public boolean insertTicket(Tickets ticket) {
+    // public boolean insertTicket(Tickets ticket) {
         
-        String sql = "INSERT INTO Tickets (ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    //     String sql = "INSERT INTO Tickets (ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, ticket.getTicket_subject());
-            stmt.setString(2, ticket.getTicket_description()); 
-            stmt.setInt(3, ticket.getCategory_id());
-            stmt.setInt(4, ticket.getEmployee_id());
-            stmt.setInt(5, ticket.getTechnician_id());
-            stmt.setString(6, ticket.getCreation_date());
-            stmt.setString(7, ticket.getResolve_date());
-            stmt.setString(8, ticket.getStatus());
+    //     try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+    //         stmt.setString(1, ticket.getTicket_subject());
+    //         stmt.setString(2, ticket.getTicket_description()); 
+    //         stmt.setInt(3, ticket.getCategory_id());
+    //         stmt.setInt(4, ticket.getEmployee_id());
+    //         stmt.setInt(5, ticket.getTechnician_id());
+    //         stmt.setString(6, ticket.getCreation_date());
+    //         stmt.setString(7, ticket.getResolve_date());
+    //         stmt.setString(8, ticket.getStatus());
 
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+    //         return stmt.executeUpdate() > 0;
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         return false;
+    //     }
+    // }
 
     public int getAvailableTechnicianId() throws SQLException {
         String sql = "SELECT technician_id FROM Technicians WHERE technician_id NOT IN (SELECT technician_id FROM Tickets WHERE status = 'Active') LIMIT 1";
@@ -224,15 +267,14 @@ public class TicketsDAO {
 
             while (rs.next()) {
                 Tickets ticket = new Tickets(
-                            rs.getInt("ticket_id"),
-                            rs.getString("ticket_subject"), 
-                            rs.getString("ticket_description"), 
-                            rs.getInt("category_id"),
-                            rs.getInt("employee_id"),
-                            rs.getInt("technician_id"),
-                            rs.getString("creation_date"),
-                            rs.getString("resolve_date"),
-                            rs.getString("status")
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getDate(5).toString(),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getString(8)
                     );
                     empTicketList.add(ticket);
             }
@@ -245,22 +287,22 @@ public class TicketsDAO {
 
 
 
-    public boolean updateTicket(Tickets ticket) {
+    // public boolean updateTicket(Tickets ticket) {
 
-        String sql = "UPDATE tickets SET category_id = ?, status = ?, resolve_date = ? WHERE ticket_id = ?";
+    //     String sql = "UPDATE tickets SET category_id = ?, status = ?, resolve_date = ? WHERE ticket_id = ?";
 
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, ticket.getCategory_id());
-            stmt.setString(2, ticket.getStatus());
-            stmt.setString(3, ticket.getResolve_date());
-            stmt.setInt(4, ticket.getTicket_id());
+    //     try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+    //         stmt.setInt(1, ticket.getCategory_id());
+    //         stmt.setString(2, ticket.getStatus());
+    //         stmt.setString(3, ticket.getResolve_date());
+    //         stmt.setInt(4, ticket.getTicket_id());
 
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
+    //         return stmt.executeUpdate() > 0;
+    //     } catch (SQLException e) {
+    //         e.printStackTrace();
+    //         return false;
+    //     }
+    // }
 
     public List<Tickets> getEnqueuedTicketsByTechnician(int technicianID) throws SQLException {
         List<Tickets> tickets = new ArrayList<>();
@@ -274,15 +316,14 @@ public class TicketsDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Tickets t = new Tickets(
-                            rs.getInt("ticket_id"),
-                            rs.getString("ticket_subject"),
-                            rs.getString("ticket_description"),
-                            rs.getInt("category_id"),
-                            rs.getInt("employee_id"),
-                            rs.getInt("technician_id"),
-                            rs.getString("creation_date"),
-                            rs.getString("resolve_date"),
-                            rs.getString("status")
+                        rs.getInt(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getInt(4),
+                        rs.getDate(5).toString(),
+                        rs.getInt(6),
+                        rs.getInt(7),
+                        rs.getString(8)
                     );
                     tickets.add(t);
                 }
