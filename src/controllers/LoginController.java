@@ -92,18 +92,13 @@ public class LoginController {
             }
         }
 
-        Technicians tech = techDAO.getTechnicianByUserID(user.getUserID());
-
-        if (tech == null) {
-            JOptionPane.showMessageDialog(null, "Technician record not found.", "Invalid", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-
-        if (!tech.isActive()) {
-            JOptionPane.showMessageDialog(null, "User is deactivated.", "Invalid", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-
+        if (user.getRole().contentEquals(UserAccount.TECH_ROLE)) {
+            Technicians tech = techDAO.getTechnicianByUserID(user.getUserID());
+            if (!tech.isActive()) {
+                JOptionPane.showMessageDialog(null, "User is deactivated.", "Invalid", JOptionPane.ERROR_MESSAGE);
+                return null;
+            }
+        }    
         return user;
     }
     
