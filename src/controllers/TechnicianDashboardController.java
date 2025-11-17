@@ -157,7 +157,7 @@ private void cancelActiveTicket(Tickets ticket) {
         try {
             int technicianId = new TechniciansDAO(DBConnection.connect())
                     .getTechnicianIdByUserId(user.getUserID());
-            List<Tickets> tickets = ticketsDAO.getTicketsByTechninicianID(technicianId);
+            List<Tickets> tickets = ticketsDAO.getTicketsByTechnicianID(technicianId);
 
             for (Tickets t : tickets) {
                 ticketQueuePanel.addTicket(

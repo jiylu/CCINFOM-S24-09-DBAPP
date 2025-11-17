@@ -119,7 +119,6 @@ public class EmployeeDashboardController{
             newTicket.setEmployee_id(emp.getEmpID());
             newTicket.setTechnician_id(getTechnicianId()); 
             newTicket.setCreation_date(java.time.LocalDateTime.now().toString());
-            newTicket.setResolve_date(null);
             newTicket.setStatus(status);
 
             boolean success = ticketsDAO.insertTicket(newTicket);
