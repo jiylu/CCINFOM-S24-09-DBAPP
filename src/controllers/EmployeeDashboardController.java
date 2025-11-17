@@ -143,7 +143,12 @@ public class EmployeeDashboardController{
     }
 
     private void viewTicketHistory() {
-        Employees employee = empDAO.getEmployeeByUserId(user.getUserID());
+        Employees employee = null;
+        try {
+            employee = empDAO.getEmployeeByUserId(user.getUserID());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         if (employee == null) {
             JOptionPane.showMessageDialog(frame, "Employee record not found.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
