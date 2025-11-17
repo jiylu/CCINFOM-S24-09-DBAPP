@@ -123,23 +123,23 @@ public class TicketsDAO {
     public List<Tickets> getResolvedTickets(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
-                       "FROM Tickets WHERE technician_id = ? AND status IN ('Resolved', 'Cancelled')";
-                       
+        String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, creation_date, emp_id, tech_id, status " +
+                    "FROM Tickets WHERE tech_id = ? AND status IN ('Resolved', 'Cancelled')";
+                        
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, technicianId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Tickets ticket = new Tickets(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getInt(4),
-                            rs.getDate(5).toString(),
-                            rs.getInt(6),
-                            rs.getInt(7),
-                            rs.getString(8)
+                            rs.getInt("ticket_id"),
+                            rs.getString("ticket_subject"),
+                            rs.getString("ticket_description"),
+                            rs.getInt("category_id"),
+                            rs.getString("creation_date"),
+                            rs.getInt("emp_id"),
+                            rs.getInt("tech_id"),
+                            rs.getString("status")
                     );
                     ticketsList.add(ticket);
                 }
@@ -148,26 +148,28 @@ public class TicketsDAO {
         return ticketsList;
     }
 
-    public List<Tickets> getTicketsByTechninicianID(int technicianId) throws SQLException {
+
+    public List<Tickets> getTicketsByTechnicianID(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
-                       "FROM Tickets WHERE technician_id = ? AND status NOT IN ('Resolved', 'Cancelled')";
-                       
+        // Fixed column name and order to match constructor
+        String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, creation_date, emp_id, tech_id, status " +
+                    "FROM Tickets WHERE tech_id = ? AND status NOT IN ('Resolved', 'Cancelled')";
+
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, technicianId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Tickets ticket = new Tickets(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getInt(4),
-                            rs.getDate(5).toString(),
-                            rs.getInt(6),
-                            rs.getInt(7),
-                            rs.getString(8)
+                            rs.getInt("ticket_id"),
+                            rs.getString("ticket_subject"),
+                            rs.getString("ticket_description"),
+                            rs.getInt("category_id"),
+                            rs.getString("creation_date"),  // now matches constructor
+                            rs.getInt("emp_id"),
+                            rs.getInt("tech_id"),
+                            rs.getString("status")
                     );
                     ticketsList.add(ticket);
                 }
@@ -175,6 +177,7 @@ public class TicketsDAO {
         }
         return ticketsList;
     }
+
 
     public List<Tickets> getTicketsByTechnician(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
@@ -256,7 +259,7 @@ public class TicketsDAO {
 
 
     public Tickets getActiveTicketByTechnicianID(int technicianId) throws SQLException {
-        String query = "SELECT * FROM Tickets WHERE technician_id = ? AND status = 'Active' LIMIT 1";
+        String query = "SELECT * FROM Tickets WHERE tech_id = ? AND status = 'Active' LIMIT 1";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, technicianId);
@@ -277,26 +280,25 @@ public class TicketsDAO {
         return null;
     }
 
-    // public boolean insertTicket(Tickets ticket) {
+    public boolean insertTicket(Tickets ticket) {
         
-    //     String sql = "INSERT INTO Tickets (ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Tickets (ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    //     try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-    //         stmt.setString(1, ticket.getTicket_subject());
-    //         stmt.setString(2, ticket.getTicket_description()); 
-    //         stmt.setInt(3, ticket.getCategory_id());
-    //         stmt.setInt(4, ticket.getEmployee_id());
-    //         stmt.setInt(5, ticket.getTechnician_id());
-    //         stmt.setString(6, ticket.getCreation_date());
-    //         stmt.setString(7, ticket.getResolve_date());
-    //         stmt.setString(8, ticket.getStatus());
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, ticket.getTicket_subject());
+            stmt.setString(2, ticket.getTicket_description()); 
+            stmt.setInt(3, ticket.getCategory_id());
+            stmt.setInt(4, ticket.getEmployee_id());
+            stmt.setInt(5, ticket.getTechnician_id());
+            stmt.setString(6, ticket.getCreation_date());
+            stmt.setString(8, ticket.getStatus());
 
-    //         return stmt.executeUpdate() > 0;
-    //     } catch (SQLException e) {
-    //         e.printStackTrace();
-    //         return false;
-    //     }
-    // }
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
     public int getAvailableTechnicianId() throws SQLException {
         String sql = "SELECT technician_id FROM Technicians WHERE technician_id NOT IN (SELECT technician_id FROM Tickets WHERE status = 'Active') LIMIT 1";

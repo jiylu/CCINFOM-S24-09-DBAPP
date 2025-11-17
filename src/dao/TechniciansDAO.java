@@ -59,9 +59,9 @@ public class TechniciansDAO {
 
     public Technicians getTechnicianByUserID(int userID) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT * FROM Technicians t ");
-        query.append("JOIN TechnicianUser tu ON tu.technician_id = t.technician_id ");
-        query.append("WHERE tu.tech_user_id = ? ");
+        query.append("SELECT t.* FROM Technicians t ");
+        query.append("JOIN TechnicianUsers tu ON tu.technician_id = t.technician_id ");
+        query.append("WHERE tu.user_id = ? ");
 
         try (PreparedStatement ps = conn.prepareStatement(query.toString())){
             ps.setInt(1, userID);
@@ -69,10 +69,10 @@ public class TechniciansDAO {
 
             if (rs.next()){
                 return new Technicians(
-                    rs.getInt(1),
-                    rs.getString(2),
-                    rs.getString(3),
-                    rs.getBoolean(4)
+                    rs.getInt("technician_id"),
+                    rs.getString("tech_lastName"),
+                    rs.getString("tech_firstName"),
+                    rs.getBoolean("active")
                 );
             }
 
@@ -127,7 +127,7 @@ public class TechniciansDAO {
         }
     }
 
-    public int getTechnicianIdByUserId(int userId) {
+    public int getTechnicianIdByUserId(int userId) {    
         String sql = "SELECT technician_id FROM TechnicianUsers WHERE user_id = ?";
 
         try (PreparedStatement ps = conn.prepareStatement(sql)) {

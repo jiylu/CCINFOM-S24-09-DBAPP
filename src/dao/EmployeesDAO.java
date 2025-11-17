@@ -41,6 +41,37 @@ public class EmployeesDAO {
     }
 
 
+
+    public Employees getEmployeeByUserID(int userID){
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM Employees e ");
+        query.append("JOIN EmployeeUsers eu ON eu.emp_id = e.emp_id ");
+        query.append("WHERE eu.user_id = ? ");
+
+        try (PreparedStatement ps = conn.prepareStatement(query.toString())){
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                return new Employees(
+                    rs.getInt(1), 
+                    rs.getString(2), 
+                    rs.getString(3), 
+                    rs.getInt(4), 
+                    rs.getString(5), 
+                    rs.getBoolean(6)
+                );
+            }
+
+            System.out.println("No employee found with userID " + userID);
+            return null;
+        } catch (SQLException e){
+            System.out.println("getEmployeeByUserID error.");
+            return null;
+        }
+    }
+
+
     // READ (onlu active employees)
     public List<Employees> getAllEmployees() {
         List<Employees> list = new ArrayList<>();
@@ -97,6 +128,26 @@ public class EmployeesDAO {
 
             return null;
         }
+    public Employees getEmployeeByUserId(int userId) throws SQLException {
+        String query = "SELECT emp_id, user_id, last_name, first_name, dept_id, job_title FROM Employees WHERE user_id = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new Employees(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4),
+                    rs.getString(5),
+                    rs.getBoolean(6)
+                );
+            }
+        }
+        return null; 
+    }
+
 
     public List<Employees> getEmployeesByDepartment(int departmentID){
         List<Employees> list = new ArrayList<>();
