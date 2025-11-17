@@ -1,12 +1,10 @@
 package controllers;
 
+import dao.*;
 import java.sql.SQLException;
 import java.util.List;
-
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
-
-import dao.*;
 import models.*;
 import view.Frame;
 import view.employee.*;
@@ -16,7 +14,7 @@ import view.technician.*;
 public class EmployeeDashboardController{
 
     private int lastTechIndex = -1;
-    private User user;
+    private EmpUser user;
     private Frame frame;
     private UserDAO userDAO;
     private EmployeesDAO empDAO;
@@ -27,7 +25,7 @@ public class EmployeeDashboardController{
     private CreateTicketPanel createTicketPanel;
     private TicketHistoryPanel ticketHistoryPanel;
 
-    public EmployeeDashboardController(User user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, 
+    public EmployeeDashboardController(EmpUser user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, 
                                        TechniciansDAO techniciansDAO, TicketsDAO ticketsDAO, CategoriesDAO categoriesDAO){
         this.user = user;
         this.frame = frame;

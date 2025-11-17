@@ -21,10 +21,10 @@ public class TechniciansDAO {
 
             while (rs.next()){
                 list.add(new Technicians(
-                    rs.getInt("technician_id"),
-                    rs.getInt("user_id"),
-                    rs.getString("tech_lastName"),
-                    rs.getString("tech_firstName")
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getBoolean(4)
                 ));
             }
 
@@ -57,17 +57,48 @@ public class TechniciansDAO {
         }
     }
 
+    public Technicians getTechnicianByUserID(int userID) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM Technicians t ");
+        query.append("JOIN TechnicianUser tu ON tu.technician_id = t.technician_id ");
+        query.append("WHERE tu.tech_user_id = ? ");
+
+        try (PreparedStatement ps = conn.prepareStatement(query.toString())){
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                return new Technicians(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getBoolean(4)
+                );
+            }
+
+            System.out.println("No technician found with userID " + userID);
+            return null;
+        } catch (SQLException e){
+            System.out.println("getTechnicianByUserID error.");
+            return null;
+        }
+    }
     
 
     public void insertTechnician(Technicians tech){
-        String query = "INSERT INTO Technicians(user_id, tech_lastName, tech_firstName) VALUES (?, ?, ?)";
+        String query = "INSERT INTO Technicians(tech_lastName, tech_firstName) VALUES (?, ?)";
 
-        try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, tech.getUser_ID());
-            pstmt.setString(2, tech.getTech_lastName());
-            pstmt.setString(3, tech.getTech_firstName());
+        try (PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, tech.getTech_lastName());
+            pstmt.setString(2, tech.getTech_firstName());
 
             pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+
+            if (rs.next()){
+                tech.setTechID(rs.getInt(1));
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,14 +116,14 @@ public class TechniciansDAO {
             int rowsAffected = ps.executeUpdate();
 
             if (rowsAffected > 0) {
-                System.out.println("User " + tech.getUser_ID() + " updated successfully.");
+                System.out.println("User " + tech.getTechnician_id() + " updated successfully.");
             } else {
-                System.out.println("No user found with ID " + tech.getUser_ID());
+                System.out.println("No user found with ID " + tech.getTechnician_id());
             }
 
             ps.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("updateTechnicianError.");
         }
     }
 
@@ -124,5 +155,24 @@ public class TechniciansDAO {
     }
 
     return -1;
+    }
+
+    public void deactivateTechnician(int techID) {
+        String query = "UPDATE technicians SET active = FALSE WHERE technician_id = ?";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setInt(1, techID);
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Technician " + techID + " deactivated successfully.");
+            } else {
+                System.out.println("No technician found with ID " + techID);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error deactivating technician.");
+            e.printStackTrace();
+        }
     }
 }

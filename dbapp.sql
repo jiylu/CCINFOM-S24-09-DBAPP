@@ -3,19 +3,13 @@ USE ticketing_system;
 
 DROP TABLE IF EXISTS TicketLogs;
 DROP TABLE IF EXISTS Tickets;
+DROP TABLE IF EXISTS EmployeeUsers;
+DROP TABLE IF EXISTS TechnicianUsers;
 DROP TABLE IF EXISTS Technicians;
 DROP TABLE IF EXISTS Employees;
-DROP TABLE IF EXISTS Departments;
-DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Categories;
-
-CREATE TABLE IF NOT EXISTS Users(
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(20) NOT NULL UNIQUE,
-    password VARCHAR(15) NOT NULL,
-    role ENUM('Technician', 'Employee', 'Admin') NOT NULL,
-    active BOOLEAN DEFAULT TRUE 
-) AUTO_INCREMENT = 10000;
+DROP TABLE IF EXISTS UserAccounts;
+DROP TABLE IF EXISTS Departments;
 
 CREATE TABLE IF NOT EXISTS Departments (
     department_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -23,24 +17,43 @@ CREATE TABLE IF NOT EXISTS Departments (
     active BOOLEAN DEFAULT TRUE
 );
 
+CREATE TABLE IF NOT EXISTS UserAccounts(
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    role ENUM('Admin', 'Employee', 'Technician') NOT NULL,
+    username VARCHAR(20) NOT NULL UNIQUE,
+    password VARCHAR(15) NOT NULL
+) AUTO_INCREMENT = 50000;
+
 CREATE TABLE IF NOT EXISTS Employees (
 	emp_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL UNIQUE, 
     last_name VARCHAR(50) NOT NULL,
     first_name VARCHAR(50) NOT NULL,
     dept_id INT NOT NULL,
     job_title VARCHAR(50) NOT NULL,
-    CONSTRAINT fk_employee_user FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    ACTIVE BOOLEAN DEFAULT TRUE,
 	CONSTRAINT fk_employee_department FOREIGN KEY (dept_id) REFERENCES Departments(department_id)
 ) AUTO_INCREMENT = 90000;
 
+CREATE TABLE IF NOT EXISTS EmployeeUsers (
+    user_id INT NOT NULL UNIQUE,
+    emp_id INT NOT NULL UNIQUE,
+    CONSTRAINT fk_emp_user_id FOREIGN KEY (user_id) REFERENCES UserAccounts(user_id),
+    CONSTRAINT fk_emp_id FOREIGN KEY (emp_id) REFERENCES Employees(emp_id)
+) AUTO_INCREMENT = 100000;
+
 CREATE TABLE IF NOT EXISTS Technicians ( 
 	technician_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL UNIQUE,
     tech_lastName VARCHAR(50) NOT NULL,
     tech_firstName VARCHAR(50) NOT NULL,
-    CONSTRAINT fk_technician_user FOREIGN KEY (user_id) REFERENCES Users(user_id)
+    ACTIVE BOOLEAN DEFAULT TRUE
 ) AUTO_INCREMENT = 30000;
+
+CREATE TABLE IF NOT EXISTS TechnicianUsers (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    technician_id INT NOT NULL UNIQUE,
+    CONSTRAINT fk_tech_user_id FOREIGN KEY (user_id) REFERENCES UserAccounts(user_id),
+    CONSTRAINT fk_technician_id FOREIGN KEY (technician_id) REFERENCES Technicians(technician_id)
+);
 
 CREATE TABLE IF NOT EXISTS Categories (
 	category_id INT AUTO_INCREMENT PRIMARY KEY,  

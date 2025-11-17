@@ -1,12 +1,16 @@
 package view.admin;
 
+import java.util.AbstractMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import models.EmpUser;
 import models.Employees;
+import models.TechUser;
 import models.Technicians;
-import models.User;
+import models.UserAccount;
 
 public class UserManagementPanel extends JPanel{
     private JButton viewEmployees;
@@ -84,59 +88,71 @@ public class UserManagementPanel extends JPanel{
         return model;
     }
 
-    public void setupEmployeesTable(List<Employees> employeeList, List<User> users){
+    public void setupEmployeesTable(List<Employees> employeeList, List<UserAccount> users, List<EmpUser> empUsers){
         String[] cols = {"User ID", "Emp ID", "Username", "Password", "Name", "Dept ID", "Job Title", "Status", "Edit", "Deactivate"};
         DefaultTableModel model = setupTable(cols);
         
-        // sorted by active users
-        List<User> userList = users.stream()
-                .filter(u -> u.getRole() == User.Role.EMPLOYEE || u.getRole() == User.Role.ADMIN)
-                .sorted((u1, u2) -> Boolean.compare(u2.getIsActive(), u1.getIsActive()))
-                .collect(Collectors.toList());
+
+        // map natin user to empid
+        List<Map.Entry<UserAccount, Integer>> mapped = empUsers.stream()
+            .flatMap(eu -> users.stream()
+                .filter(u -> u.getUserID() == eu.getUserID() &&
+                            (UserAccount.EMP_ROLE.equals(u.getRole()) || UserAccount.ADMIN_ROLE.equals(u.getRole())))
+                .map(u -> new AbstractMap.SimpleEntry<>(u, eu.getEmpID()))
+            )
+            .collect(Collectors.toList());
+
         
-        for (User u : userList) {
+        for (Map.Entry<UserAccount, Integer> entry : mapped) {
+            UserAccount u = entry.getKey();
+            int empID = entry.getValue();
+
             Employees e = employeeList.stream()
-                            .filter(emp -> emp.getUserID() == u.getUserID())
+                            .filter(emp -> emp.getEmpID() == empID)
                             .findFirst()
                             .orElse(null);
 
             if (e != null) {
                 String fullName = e.getLastName() + ", " + e.getFirstName();
-                String status = u.getIsActive() ? "Active" : "Inactive";
-                Object[] row = { u.getUserID(), e.getEmpID(), u.getUsername(), u.getPassword(),
-                                fullName, e.getDeptID(), e.getJobTitle(), status, "Edit", "Delete"};
+                String status = e.isActive() ? "Active" : "Inactive";
+                Object[] row = {u.getUserID(), e.getEmpID(), u.getUsername(), u.getPassword(), fullName, e.getDeptID(), e.getJobTitle(), status, "Edit", "Deactivate"};
                 model.addRow(row);
             }
         }
+
 
         table.setModel(model);
     }
 
-    public void setupTechniciansTable(List<Technicians> technicianList, List<User> users){
+    public void setupTechniciansTable(List<Technicians> technicianList, List<UserAccount> users, List<TechUser> techUsers) {
         String[] cols = {"User ID", "Tech ID", "Username", "Password", "Name", "Status", "Edit", "Deactivate"};
         DefaultTableModel model = setupTable(cols);
 
-        List<User> userList = users.stream()
-                    .filter(u -> u.getRole() == User.Role.TECHNICIAN)
-                    .sorted((u1, u2) -> Boolean.compare(u2.getIsActive(), u1.getIsActive()))
-                    .collect(Collectors.toList());
+        List<Map.Entry<UserAccount, Integer>> mapped = techUsers.stream()
+            .flatMap(tu -> users.stream()
+                .filter(u -> u.getUserID() == tu.getUserID() && u.getRole().contentEquals(UserAccount.TECH_ROLE))
+                .map(u -> new AbstractMap.SimpleEntry<>(u, tu.getTechID()))
+            )
+            .collect(Collectors.toList()); 
 
-        for (User u : userList){
+        for (Map.Entry<UserAccount, Integer> entry : mapped) {
+            UserAccount u = entry.getKey();
+            int techID = entry.getValue();
+
             Technicians t = technicianList.stream()
-                            .filter(tec -> tec.getUser_ID() == u.getUserID())
-                            .findFirst()
-                            .orElse(null);
-            
-            if (t != null){
+                                    .filter(tec -> tec.getTechnician_id() == techID)
+                                    .findFirst()
+                                    .orElse(null);
+
+            if (t != null) {
                 String fullName = t.getTech_lastName() + ", " + t.getTech_firstName();
-                String status = u.getIsActive() ? "Active" : "Inactive";
+                String status = t.isActive() ? "Active" : "Inactive";
 
-
-                Object[] row = { u.getUserID(), t.getTechnician_id(), u.getUsername(), u.getPassword(), fullName, status };
+                Object[] row = {u.getUserID(), t.getTechnician_id(), u.getUsername(), u.getPassword(), fullName, status, "Edit", "Deactivate"};
                 model.addRow(row);
             }
-
         }
+
 
         table.setModel(model);
     }

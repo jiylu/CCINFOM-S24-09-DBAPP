@@ -5,9 +5,11 @@ import dao.EmployeesDAO;
 import dao.TechniciansDAO;
 import dao.UserDAO;
 import javax.swing.*;
+import models.EmpUser;
 import models.Employees;
+import models.TechUser;
 import models.Technicians;
-import models.User;
+import models.UserAccount;
 import view.admin.AddUserPanel;
 
 public class AddUserController {
@@ -63,28 +65,29 @@ public class AddUserController {
         });
     }
 
-    private Integer insertToUsers(){
+    private UserAccount insertToUsers(){    
         String username = addUserPanel.getUsernameField().getText().trim();
         String password = addUserPanel.getPasswordField().getText().trim();
         String selectedRole = (String) addUserPanel.getRoles().getSelectedItem();
-        User.Role role = User.Role.valueOf(selectedRole.toUpperCase());
         
-        User u = new User(0,username,password,role, true);
-        return userDAO.insertUser(u);
+        return userDAO.insertUserAccount(selectedRole, username, password);
     }
 
     private void insertToEmployee(String selectedRole, StringBuilder errors){
         if (!validateInputFields(errors)){
             return;
         }
-        
-        Integer userID = insertToUsers();
+
         String lastName = addUserPanel.getLastNameField().getText();
-        String firstName = addUserPanel.getFirstNameField().getText();
+        String firstName = addUserPanel.getFirstNameField().getText();        
+        
+        UserAccount u = insertToUsers();
 
         if (selectedRole.contentEquals("Admin")){
-            Employees emp = new Employees(0, userID, lastName, firstName, 7, "Admin");
+            Employees emp = new Employees(0, lastName, firstName, 7, "Admin", true);
             empDAO.insertEmployee(emp);
+            EmpUser empUser = new EmpUser(u.getUserID(), emp.getEmpID());
+            userDAO.insertEmpUser(empUser);
             JOptionPane.showMessageDialog(null, "Successfully inserted " + firstName + " " + lastName);
             return;
         }
@@ -92,9 +95,11 @@ public class AddUserController {
         String department = (String) addUserPanel.getDepartmentBox().getSelectedItem();
         Integer departmentID = deptDAO.getDepartmentIDByName(department);
         String role = addUserPanel.getEmployeeRole().getText().trim();
-        Employees emp = new Employees(0, userID, lastName, firstName, departmentID, role);
-
+        Employees emp = new Employees(0, lastName, firstName, departmentID, role, true);
         empDAO.insertEmployee(emp);
+        EmpUser empUser = new EmpUser(u.getUserID(), emp.getEmpID());
+        
+        userDAO.insertEmpUser(empUser);
         JOptionPane.showMessageDialog(null, "Successfully inserted " + firstName + " " + lastName + " to the Employees Table.");
     }
 
@@ -103,12 +108,15 @@ public class AddUserController {
             return;
         }
 
-        Integer userID = insertToUsers();
         String lastName = addUserPanel.getLastNameField().getText();
         String firstName = addUserPanel.getFirstNameField().getText();
+        
+        UserAccount u = insertToUsers();
 
-        Technicians tech = new Technicians(0, userID, lastName, firstName);
+        Technicians tech = new Technicians(0, lastName, firstName, true);
         techDAO.insertTechnician(tech);
+        TechUser techUser = new TechUser(u.getUserID(), tech.getTechnician_id());
+        userDAO.insertTechUser(techUser);
         JOptionPane.showMessageDialog(null, "Successfuully inserted " + firstName + " " + lastName + " to the Technicians Table.");
     }
 
