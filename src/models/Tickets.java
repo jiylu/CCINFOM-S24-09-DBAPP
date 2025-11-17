@@ -1,27 +1,23 @@
 package models;
 
-import java.util.List;
-
 public class Tickets {
     private int ticket_id;
-    private int category_id;
     private String ticket_subject;
     private String ticket_description; 
+    private int category_id;
+    private String creationDate;
     private int employee_id;
     private int technician_id;
-    private String creation_date;
-    private String resolve_date;
     private String status;
 
-    public Tickets(int ticket_id, String ticket_subject, String ticket_description, int category_id, int employee_id, int technician_id, String creation_date, String resolve_date, String status) {
-        this.ticket_id = ticket_id;
-        this.ticket_subject = ticket_subject;
-        this.ticket_description = ticket_description;
-        this.category_id = category_id;
-        this.employee_id = employee_id;
-        this.technician_id = technician_id;
-        this.creation_date = creation_date;
-        this.resolve_date = resolve_date;
+    public Tickets(int ticketID, String ticketSubject, String ticketDescription, int categoryID, String creationDate, int empID, int techID, String status){
+        this.ticket_id = ticketID;
+        this.ticket_subject = ticketSubject;
+        this.ticket_description = ticketDescription;
+        this.category_id = categoryID;
+        this.creationDate = creationDate;
+        this.employee_id = empID;
+        this.technician_id = techID;
         this.status = status;
     }
 
@@ -54,11 +50,7 @@ public class Tickets {
     }
 
     public String getCreation_date() {
-        return creation_date;
-    }
-
-    public String getResolve_date() {
-        return resolve_date;
+        return creationDate;
     }
 
     public String getStatus(){
@@ -75,15 +67,11 @@ public class Tickets {
     }
 
     public void setCreation_date(String date) {
-        this.creation_date = date;
+        this.creationDate = date;
     }
 
     public void setTechnician_id(int technician_id) {
         this.technician_id = technician_id;
-    }
-
-    public void setResolve_date(String resolve_date) {
-        this.resolve_date = resolve_date;
     }
 
     public void setStatus(String status){
