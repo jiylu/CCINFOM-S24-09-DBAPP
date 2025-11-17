@@ -1,14 +1,14 @@
 package models;
 
-public class TechnicianResolvesTicket {
+public class ResolvedTickets {
 
     private int resolve_id;
     private int ticket_id;
     private String resolve_date;
 
-    public TechnicianResolvesTicket() {}
+    public ResolvedTickets() {}
 
-    public TechnicianResolvesTicket(int resolve_id, int ticket_id, String resolve_date) {
+    public ResolvedTickets(int resolve_id, int ticket_id, String resolve_date) {
         this.resolve_id = resolve_id;
         this.ticket_id = ticket_id;
         this.resolve_date = resolve_date;

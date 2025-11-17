@@ -201,29 +201,33 @@ private void cancelActiveTicket(Tickets ticket) {
 
     private void loadAssignedTickets() {
         try {
+            // Get technician ID from the logged-in user
             int technicianId = new TechniciansDAO(DBConnection.connect())
                     .getTechnicianIdByUserId(user.getUserID());
+
+            // Fetch tickets assigned to this technician
             List<Tickets> tickets = ticketsDAO.getTicketsByTechnician(technicianId);
 
-            if (tickets == null || tickets.isEmpty()){
-                resolveTicketTechnicianPanel.getTicketsToResolve()
-                        .setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"No Tickets"}));
+            javax.swing.JComboBox<String> ticketsComboBox = resolveTicketTechnicianPanel.getTicketsToResolve();
+
+            if (tickets.isEmpty()) {
+                // No tickets assigned
+                ticketsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"No Tickets"}));
+                resolveTicketTechnicianPanel.setTicketsList(tickets);
                 return;
             }
 
-            String[] ticketLabels = new String[tickets.size()];
-            for(int i = 0; i < tickets.size(); i++){
-                Tickets t = tickets.get(i);
-                ticketLabels[i] = "Ticket#" + t.getTicket_id();
-            }
+            // Build combo box labels
+            String[] ticketLabels = tickets.stream()
+                    .map(t -> "Ticket#" + t.getTicket_id())
+                    .toArray(String[]::new);
 
-            resolveTicketTechnicianPanel.getTicketsToResolve()
-                    .setModel(new javax.swing.DefaultComboBoxModel<>(ticketLabels));
-
+            // Set model and store ticket list in the panel
+            ticketsComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(ticketLabels));
             resolveTicketTechnicianPanel.setTicketsList(tickets);
 
-            // Select the first ticket
-            resolveTicketTechnicianPanel.getTicketsToResolve().setSelectedIndex(0);
+            // Select first ticket and update details
+            ticketsComboBox.setSelectedIndex(0);
             updateTicketDetails();
 
         } catch (Exception ex) {
@@ -286,54 +290,48 @@ private void cancelActiveTicket(Tickets ticket) {
 
         Tickets selected = resolveTicketTechnicianPanel.getTicketsList().get(selectedIndex);
 
-        // Status selected by tech
+        // Get status selected by technician
         String newStatus = (String) resolveTicketTechnicianPanel.getStatus().getSelectedItem();
-
-        // Category combo selected
-        CategoryItem selectedCategory =
-                (CategoryItem) resolveTicketTechnicianPanel.getCategories().getSelectedItem();
-
-        if (selectedCategory != null) {
-            selected.setCategory_id(selectedCategory.getId());
-        }
-
-        String resolveDateText = resolveTicketTechnicianPanel.getResolveDateLabel().getText();
-
-        if (!"".equals(resolveDateText)) {
-            selected.setResolve_date(resolveDateText);
-        } else {
-            selected.setResolve_date(null);
-        }
-
         if ("Mark Ticket Resolution Status".equals(newStatus)) {
             JOptionPane.showMessageDialog(frame, "No resolution selected — defaulting status to Active.");
             newStatus = "Active";
         }
-
         selected.setStatus(newStatus);
 
+        // Update category if changed
+        CategoryItem selectedCategory = (CategoryItem) resolveTicketTechnicianPanel.getCategories().getSelectedItem();
+        if (selectedCategory != null) {
+            selected.setCategory_id(selectedCategory.getId());
+        }
+
         try {
+            // Update Tickets table
             boolean success = ticketsDAO.updateTicket(selected);
-            if (success) {
-                JOptionPane.showMessageDialog(frame,
-                        "Ticket updated successfully!");
-
-                if ("Resolved".equalsIgnoreCase(newStatus)) {
-                    activateNextEnqueuedTicket();
-                }
-
-                loadAssignedTickets();
-                panel.showPanel(TechnicianDashboardPanel.EMPTY_PANEL);
-            } else {
-                JOptionPane.showMessageDialog(frame,
-                        "Update failed. Please try again.");
+            if (!success) {
+                JOptionPane.showMessageDialog(frame, "Update failed. Please try again.");
+                return;
             }
+
+            // If ticket is resolved, update ResolvedTickets table
+            if ("Resolved".equalsIgnoreCase(newStatus)) {
+                String resolveDateText = resolveTicketTechnicianPanel.getResolveDateLabel().getText();
+                ticketsDAO.markTicketResolved(selected.getTicket_id(),
+                        (resolveDateText != null && !resolveDateText.isBlank()) ? resolveDateText : null);
+                activateNextEnqueuedTicket();
+            }
+
+            // Optionally: handle Cancelled tickets here if needed
+
+            JOptionPane.showMessageDialog(frame, "Ticket updated successfully!");
+            loadAssignedTickets();
+            panel.showPanel(TechnicianDashboardPanel.EMPTY_PANEL);
+
         } catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(frame,
-                    "Error updating ticket!");
+            JOptionPane.showMessageDialog(frame, "Error updating ticket!");
         }
     }
+
 
     private void activateNextEnqueuedTicket(){
         try {

@@ -1,15 +1,15 @@
 package models;
 
-public class TechnicianCancelsTicket {
+public class CancelledTickets {
 
     private int cancel_id;
     private int ticket_id;
     private String cancel_date;
     private String cancel_reason;
 
-    public TechnicianCancelsTicket() {}
+    public CancelledTickets() {}
 
-    public TechnicianCancelsTicket(int cancel_id, int ticket_id, int tech_id, String cancel_date, String cancel_reason) {
+    public CancelledTickets(int cancel_id, int ticket_id, String cancel_date, String cancel_reason) {
         this.cancel_id = cancel_id;
         this.ticket_id = ticket_id;
         this.cancel_date = cancel_date;

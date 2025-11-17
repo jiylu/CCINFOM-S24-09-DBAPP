@@ -3,6 +3,9 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import models.CancelledTickets;
+import models.ResolvedTickets;
 import models.Tickets;
 
 public class TicketsDAO {
@@ -176,24 +179,37 @@ public class TicketsDAO {
     public List<Tickets> getTicketsByTechnician(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String query = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
-                "FROM Tickets WHERE technician_id = ? AND status = 'Active'";
+        String ticketQuery = "SELECT ticket_id, ticket_subject, ticket_description, category_id, emp_id, tech_id, creation_date, status " +
+                "FROM Tickets WHERE tech_id = ?";
 
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(ticketQuery)) {
             ps.setInt(1, technicianId);
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Tickets ticket = new Tickets(
-                            rs.getInt(1),
-                            rs.getString(2),
-                            rs.getString(3),
-                            rs.getInt(4),
-                            rs.getDate(5).toString(),
-                            rs.getInt(6),
-                            rs.getInt(7),
-                            rs.getString(8)
+                            rs.getInt("ticket_id"),
+                            rs.getString("ticket_subject"),
+                            rs.getString("ticket_description"),
+                            rs.getInt("category_id"),
+                            rs.getString("creation_date"),
+                            rs.getInt("emp_id"),
+                            rs.getInt("tech_id"),
+                            rs.getString("status")
                     );
+
+                    // If the ticket is resolved, fetch ResolvedTickets info
+                    if ("Resolved".equals(ticket.getStatus())) {
+                        ResolvedTickets resolvedTicket = getResolvedTicketByTicketId(ticket.getTicket_id());
+                        // You can now store it in a map, or attach it to the ticket if you want
+                    }
+
+                    // If the ticket is cancelled, fetch CancelledTickets info
+                    if ("Cancelled".equals(ticket.getStatus())) {
+                        CancelledTickets cancelledTicket = getCancelledTicketByTicketId(ticket.getTicket_id());
+                        // Store it as needed
+                    }
+
                     ticketsList.add(ticket);
                 }
             }
@@ -201,6 +217,43 @@ public class TicketsDAO {
 
         return ticketsList;
     }
+
+    // helper methods
+    private ResolvedTickets getResolvedTicketByTicketId(int ticketId) throws SQLException {
+        String query = "SELECT resolve_id, ticket_id, resolve_date FROM ResolvedTickets WHERE ticket_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, ticketId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new ResolvedTickets(
+                            rs.getInt("resolve_id"),
+                            rs.getInt("ticket_id"),
+                            rs.getString("resolve_date")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
+    private CancelledTickets getCancelledTicketByTicketId(int ticketId) throws SQLException {
+        String query = "SELECT cancel_id, ticket_id, cancel_date, cancel_reason FROM CancelledTickets WHERE ticket_id = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, ticketId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new CancelledTickets(
+                            rs.getInt("cancel_id"),
+                            rs.getInt("ticket_id"),
+                            rs.getString("cancel_date"),
+                            rs.getString("cancel_reason")
+                    );
+                }
+            }
+        }
+        return null;
+    }
+
 
     public Tickets getActiveTicketByTechnicianID(int technicianId) throws SQLException {
         String query = "SELECT * FROM Tickets WHERE technician_id = ? AND status = 'Active' LIMIT 1";
@@ -304,11 +357,59 @@ public class TicketsDAO {
     //     }
     // }
 
+    public boolean updateTicket(Tickets ticket) {
+        String sql = "UPDATE Tickets SET category_id = ?, status = ? WHERE ticket_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, ticket.getCategory_id());
+            stmt.setString(2, ticket.getStatus());
+            stmt.setInt(3, ticket.getTicket_id());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean markTicketResolved(int ticketId, String resolveDate) {
+        try {
+            // First, check if a resolved entry already exists
+            String checkSql = "SELECT resolve_id FROM ResolvedTickets WHERE ticket_id = ?";
+            try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
+                checkStmt.setInt(1, ticketId);
+                ResultSet rs = checkStmt.executeQuery();
+                if (rs.next()) {
+                    // Update existing entry
+                    String updateSql = "UPDATE ResolvedTickets SET resolve_date = ? WHERE ticket_id = ?";
+                    try (PreparedStatement updateStmt = connection.prepareStatement(updateSql)) {
+                        updateStmt.setString(1, resolveDate); // can be null
+                        updateStmt.setInt(2, ticketId);
+                        return updateStmt.executeUpdate() > 0;
+                    }
+                } else {
+                    // Insert new entry
+                    String insertSql = "INSERT INTO ResolvedTickets (ticket_id, resolve_date) VALUES (?, ?)";
+                    try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
+                        insertStmt.setInt(1, ticketId);
+                        insertStmt.setString(2, resolveDate); // can be null
+                        return insertStmt.executeUpdate() > 0;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public List<Tickets> getEnqueuedTicketsByTechnician(int technicianID) throws SQLException {
         List<Tickets> tickets = new ArrayList<>();
 
-        String sql = "SELECT ticket_id, ticket_subject, ticket_description, category_id, employee_id, technician_id, creation_date, resolve_date, status " +
-                "FROM Tickets WHERE technician_id = ? AND status = 'Enqueued' ORDER BY creation_date ASC";
+        String sql = "SELECT ticket_id, ticket_subject, ticket_description, category_id, emp_id, tech_id, creation_date, status " +
+                "FROM Tickets " +
+                "WHERE tech_id = ? AND status = 'Enqueued' " +
+                "ORDER BY creation_date ASC";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, technicianID);
@@ -316,14 +417,14 @@ public class TicketsDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     Tickets t = new Tickets(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getInt(4),
-                        rs.getDate(5).toString(),
-                        rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getString(8)
+                            rs.getInt("ticket_id"),
+                            rs.getString("ticket_subject"),
+                            rs.getString("ticket_description"),
+                            rs.getInt("category_id"),
+                            rs.getString("creation_date"),
+                            rs.getInt("emp_id"),
+                            rs.getInt("tech_id"),
+                            rs.getString("status")
                     );
                     tickets.add(t);
                 }
@@ -356,7 +457,7 @@ public class TicketsDAO {
     }
 
     public boolean hasActiveOrEnqueuedTickets(int technicianId) {
-        String query = "SELECT COUNT(*) FROM tickets WHERE technician_id = ? AND status IN ('Active', 'Enqueued')";
+        String query = "SELECT COUNT(*) FROM tickets WHERE tech_id = ? AND status IN ('Active', 'Enqueued')";
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, technicianId);

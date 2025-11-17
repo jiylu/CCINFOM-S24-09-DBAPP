@@ -128,15 +128,21 @@ public class TechniciansDAO {
     }
 
     public int getTechnicianIdByUserId(int userId) {
-        String sql = "SELECT technician_id FROM Technicians WHERE user_id = ?";
+        String sql = "SELECT technician_id FROM TechnicianUsers WHERE user_id = ?";
+
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt("technician_id");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("technician_id");
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return -1;
+
+        return -1; // Not found
     }
 
     public int getTechnicianIDByName(String name) {
