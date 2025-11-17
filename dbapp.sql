@@ -1,7 +1,8 @@
 CREATE SCHEMA IF NOT EXISTS ticketing_system;
 USE ticketing_system;
 
-DROP TABLE IF EXISTS TicketLogs;
+DROP TABLE IF EXISTS EmployeeCreatesTicket;
+DROP TABLE IF EXISTS TechnicianResolvesTicket;
 DROP TABLE IF EXISTS Tickets;
 DROP TABLE IF EXISTS EmployeeUsers;
 DROP TABLE IF EXISTS TechnicianUsers;
@@ -66,12 +67,24 @@ CREATE TABLE IF NOT EXISTS Tickets (
     ticket_subject VARCHAR(100) NOT NULL,
     ticket_description VARCHAR(250) NOT NULL, 
     category_id INT NOT NULL,
-    employee_id INT NOT NULL,
-    technician_id INT NOT NULL,
-    creation_date DATETIME, 
-    resolve_date DATETIME,
     status ENUM('Enqueued', 'Active', 'Resolved', 'Cancelled') NOT NULL,
-    CONSTRAINT fk_category_ticket FOREIGN KEY (category_id) REFERENCES Categories(category_id),
-    CONSTRAINT fk_employee_ticket FOREIGN KEY (employee_id) REFERENCES Employees(emp_id),
-    CONSTRAINT fk_technician_ticket FOREIGN KEY (technician_id) REFERENCES Technicians(technician_id)
+    CONSTRAINT fk_category_ticket FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 ) AUTO_INCREMENT = 40000;
+
+CREATE TABLE IF NOT EXISTS EmployeeCreatesTicket (
+	create_id INT AUTO_INCREMENT PRIMARY KEY,
+    ticket_id INT NOT NULL UNIQUE,
+    creation_date DATETIME,
+    emp_id INT NOT NULL UNIQUE,
+    CONSTRAINT fk_ticket_create_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
+    CONSTRAINT fk_employee_id FOREIGN KEY (emp_id) REFERENCES Employees(emp_id)
+) AUTO_INCREMENT = 150000; 
+
+CREATE TABLE IF NOT EXISTS TechnicianResolvesTicket (
+	resolve_id INT AUTO_INCREMENT PRIMARY KEY,
+    ticket_id INT NOT NULL UNIQUE,
+    resolve_date DATETIME,
+    tech_id INT NOT NULL UNIQUE,
+    CONSTRAINT fk_ticket_resolve_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
+    CONSTRAINT fk_tech_id FOREIGN KEY (tech_id) REFERENCES Technicians(technician_id)
+) AUTO_INCREMENT = 160000; 
