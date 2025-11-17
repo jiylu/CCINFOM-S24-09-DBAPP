@@ -64,12 +64,15 @@ CREATE TABLE IF NOT EXISTS Categories (
 );
 
 CREATE TABLE IF NOT EXISTS Tickets (
-	ticket_id INT AUTO_INCREMENT PRIMARY KEY,
+    ticket_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_subject VARCHAR(100) NOT NULL,
     ticket_description VARCHAR(250) NOT NULL,
-    tech_id INT NOT NULL,
     category_id INT NOT NULL,
+    creation_date DATETIME NOT NULL,
+    emp_id INT NOT NULL,
+    tech_id INT NOT NULL,
     status ENUM('Enqueued', 'Active', 'Resolved', 'Cancelled') NOT NULL,
+    CONSTRAINT fk_emp_ticket FOREIGN KEY (emp_id) REFERENCES Employees(emp_id),
     CONSTRAINT fk_tech_ticket FOREIGN KEY (tech_id) REFERENCES Technicians(technician_id), 
     CONSTRAINT fk_category_ticket FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 ) AUTO_INCREMENT = 40000;
