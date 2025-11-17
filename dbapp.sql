@@ -77,23 +77,14 @@ CREATE TABLE IF NOT EXISTS Tickets (
     CONSTRAINT fk_category_ticket FOREIGN KEY (category_id) REFERENCES Categories(category_id)
 ) AUTO_INCREMENT = 40000;
 
-CREATE TABLE IF NOT EXISTS EmployeeCreatesTicket (
-	create_id INT AUTO_INCREMENT PRIMARY KEY,
-    ticket_id INT NOT NULL UNIQUE,
-    creation_date DATETIME,
-    emp_id INT NOT NULL UNIQUE,
-    CONSTRAINT fk_ticket_create_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id),
-    CONSTRAINT fk_employee_id FOREIGN KEY (emp_id) REFERENCES Employees(emp_id)
-) AUTO_INCREMENT = 150000; 
-
-CREATE TABLE IF NOT EXISTS TechnicianResolvesTicket (
+CREATE TABLE IF NOT EXISTS ResolvedTickets (
 	resolve_id INT AUTO_INCREMENT PRIMARY KEY,
     ticket_id INT NOT NULL UNIQUE,
     resolve_date DATETIME,
     CONSTRAINT fk_ticket_resolve_id FOREIGN KEY (ticket_id) REFERENCES Tickets(ticket_id)
 ) AUTO_INCREMENT = 160000; 
 
-CREATE TABLE IF NOT EXISTS TechnicianCancelsTicket (
+CREATE TABLE IF NOT EXISTS CancelledTickets (
 	cancel_id INT AUTO_INCREMENT PRIMARY KEY, 
     ticket_id INT NOT NULL UNIQUE,
     cancel_date DATETIME, 
