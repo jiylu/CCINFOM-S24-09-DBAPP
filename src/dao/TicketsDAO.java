@@ -184,8 +184,9 @@ public class TicketsDAO {
     public List<Tickets> getTicketsByTechnician(int technicianId) throws SQLException {
         List<Tickets> ticketsList = new ArrayList<>();
 
-        String ticketQuery = "SELECT ticket_id, ticket_subject, ticket_description, category_id, emp_id, tech_id, creation_date, status " +
-                "FROM Tickets WHERE tech_id = ?";
+        String ticketQuery =
+                "SELECT ticket_id, ticket_subject, ticket_description, category_id, emp_id, tech_id, creation_date, status " +
+                        "FROM Tickets WHERE tech_id = ? AND status = 'Active' ORDER BY ticket_id ASC";
 
         try (PreparedStatement ps = connection.prepareStatement(ticketQuery)) {
             ps.setInt(1, technicianId);
@@ -202,18 +203,6 @@ public class TicketsDAO {
                             rs.getInt("tech_id"),
                             rs.getString("status")
                     );
-
-                    // If the ticket is resolved, fetch ResolvedTickets info
-                    if ("Resolved".equals(ticket.getStatus())) {
-                        ResolvedTickets resolvedTicket = getResolvedTicketByTicketId(ticket.getTicket_id());
-                        // You can now store it in a map, or attach it to the ticket if you want
-                    }
-
-                    // If the ticket is cancelled, fetch CancelledTickets info
-                    if ("Cancelled".equals(ticket.getStatus())) {
-                        CancelledTickets cancelledTicket = getCancelledTicketByTicketId(ticket.getTicket_id());
-                        // Store it as needed
-                    }
 
                     ticketsList.add(ticket);
                 }
