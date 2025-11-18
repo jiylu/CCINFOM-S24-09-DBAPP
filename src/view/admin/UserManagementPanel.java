@@ -102,6 +102,24 @@ public class UserManagementPanel extends JPanel{
             )
             .collect(Collectors.toList());
 
+        mapped.sort((a, b) -> {
+            Employees ea = employeeList.stream()
+                .filter(emp -> emp.getEmpID() == a.getValue())
+                .findFirst()
+                .orElse(null);
+
+            Employees eb = employeeList.stream()
+                .filter(emp -> emp.getEmpID() == b.getValue())
+                .findFirst()
+                .orElse(null);  
+
+            if (ea == null || eb == null){
+                return 0;
+            } 
+    
+            return Boolean.compare(eb.isActive(), ea.isActive());
+        });
+
         
         for (Map.Entry<UserAccount, Integer> entry : mapped) {
             UserAccount u = entry.getKey();
@@ -134,6 +152,25 @@ public class UserManagementPanel extends JPanel{
                 .map(u -> new AbstractMap.SimpleEntry<>(u, tu.getTechID()))
             )
             .collect(Collectors.toList()); 
+
+        mapped.sort((a,b) -> {
+            Technicians ta = technicianList.stream()
+                    .filter(t -> t.getTechnician_id() == a.getValue())
+                    .findFirst()
+                    .orElse(null);
+            
+            Technicians tb = technicianList.stream()
+                    .filter(t -> t.getTechnician_id() == b.getValue())
+                    .findFirst()
+                    .orElse(null);
+            
+            if (ta == null || tb == null){
+                return 0;
+            }
+
+            return Boolean.compare(tb.isActive(), ta.isActive());
+        });
+
 
         for (Map.Entry<UserAccount, Integer> entry : mapped) {
             UserAccount u = entry.getKey();
