@@ -138,41 +138,41 @@ VALUES
 INSERT INTO Tickets (ticket_subject, ticket_description, category_id, creation_date, emp_id, tech_id, status)
 VALUES
 -- Emp IDs 90000 to 90019 (20 IDs total)
-('Computer won’t boot', 'The computer does not start when the power button is pressed. User urgently needs access to files for ongoing project.', 1, '2025-11-01 08:30:00', 90007, 30000, 'Active'),
-('Email not syncing', 'User emails are not updating in the desktop client. Attempts to refresh or restart have not resolved the issue.', 2, '2025-11-01 09:00:00', 90015, 30001, 'Active'),
-('Printer not responding', 'The office printer does not print any documents. User tried different cables but problem persists.', 1, '2025-11-02 10:20:00', 90002, 30002, 'Active'),
-('Wi-Fi disconnected', 'User cannot connect to the office Wi-Fi network. Other devices are connecting fine, so issue seems specific to this computer.', 3, '2025-11-02 11:15:00', 90011, 30003, 'Enqueued'),
-('VPN not connecting', 'Remote access VPN fails to connect using standard credentials. Error message indicates authentication problem.', 3, '2025-11-03 13:40:00', 90008, 30004, 'Enqueued'),
-('Monitor flickering', 'The monitor flickers intermittently during normal use. This is causing strain to the user’s eyes.', 1, '2025-11-03 15:00:00', 90016, 30005, 'Enqueued'),
-('Slow computer performance', 'The computer runs very slowly even with minimal programs open. User reports delays in completing regular tasks.', 1, '2025-11-04 08:50:00', 90003, 30006, 'Enqueued'),
-('Cannot print PDF files', 'Printing PDF files does not work on the office printer. Other document types print fine, but PDFs fail every time.', 2, '2025-11-04 09:30:00', 90014, 30007, 'Enqueued'),
-('Antivirus expired', 'User antivirus software subscription has expired. System is now unprotected and requires immediate renewal.', 2, '2025-11-05 10:10:00', 90001, 30008, 'Enqueued'),
-('System update failed', 'Automatic system update did not complete successfully. Error logs indicate multiple failed attempts.', 4, '2025-11-05 14:45:00', 90013, 30009, 'Enqueued'),
-('Mouse not detected', 'The mouse is not recognized by the computer. User has tried multiple USB ports without success.', 1, '2025-11-06 08:20:00', 90006, 30010, 'Enqueued'),
-('Projector not displaying', 'The conference room projector does not display any image. User verified connections but still shows black screen.', 4, '2025-11-06 09:30:00', 90018, 30011, 'Enqueued'),
-('Software installation request', 'User needs new software installed for upcoming project. License and installer files have been provided.', 2, '2025-11-07 13:00:00', 90004, 30012, 'Enqueued'),
-('Keyboard malfunctioning', 'Keyboard keys are sticking and not responding properly. User reports frequent errors when typing.', 1, '2025-11-08 09:15:00', 90017, 30013, 'Enqueued'), -- Changed 90020 -> 90017
+('Computer won’t boot', 'The computer does not start when the power button is pressed. User urgently needs access to files for ongoing project.', 1, '2025-11-01 08:30:00', 90007, 30000, 'Active'), -- 30000 1 Active
+('Email not syncing', 'User emails are not updating in the desktop client. Attempts to refresh or restart have not resolved the issue.', 2, '2025-11-01 09:00:00', 90015, 30001, 'Active'), -- 30001 1 Active
+('Printer not responding', 'The office printer does not print any documents. User tried different cables but problem persists.', 1, '2025-11-02 10:20:00', 90002, 30002, 'Active'), -- 30002 1 Active
+('Wi-Fi disconnected', 'User cannot connect to the office Wi-Fi network. Other devices are connecting fine, so issue seems specific to this computer.', 3, '2025-11-02 11:15:00', 90011, 30003, 'Active'), -- 30003 1 Active
+('VPN not connecting', 'Remote access VPN fails to connect using standard credentials. Error message indicates authentication problem.', 3, '2025-11-03 13:40:00', 90008, 30004, 'Active'), -- 30004 1 Active
+('Monitor flickering', 'The monitor flickers intermittently during normal use. This is causing strain to the user’s eyes.', 1, '2025-11-03 15:00:00', 90016, 30005, 'Active'), -- 30005 1 Active
+('Slow computer performance', 'The computer runs very slowly even with minimal programs open. User reports delays in completing regular tasks.', 1, '2025-11-04 08:50:00', 90003, 30006, 'Active'), -- 30006 1 Active
+('Cannot print PDF files', 'Printing PDF files does not work on the office printer. Other document types print fine, but PDFs fail every time.', 2, '2025-11-04 09:30:00', 90014, 30007, 'Active'), -- 30007 1 Active
+('Antivirus expired', 'User antivirus software subscription has expired. System is now unprotected and requires immediate renewal.', 2, '2025-11-05 10:10:00', 90001, 30008, 'Active'), -- 30008 1 Active
+('System update failed', 'Automatic system update did not complete successfully. Error logs indicate multiple failed attempts.', 4, '2025-11-05 14:45:00', 90013, 30009, 'Active'), -- 30009 1 Active
+('Mouse not detected', 'The mouse is not recognized by the computer. User has tried multiple USB ports without success.', 1, '2025-11-06 08:20:00', 90006, 30010, 'Active'), -- 30010 1 Active
+('Projector not displaying', 'The conference room projector does not display any image. User verified connections but still shows black screen.', 4, '2025-11-06 09:30:00', 90018, 30011, 'Active'), -- 30011 1 Active
+('Software installation request', 'User needs new software installed for upcoming project. License and installer files have been provided.', 2, '2025-11-07 13:00:00', 90004, 30012, 'Active'), -- 30012 1 Active
+('Keyboard malfunctioning', 'Keyboard keys are sticking and not responding properly. User reports frequent errors when typing.', 1, '2025-11-08 09:15:00', 90017, 30013, 'Active'), -- Changed 90020 -> 90017 -- 30013 1 Active
 -- Cycle 1 complete. Start Cycle 2 (90000-90019)
-('Forgot Windows password', 'User has forgotten Windows login password. Cannot access the computer and needs password reset.', 2, '2025-11-08 10:00:00', 90009, 30000, 'Enqueued'),
-('Email password reset request', 'User requests reset of corporate email password. Cannot send or receive important emails.', 4, '2021-03-15 09:25:00', 90000, 30001, 'Resolved'),
-('Network cable replacement', 'The network cable in the office is damaged. User cannot connect to the internet and requests replacement.', 1, '2021-07-10 14:10:00', 90010, 30002, 'Resolved'),
-('Software update installation', 'User requests the latest software updates be installed. Updates are critical for security and functionality.', 2, '2022-02-12 08:30:00', 90005, 30003, 'Resolved'),
-('Monitor display issue', 'Monitor shows distorted colors and lines on the screen. User reports difficulty in reading documents.', 3, '2022-09-05 10:50:00', 90014, 30004, 'Resolved'),
-('Unable to connect to VPN', 'VPN connection fails for remote work. User receives repeated authentication errors.', 3, '2023-01-18 13:40:00', 90017, 30005, 'Resolved'), -- Changed 90021 -> 90017
-('Keyboard replacement request', 'Keyboard keys are missing and typing is difficult. User requests a replacement keyboard.', 1, '2023-05-09 09:00:00', 90007, 30006, 'Resolved'),
-('Outlook not opening', 'Microsoft Outlook crashes immediately after opening. User cannot access emails and calendar events.', 2, '2023-09-22 08:45:00', 90015, 30007, 'Resolved'),
-('Printer driver installation', 'User needs a printer driver installed to print documents. Installation files are already available.', 2, '2024-02-14 10:30:00', 90002, 30008, 'Resolved'),
-('Forgotten laptop PIN', 'User cannot log in because the laptop PIN was forgotten. Needs reset to access system.', 4, '2024-05-06 09:40:00', 90011, 30009, 'Resolved'),
-('Wi-Fi signal instability', 'Wi-Fi connection drops intermittently. User reports difficulty maintaining online sessions.', 1, '2024-10-11 15:15:00', 90008, 30010, 'Resolved'),
-('System crash recovery', 'System crashed during work, causing loss of unsaved files. User needs recovery and troubleshooting.', 1, '2021-04-22 09:00:00', 90016, 30011, 'Resolved'),
-('Display calibration request', 'Monitor colors are not accurate. User requests calibration for professional work.', 1, '2022-03-19 08:40:00', 90003, 30012, 'Resolved'),
-('Email spam filtering issue', 'User receives too many spam emails. Requests proper spam filter configuration.', 2, '2022-07-22 10:15:00', 90016, 30013, 'Resolved'),
+('Forgot Windows password', 'User has forgotten Windows login password. Cannot access the computer and needs password reset.', 2, '2025-11-08 10:00:00', 90009, 30000, 'Enqueued'), -- 30000 1 Enqueued
+('Email password reset request', 'User requests reset of corporate email password. Cannot send or receive important emails.', 4, '2021-03-15 09:25:00', 90000, 30001, 'Resolved'), -- 30001 1 Resolved
+('Network cable replacement', 'The network cable in the office is damaged. User cannot connect to the internet and requests replacement.', 1, '2021-07-10 14:10:00', 90010, 30002, 'Resolved'), -- 30002 1 Resolved
+('Software update installation', 'User requests the latest software updates be installed. Updates are critical for security and functionality.', 2, '2022-02-12 08:30:00', 90005, 30003, 'Resolved'), -- 30003 1 Resolved
+('Monitor display issue', 'Monitor shows distorted colors and lines on the screen. User reports difficulty in reading documents.', 3, '2022-09-05 10:50:00', 90014, 30004, 'Resolved'), -- 30004 1 Resolved
+('Unable to connect to VPN', 'VPN connection fails for remote work. User receives repeated authentication errors.', 3, '2023-01-18 13:40:00', 90017, 30005, 'Resolved'), -- Changed 90021 -> 90017 -- 30005 1 Resolved
+('Keyboard replacement request', 'Keyboard keys are missing and typing is difficult. User requests a replacement keyboard.', 1, '2023-05-09 09:00:00', 90007, 30006, 'Resolved'), -- 30006 1 Resolved
+('Outlook not opening', 'Microsoft Outlook crashes immediately after opening. User cannot access emails and calendar events.', 2, '2023-09-22 08:45:00', 90015, 30007, 'Resolved'), -- 30007 1 Resolved
+('Printer driver installation', 'User needs a printer driver installed to print documents. Installation files are already available.', 2, '2024-02-14 10:30:00', 90002, 30008, 'Resolved'), -- 30008 1 Resolved
+('Forgotten laptop PIN', 'User cannot log in because the laptop PIN was forgotten. Needs reset to access system.', 4, '2024-05-06 09:40:00', 90011, 30009, 'Resolved'), -- 30009 1 Resolved 
+('Wi-Fi signal instability', 'Wi-Fi connection drops intermittently. User reports difficulty maintaining online sessions.', 1, '2024-10-11 15:15:00', 90008, 30010, 'Resolved'), -- 30010 1 Resolved
+('System crash recovery', 'System crashed during work, causing loss of unsaved files. User needs recovery and troubleshooting.', 1, '2021-04-22 09:00:00', 90016, 30011, 'Resolved'), -- 30011 1 Resolved
+('Display calibration request', 'Monitor colors are not accurate. User requests calibration for professional work.', 1, '2022-03-19 08:40:00', 90003, 30012, 'Resolved'), -- 30012 1 Resolved
+('Email spam filtering issue', 'User receives too many spam emails. Requests proper spam filter configuration.', 2, '2022-07-22 10:15:00', 90016, 30013, 'Resolved'), -- 30013 1 Resolved
 -- Cycle 2 complete. Start Cycle 3 (90000-90019)
-('VPN access configuration', 'User needs VPN configured for remote work. Access must be secure and reliable.', 3, '2022-11-18 09:35:00', 90001, 30000, 'Resolved'),
-('PC performance optimization', 'Computer performance is slow with multiple apps running. User requests optimization for faster workflow.', 1, '2023-04-25 14:00:00', 90013, 30001, 'Resolved'),
-('Software license renewal', 'Software license has expired. User requires renewal to continue working.', 2, '2023-07-19 09:30:00', 90006, 30002, 'Resolved'),
-('Projector bulb replacement', 'Projector bulb has burnt out and needs replacement. User requests installation before next meeting.', 4, '2024-01-15 08:50:00', 90018, 30003, 'Resolved'),
-('Network speed issue', 'Internet speed is very slow for tasks requiring high bandwidth. User requests network troubleshooting.', 3, '2024-06-05 14:10:00', 90004, 30004, 'Resolved');
+('VPN access configuration', 'User needs VPN configured for remote work. Access must be secure and reliable.', 3, '2022-11-18 09:35:00', 90001, 30000, 'Resolved'), -- 30000 2 Resolved
+('PC performance optimization', 'Computer performance is slow with multiple apps running. User requests optimization for faster workflow.', 1, '2023-04-25 14:00:00', 90013, 30001, 'Resolved'), -- 30001 2 Resolved
+('Software license renewal', 'Software license has expired. User requires renewal to continue working.', 2, '2023-07-19 09:30:00', 90006, 30002, 'Resolved'), -- 30002 2 Resolved
+('Projector bulb replacement', 'Projector bulb has burnt out and needs replacement. User requests installation before next meeting.', 4, '2024-01-15 08:50:00', 90018, 30003, 'Resolved'), -- 30003 2 Resolved
+('Network speed issue', 'Internet speed is very slow for tasks requiring high bandwidth. User requests network troubleshooting.', 3, '2024-06-05 14:10:00', 90004, 30004, 'Resolved'); -- 30004 2 Resolved
 
 -- Mapped Accordingly
 INSERT INTO ResolvedTickets (ticket_id, resolve_date) VALUES
