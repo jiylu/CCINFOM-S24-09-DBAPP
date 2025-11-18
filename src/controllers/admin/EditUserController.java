@@ -110,11 +110,9 @@ public class EditUserController {
         editPanel.getLastNameField().setText(lastName);
         
         editPanel.getRoles().setSelectedItem(userRole);
-        String[] departments = deptDAO.getAllDepartmentNames(false).toArray(new String[0]);
+        editPanel.getRoles().setEnabled(false);
 
-        if (userRole.contentEquals(UserAccount.EMP_ROLE) || userRole.contentEquals(UserAccount.ADMIN_ROLE)){
-            dropBoxFunctionality(table, departments, department, row);
-        }
+        String[] departments = deptDAO.getAllDepartmentNames(true).toArray(new String[0]);
 
         if (userRole.contentEquals(UserAccount.EMP_ROLE) || userRole.contentEquals(UserAccount.ADMIN_ROLE)) {
             editPanel.getRoles().removeItem("Technician");
@@ -125,27 +123,7 @@ public class EditUserController {
                 editPanel.getEmployeeRole().setText(table.getValueAt(row, 6).toString());
             }
 
-        } else {
-            editPanel.getRoles().setEnabled(false);
         }
-    }
-
-    private void dropBoxFunctionality(JTable table, String[] departments, String department, int row){
-        editPanel.getRoles().addActionListener(e->{
-            String selectedRole = (String) editPanel.getRoles().getSelectedItem();
-            String[] departmentList = deptDAO.getAllDepartmentNames(true).toArray(new String[0]);
-            
-            if (selectedRole.contentEquals(UserAccount.EMP_ROLE)){
-                userRole = UserAccount.EMP_ROLE;
-                editPanel.transformToEmployeeFields(departments);
-                editPanel.getDepartmentBox().setSelectedItem(table.getValueAt(row, 5).toString());
-                editPanel.getEmployeeRole().setText(table.getValueAt(row, 6).toString());
-                editPanel.transformToEmployeeFields(departmentList);
-            } else if (selectedRole.contentEquals(UserAccount.ADMIN_ROLE)) {
-                userRole = UserAccount.ADMIN_ROLE;
-                editPanel.revert();
-            }
-        });
     }
 
     private UserAccount updateUserData(){
