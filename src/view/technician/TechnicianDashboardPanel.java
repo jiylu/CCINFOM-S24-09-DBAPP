@@ -1,7 +1,7 @@
 package view.technician;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class TechnicianDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
@@ -15,6 +15,7 @@ public class TechnicianDashboardPanel extends JPanel {
     private JButton viewTicketQueueButton;
     private JButton ticketHistoryButton;
     private JButton cancelTicketButton;
+    private JButton logoutButton;
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -96,6 +97,12 @@ public class TechnicianDashboardPanel extends JPanel {
         ticketHistoryButton.setBounds(20, 240, 240, 50);
         styleNavButton(ticketHistoryButton);
         navPanel.add(ticketHistoryButton);
+
+        logoutButton = new JButton("Logout Button");
+        logoutButton.setFont(buttonFont);
+        logoutButton.setBounds(20, 310, 240, 50);
+        styleNavButton(logoutButton);
+        navPanel.add(logoutButton);
     }
 
     private void styleNavButton(JButton button) {
@@ -160,6 +167,10 @@ public class TechnicianDashboardPanel extends JPanel {
 
     public JButton getCancelTicketButton() {
         return cancelTicketButton;
+    }
+
+    public JButton getLogoutButton(){
+        return logoutButton;
     }
 
     public ResolveTicketTechnicianPanel getResolveTicketTechnicianPanel() {

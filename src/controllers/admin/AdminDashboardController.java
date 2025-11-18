@@ -93,5 +93,9 @@ public class AdminDashboardController {
         panel.getReportsButton().addActionListener(e->{
             reportsDashboardController.init(panel);
         });
+
+        panel.getLogoutButton().addActionListener(e->{
+            frame.showPanel(Frame.LOGIN_PANEL);
+        });
     }
 }
