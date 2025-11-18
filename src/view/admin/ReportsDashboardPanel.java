@@ -1,7 +1,7 @@
 package view.admin;
 
 
-import java.awt.Font;
+import java.awt.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -29,150 +29,131 @@ public class ReportsDashboardPanel extends JPanel{
     private JLabel empYearLabel;
 
     private JButton downloadButton;
-    
+
     private JTable table;
     private JScrollPane tableScrollPane;
-    
+
     public ReportsDashboardPanel(){
         setLayout(null);
+        setBackground(new Color(245, 245, 245)); // Light gray background
         setupMainButtons();
         setupFilterButtons();
     }
 
     private void setupMainButtons(){
-        setupTechnicianReportButton();
-        setupEmployeeReportButton();
-        setupCategoryReportButton();
-        setupDepartmentIssueButton();
-        setupDownloadButton();
+        technicianReport = createStyledButton("View Technician Workload Report", 10, 10, 270, 35);
+        employeeReport = createStyledButton("View Employee Ticket Resolution Report", 285, 10, 320, 35);
+        categoryReport = createStyledButton("View Category (Issue Type) Report", 610, 10, 275, 35);
+        departmentReport = createStyledButton("View Department Issue Report", 890, 10, 260, 35);
+        downloadButton = createStyledButton("Download", 1050, 50, 100, 35, new Color(0, 153, 0));
+
+        add(technicianReport);
+        add(employeeReport);
+        add(categoryReport);
+        add(departmentReport);
+        add(downloadButton);
     }
 
     private void setupFilterButtons(){
-        setupClearFilterButton();
-        setupFilterByCategoryButton();
-        setupFilterByCategoryYearButton();
-        setupFilterByDepartmentButton();
-        setupFilterByDepartmentYearButton();
-        setupFilterByTechnicianButton();
-        setupFilterbyTechnicianYearButton();
-        setupFilterByEmployeeButton();
-        setupFilterByEmpYearButton();
-    }
+        clearFilter = createStyledButton("Clear Filter", 335, 55, 140, 30, new Color(204, 0, 0));
+        filterByCategory = createStyledButton("Filter by Category", 10, 55, 170, 30);
+        filterByYear = createStyledButton("Filter by Year", 185, 55, 140, 30);
+        filterByDepartment = createStyledButton("Filter by Department", 10, 55, 175, 30);
+        filterByDepartmentYear = createStyledButton("Filter by Year", 190, 55, 140, 30);
+        filterByTech = createStyledButton("Filter by Technician", 10, 55, 170, 30);
+        filterByTechYear = createStyledButton("Filter by Year", 185, 55, 140, 30);
+        filterByEmployee = createStyledButton("Filter by Employee", 10, 55, 170, 30);
+        filterByEmployeeYear = createStyledButton("Filter by Year", 185, 55, 140, 30);
 
-    //----------------Report Buttons-------------------//
-    private void setupTechnicianReportButton() {
-        technicianReport = new JButton("View Technician Workload Report");
-        technicianReport.setBounds(0, 20, 240, 25);
-        add(technicianReport);
-    }
-
-    private void setupEmployeeReportButton() {
-        employeeReport = new JButton("View Employee Ticket Resolution Report");
-        employeeReport.setBounds(250, 20, 270, 25);
-        add(employeeReport);
-    }
-
-    private void setupCategoryReportButton() {
-        categoryReport = new JButton("View Category (Issue Type) Report");
-        categoryReport.setBounds(530, 20, 230, 25);
-        add(categoryReport);
-    }
-
-    private void setupDepartmentIssueButton(){
-        departmentReport = new JButton("View Department Issue Report");
-        departmentReport.setBounds(770, 20, 220, 25);
-        add(departmentReport);
-    }
-
-    private void setupClearFilterButton(){
-        clearFilter = new JButton("Clear Filter");
-        clearFilter.setBounds(320, 55, 150, 25);
         clearFilter.setVisible(false);
-        add(clearFilter);
-    }
-
-    //----------------- Category Filters -----------------//
-    private void setupFilterByCategoryButton(){
-        filterByCategory = new JButton("Filter by Category");
-        filterByCategory.setBounds(0, 55, 150, 25);
         filterByCategory.setVisible(false);
-        add(filterByCategory);
-    }
-
-    private void setupFilterByCategoryYearButton(){
-        filterByYear = new JButton("Filter by Year");
-        filterByYear.setBounds(160, 55, 150, 25);
         filterByYear.setVisible(false);
-        add(filterByYear);
-    }
-
-    //---------------------- Department Filters ---------------------//
-    private void setupFilterByDepartmentButton(){
-        filterByDepartment = new JButton("Filter by Department");
-        filterByDepartment.setBounds(0, 55, 150, 25);
         filterByDepartment.setVisible(false);
-        add(filterByDepartment);
-    }
-
-    private void setupFilterByDepartmentYearButton(){
-        filterByDepartmentYear = new JButton("Filter by Year");
-        filterByDepartmentYear.setBounds(160, 55, 150, 25);
         filterByDepartmentYear.setVisible(false);
-        add(filterByDepartmentYear);
-    }
-
-    //----------------- Technician Filters ----------------------// 
-    private void setupFilterByTechnicianButton(){
-        filterByTech = new JButton("Filter by Technician");
-        filterByTech.setBounds(0, 55, 150, 25);
         filterByTech.setVisible(false);
-        add(filterByTech);
-    }
-
-    private void setupFilterbyTechnicianYearButton(){
-        filterByTechYear = new JButton("Filter by Year");
-        filterByTechYear.setBounds(160, 55, 150, 25);
         filterByTechYear.setVisible(false);
-        add(filterByTechYear);
-    }
-
-    //-------------------- Employee Filters --------------------//
-    private void setupFilterByEmployeeButton() {
-        filterByEmployee = new JButton("Filter by Employee");
-        filterByEmployee.setBounds(0, 55, 150, 25);
         filterByEmployee.setVisible(false);
-        add(filterByEmployee);
-    }
-
-    private void setupFilterByEmpYearButton() {
-        filterByEmployeeYear = new JButton("Filter by Year");
-        filterByEmployeeYear.setBounds(160, 55, 150, 25);
         filterByEmployeeYear.setVisible(false);
+
+        add(clearFilter);
+        add(filterByCategory);
+        add(filterByYear);
+        add(filterByDepartment);
+        add(filterByDepartmentYear);
+        add(filterByTech);
+        add(filterByTechYear);
+        add(filterByEmployee);
         add(filterByEmployeeYear);
     }
 
-    private void setupDownloadButton(){
-        downloadButton = new JButton("Download");
-        downloadButton.setBounds(0, 600, 150, 25);
-        add(downloadButton);
+    private JButton createStyledButton(String text, int x, int y, int width, int height){
+        JButton button = new JButton(text);
+        button.setBounds(x, y, width, height);
+        button.setFocusPainted(false);
+        button.setBackground(new Color(0, 102, 204));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+        // hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(0, 80, 160));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(0, 102, 204));
+            }
+        });
+        return button;
     }
+    // For Download and Cancel
+    private JButton createStyledButton(String text, int x, int y, int width, int height, Color bgColor){
+        JButton button = new JButton(text);
+        button.setBounds(x, y, width, height);
+        button.setFocusPainted(false);
+        button.setBackground(bgColor);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setBorder(BorderFactory.createEmptyBorder(5, 15, 5, 15));
+
+        // hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor.darker());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(bgColor);
+            }
+        });
+
+        return button;
+    }
+
 
     private DefaultTableModel setupTable(String[] cols){
         if (tableScrollPane != null){
             remove(tableScrollPane);
         }
-        
-        DefaultTableModel model = new DefaultTableModel(cols, 0) {
+
+        DefaultTableModel model = new DefaultTableModel(cols, 0){
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            public boolean isCellEditable(int row, int column){ return false; }
         };
 
         table = new JTable(model);
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.setRowHeight(28);
+        table.setAutoCreateRowSorter(true);
+        table.setFillsViewportHeight(true);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        table.getTableHeader().setBackground(new Color(0, 102, 204));
+        table.getTableHeader().setForeground(Color.WHITE);
+
         tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setBounds(0, 90, 1160, 500);
+        tableScrollPane.setBounds(20, 90, 1120, 500);
         tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        tableScrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
         add(tableScrollPane);
 
         revalidate();
@@ -185,50 +166,63 @@ public class ReportsDashboardPanel extends JPanel{
         if (tableScrollPane != null){
             remove(tableScrollPane);
         }
-        
-        DefaultTableModel filteredTechModel = new DefaultTableModel(cols, 0) {
+
+        DefaultTableModel model = new DefaultTableModel(cols, 0){
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            public boolean isCellEditable(int row, int column){ return false; }
         };
 
-        table = new JTable(filteredTechModel);
+        table = new JTable(model);
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.setRowHeight(28);
+        table.setAutoCreateRowSorter(true);
+        table.setFillsViewportHeight(true);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        table.getTableHeader().setBackground(new Color(0, 102, 204));
+        table.getTableHeader().setForeground(Color.WHITE);
+
         tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setBounds(0, 130, 1160, 400);
+        tableScrollPane.setBounds(20, 90, 1120, 500); // proper spacing & alignment
         tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        tableScrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
         add(tableScrollPane);
 
         revalidate();
         repaint();
 
-        return filteredTechModel;
+        return model;
     }
 
     private DefaultTableModel setupFilteredEmpTable(String[] cols){
         if (tableScrollPane != null){
             remove(tableScrollPane);
         }
-        
-        DefaultTableModel filteredEmpModel = new DefaultTableModel(cols, 0) {
+
+        DefaultTableModel model = new DefaultTableModel(cols, 0){
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            public boolean isCellEditable(int row, int column){ return false; }
         };
 
-        table = new JTable(filteredEmpModel);
+        table = new JTable(model);
+        table.setFont(new Font("Arial", Font.PLAIN, 14));
+        table.setRowHeight(28);
+        table.setAutoCreateRowSorter(true);
+        table.setFillsViewportHeight(true);
+        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        table.getTableHeader().setBackground(new Color(0, 102, 204));
+        table.getTableHeader().setForeground(Color.WHITE);
+
         tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setBounds(0, 130, 1160, 400);
+        tableScrollPane.setBounds(20, 90, 1120, 500); // proper spacing & alignment
         tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        tableScrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
         add(tableScrollPane);
 
         revalidate();
         repaint();
 
-        return filteredEmpModel;
+        return model;
     }
-    
 
     // ---------------------- Report Tables ---------------------------- //
     public void setupCategoryReportTable(List<CategoryReport> data){
@@ -236,7 +230,7 @@ public class ReportsDashboardPanel extends JPanel{
         DefaultTableModel model = setupTable(cols);
 
         clearAllLabels();
-        
+
         for (CategoryReport cr : data){
             Object[] row = new Object[] {cr.getCategory(), cr.getYear(), cr.getTotalSubmitted(), cr.getTotalResolved()};
             model.addRow(row);
@@ -293,12 +287,12 @@ public class ReportsDashboardPanel extends JPanel{
     public void setupTechnicianSummaryTable(List<TechWorkloadReport> data, String techNameString) {
         String[] columns = {"Year", "Total Assigned", "Total Resolved", "Average Resolution Time (hours)"};
 
-        DefaultTableModel model = setupFilteredTechTable(columns); 
+        DefaultTableModel model = setupFilteredTechTable(columns);
 
         clearAllLabels();
 
         this.technicianLabel = new JLabel("Technician: " + techNameString);
-        this.technicianLabel.setBounds(0, 100, 400, 20); 
+        this.technicianLabel.setBounds(20, 100, 400, 20);
         this.technicianLabel.setFont(new Font("Arial", Font.BOLD, 18));
         this.add(technicianLabel);
 
@@ -320,7 +314,7 @@ public class ReportsDashboardPanel extends JPanel{
         clearAllLabels();
 
         this.employeeLabel = new JLabel("Employee: " + empName);
-        this.employeeLabel.setBounds(0, 100, 400, 20);
+        this.employeeLabel.setBounds(20, 100, 400, 20);
         this.employeeLabel.setFont(new Font("Arial", Font.BOLD, 18));
         this.add(employeeLabel);
 
@@ -339,13 +333,13 @@ public class ReportsDashboardPanel extends JPanel{
 
     public void setupYearSummaryTable(List<TechWorkloadReport> data, int year) {
         String[] columns = {"Technician", "Total Assigned", "Total Resolved", "Average Resolution Time (hours)"};
-        
-        DefaultTableModel model = setupFilteredTechTable(columns); 
-        
+
+        DefaultTableModel model = setupFilteredTechTable(columns);
+
         clearAllLabels();
 
         this.yearLabel = new JLabel("Year: " + year);
-        this.yearLabel.setBounds(0, 100, 400, 20);
+        this.yearLabel.setBounds(20, 100, 400, 20);
         this.yearLabel.setFont(new Font("Arial", Font.BOLD, 18));
         this.add(yearLabel);
 
@@ -366,7 +360,7 @@ public class ReportsDashboardPanel extends JPanel{
 
         clearAllLabels();
         this.empYearLabel = new JLabel("Year: " + year);
-        this.empYearLabel.setBounds(0, 100, 400, 20);
+        this.empYearLabel.setBounds(20, 100, 400, 20);
         this.empYearLabel.setFont(new Font("Arial", Font.BOLD, 18));
         this.add(empYearLabel);
 

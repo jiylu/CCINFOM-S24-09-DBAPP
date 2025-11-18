@@ -234,6 +234,8 @@ public class ReportsDashboardController {
                 filter = "_filter_year_" + year.toString().trim();
                 panel.setupEmpYearSummaryTable(list, year);
             }
+
+            panel.getClearFilterButton().setVisible(true);
         });
     }
 }
