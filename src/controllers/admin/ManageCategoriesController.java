@@ -63,8 +63,13 @@ public class ManageCategoriesController {
         }
 
         JTable table = panel.getCategoryTable();
-        table.getColumn("Edit").setCellRenderer(new ButtonRenderer("Edit"));
-        initEditCategory(table);
+
+        try {
+            table.getColumn("Edit").setCellRenderer(new ButtonRenderer("Edit"));
+            initEditCategory(table);
+        } catch (IllegalArgumentException e) {
+
+        }
     }
 
     private void initEditCategory(JTable table){
@@ -184,5 +189,4 @@ public class ManageCategoriesController {
 
         return false;
     }
-
 }
