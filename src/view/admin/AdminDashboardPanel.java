@@ -1,7 +1,7 @@
 package view.admin;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class AdminDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
@@ -15,6 +15,7 @@ public class AdminDashboardPanel extends JPanel {
     private JButton manageDepartmentsButton;
     private JButton manageCategoriesButton;
     private JButton reportsButton;
+    private JButton logoutButton;
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
@@ -65,6 +66,9 @@ public class AdminDashboardPanel extends JPanel {
 
         reportsButton = createGreenButton("View Reports", 640, 80, 180, 40);
         add(reportsButton);
+
+        logoutButton = createGreenButton("Log Out", 840, 80, 180, 40);
+        add(logoutButton);
     }
 
     private JButton createGreenButton(String text, int x, int y, int width, int height) {
@@ -148,6 +152,10 @@ public class AdminDashboardPanel extends JPanel {
 
     public JButton getReportsButton() {
         return reportsButton;
+    }
+
+    public JButton getLogoutButton(){
+        return logoutButton;
     }
 
     public UserManagementPanel getViewUsersPanel() {

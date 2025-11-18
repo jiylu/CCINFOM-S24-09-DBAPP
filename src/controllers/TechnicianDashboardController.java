@@ -81,6 +81,10 @@ public class TechnicianDashboardController {
             loadActiveTicketForCancel();
             panel.showPanel(TechnicianDashboardPanel.CANCEL_TICKET);
         });
+
+        panel.getLogoutButton().addActionListener(e->{
+            frame.showPanel(Frame.LOGIN_PANEL);
+        });
     }
 
     private void updateHeaderName() {

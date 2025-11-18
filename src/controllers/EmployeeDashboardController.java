@@ -1,7 +1,6 @@
 package controllers;
 
 import dao.*;
-import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -86,6 +85,10 @@ public class EmployeeDashboardController{
 
         createTicketPanel.getCreateButton().addActionListener(e -> {
             createTicket();
+        });
+
+        panel.getLogoutButton().addActionListener(e->{
+            frame.showPanel(Frame.LOGIN_PANEL);
         });
 
     }

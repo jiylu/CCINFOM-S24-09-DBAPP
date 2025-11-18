@@ -1,7 +1,7 @@
 package view.employee;
 
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 
 public class EmployeeDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
@@ -11,7 +11,8 @@ public class EmployeeDashboardPanel extends JPanel {
     private JLabel titleLabel;
     private JButton createTicketButton;
     private JButton ticketHistoryButton;
-
+    private JButton logoutButton;
+    
     private CardLayout cardLayout;
     private JPanel cardPanel;
     private CreateTicketPanel createTicketPanel;
@@ -78,6 +79,12 @@ public class EmployeeDashboardPanel extends JPanel {
         ticketHistoryButton.setBounds(20, 100, 240, 50);
         styleNavButton(ticketHistoryButton);
         navPanel.add(ticketHistoryButton);
+
+        logoutButton = new JButton("Log Out");
+        logoutButton.setFont(buttonFont);
+        logoutButton.setBounds(20, 170, 240, 50);
+        styleNavButton(logoutButton);
+        navPanel.add(logoutButton);
     }
 
     private void styleNavButton(JButton button) {
@@ -138,6 +145,10 @@ public class EmployeeDashboardPanel extends JPanel {
 
     public JButton getTicketHistoryButton() {
         return ticketHistoryButton;
+    }
+
+    public JButton getLogoutButton(){
+        return logoutButton;
     }
 
     public CreateTicketPanel getCreateTicketPanel() {
