@@ -27,7 +27,7 @@ public class ReportDAO {
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
         query.append("AVG(CASE WHEN tk.status = 'Resolved' THEN TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date) ELSE NULL END) AS average_resolution_time ");
         query.append("FROM Technicians t ");
-        query.append("JOIN Tickets tk ON t.technician_id = tk.technician_id ");
+        query.append("JOIN Tickets tk ON t.technician_id = tk.tech_id ");
         query.append("GROUP BY t.technician_id, technician_name, year ");
         query.append("ORDER BY t.technician_id, year;");
 
@@ -65,8 +65,8 @@ public class ReportDAO {
         query.append("COUNT(tk.ticket_id) AS assigned_tickets, ");        
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets,");
         query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date)) AS average_resolution_time");
-        query.append(" FROM tickets tk");
-        query.append(" WHERE tk.technician_id = ? ");
+        query.append(" FROM Tickets tk");
+        query.append(" WHERE tk.tech_id = ? ");
         query.append(" GROUP BY year");
         query.append(" ORDER BY year ASC");
         
@@ -109,8 +109,8 @@ public class ReportDAO {
         query.append("COUNT(tk.ticket_id) AS assigned_tickets, ");
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
         query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date)) AS average_time");
-        query.append(" FROM tickets tk");
-        query.append(" JOIN technicians t ON t.technician_id = tk.technician_id");
+        query.append(" FROM Tickets tk");
+        query.append(" JOIN Technicians t ON t.technician_id = tk.tech_id");
         query.append(" WHERE YEAR(tk.creation_date) = ?"); // Use placeholder for parameterized execution
         query.append(" GROUP BY t.technician_id, technician_name");
         query.append(" ORDER BY technician_name");
@@ -155,7 +155,7 @@ public class ReportDAO {
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
         query.append("SUM(CASE WHEN tk.status = 'Cancelled' THEN 1 ELSE 0 END) AS cancelled_tickets ");
         query.append("FROM employees e ");
-        query.append("JOIN Tickets tk ON e.emp_id = tk.employee_id ");
+        query.append("JOIN Tickets tk ON e.emp_id = tk.emp_id ");
         query.append("GROUP BY e.emp_id, employee_name, year ");
         query.append("ORDER BY e.emp_id, year;");
 
@@ -193,7 +193,7 @@ public class ReportDAO {
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
         query.append("SUM(CASE WHEN tk.status = 'Cancelled' THEN 1 ELSE 0 END) AS cancelled_tickets ");
         query.append("FROM Tickets tk ");
-        query.append("WHERE tk.employee_id = ? ");
+        query.append("WHERE tk.emp_id = ? ");
         query.append("GROUP BY year ");
         query.append("ORDER BY year ASC");
 
@@ -236,7 +236,7 @@ public class ReportDAO {
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
         query.append("SUM(CASE WHEN tk.status = 'Cancelled' THEN 1 ELSE 0 END) AS cancelled_tickets ");
         query.append("FROM Tickets tk ");
-        query.append("JOIN Employees e ON e.emp_id = tk.employee_id ");
+        query.append("JOIN Employees e ON e.emp_id = tk.emp_id ");
         query.append("WHERE YEAR(tk.creation_date) = ? ");
         query.append("GROUP BY e.emp_id, employee_name ");
         query.append("ORDER BY employee_name ASC");
@@ -276,7 +276,7 @@ public class ReportDAO {
         query.append("COUNT(t.ticket_id) AS num_tickets, ");
         query.append("SUM(CASE WHEN t.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets ");
         query.append("FROM categories c ");
-        query.append("JOIN tickets t ");
+        query.append("JOIN Tickets t ");
         query.append("ON t.category_id = c.category_id ");
         query.append("GROUP BY c.category_name, YEAR(t.creation_date) ");
         query.append("ORDER BY year, num_tickets DESC, resolved_tickets DESC;");
@@ -313,7 +313,7 @@ public class ReportDAO {
         query.append("COUNT(t.ticket_id) AS num_tickets, ");
         query.append("SUM(CASE WHEN t.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets ");
         query.append("FROM categories c ");
-        query.append("JOIN tickets t ");
+        query.append("JOIN Tickets t ");
         query.append("ON t.category_id = c.category_id ");
         query.append("WHERE YEAR(t.creation_date) = ? ");
         query.append("GROUP BY c.category_name, YEAR(t.creation_date) ");
@@ -353,7 +353,7 @@ public class ReportDAO {
         query.append("COUNT(t.ticket_id) AS num_tickets, ");
         query.append("SUM(CASE WHEN t.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets ");
         query.append("FROM categories c ");
-        query.append("JOIN tickets t ");
+        query.append("JOIN Tickets t ");
         query.append("ON t.category_id = c.category_id ");
         query.append("WHERE c.category_id = ? ");
         query.append("GROUP BY c.category_name, YEAR(t.creation_date) ");
@@ -395,7 +395,7 @@ public class ReportDAO {
         query.append("COUNT(t.ticket_id) AS total_tickets ");
         query.append("FROM Departments d ");
         query.append("JOIN employees e ON d.department_id = e.dept_id ");
-        query.append("JOIN tickets t ON e.emp_id = t.emp_id ");
+        query.append("JOIN Tickets t ON e.emp_id = t.emp_id ");
         query.append("JOIN categories c ON t.category_id = c.category_id ");
         query.append("GROUP BY d.department_name, YEAR(t.creation_date), c.category_name ");
         query.append("ORDER BY d.department_name, year;");
