@@ -143,20 +143,16 @@ public class EmployeeDashboardController{
     }
 
     private void viewTicketHistory() {
-        try {
-            Employees employee = empDAO.getEmployeeByUserId(user.getUserID());
-            if (employee == null) {
-                JOptionPane.showMessageDialog(frame, "Employee record not found.", "Error", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            List<Tickets> empTickets = ticketsDAO.getTicketsByEmployeeId(employee.getEmpID());
-            ticketHistoryPanel.loadTickets(empTickets);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(frame, "Error retrieving ticket history.", "Error", JOptionPane.ERROR_MESSAGE);
+        
+        Employees employee = empDAO.getEmployeeByUserId(user.getUserID());
+        
+        if (employee == null) {
+            JOptionPane.showMessageDialog(frame, "Employee record not found.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
+
+        List<Tickets> empTickets = ticketsDAO.getTicketsByEmployeeId(employee.getEmpID());
+        ticketHistoryPanel.loadTickets(empTickets);
     }
     
 }

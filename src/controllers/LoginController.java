@@ -3,6 +3,8 @@ package controllers;
 import controllers.admin.AdminDashboardController;
 import dao.*;
 import java.sql.Connection;
+import java.sql.SQLException;
+
 import javax.swing.*;
 import models.EmpUser;
 import models.Employees;
@@ -78,7 +80,8 @@ public class LoginController {
         }
 
         if (user.getRole().contentEquals(UserAccount.EMP_ROLE) || user.getRole().contentEquals(UserAccount.ADMIN_ROLE)){
-            Employees emp = empDAO.getEmployeeByUserID(user.getUserID());
+            Employees emp = null;
+            emp = empDAO.getEmployeeByUserId(user.getUserID());
             if (!emp.isActive()){
                 JOptionPane.showMessageDialog(null, "User is deactivated.", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return null;

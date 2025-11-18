@@ -18,7 +18,7 @@ public class TicketsDAO {
     // INSERTS
 
     public void insertToTicketsTable(Tickets ticket){
-        String query = "INSERT INTO Tickets (ticket_subject, ticket_description, category_id, creation_date, emp_id, tech_id, status) VALUES = (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Tickets (ticket_subject, ticket_description, category_id, creation_date, emp_id, tech_id, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         
         try (PreparedStatement ps = connection.prepareStatement(query)){
             ps.setString(1, ticket.getTicket_subject());
@@ -314,33 +314,36 @@ public class TicketsDAO {
 
     public List<Tickets> getTicketsByEmployeeId(int employeeId) {
         List<Tickets> empTicketList = new ArrayList<>();
-        String query = "SELECT * FROM Tickets WHERE employee_id = ? ORDER BY creation_date ASC";
+        StringBuilder query = new StringBuilder();
 
-        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setInt(1, employeeId);
+        query.append("SELECT t.ticket_id, t.category_id, t.ticket_subject, t.ticket_description, ");
+        query.append("t.emp_id, t.tech_id, t.creation_date, t.status ");        query.append("FROM Tickets t ");
+        query.append("WHERE t.emp_id = ? ");
+        query.append("ORDER BY t.creation_date ASC");
+
+        try (PreparedStatement pstmt = connection.prepareStatement(query.toString())) {
+            pstmt.setInt(1, employeeId);  // parameter for WHERE t.emp_id = ?
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 Tickets ticket = new Tickets(
-                        rs.getInt(1),
-                        rs.getString(2),
-                        rs.getString(3),
-                        rs.getInt(4),
-                        rs.getDate(5).toString(),
-                        rs.getInt(6),
-                        rs.getInt(7),
-                        rs.getString(8)
-                    );
-                    empTicketList.add(ticket);
+                    rs.getInt("ticket_id"),
+                    rs.getString("ticket_subject"),
+                    rs.getString("ticket_description"),
+                    rs.getInt("category_id"),
+                    rs.getDate("creation_date").toString(),
+                    rs.getInt("emp_id"),
+                    rs.getInt("tech_id"),
+                    rs.getString("status")
+                );
+                empTicketList.add(ticket);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return empTicketList;
-    }
-
-
-
+    };
 
     // public boolean updateTicket(Tickets ticket) {
 
