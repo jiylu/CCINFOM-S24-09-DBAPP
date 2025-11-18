@@ -111,10 +111,10 @@ public class DepartmentManagementController {
                 JOptionPane.showMessageDialog(null, "Department already deactivated.");
                 return;
             }
-            
-            
+        
             int deptID = (int) table.getValueAt(row, 0);
-            if (!empDAO.getEmployeesByDepartment(deptID).isEmpty()){
+            
+            if (!empDAO.getActiveEmployeesByDepartment(deptID).isEmpty()){
                 JOptionPane.showMessageDialog(null, "This department has employees.", "Cannot deactivate department", JOptionPane.WARNING_MESSAGE);
                 return;
             }

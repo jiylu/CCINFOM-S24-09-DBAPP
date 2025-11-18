@@ -7,6 +7,7 @@ import dao.ReportDAO;
 import dao.TechniciansDAO;
 import dao.TicketsDAO;
 import dao.UserDAO;
+import dao.UserTableDAO;
 import models.EmpUser;
 import models.Employees;
 import view.Frame;
@@ -22,6 +23,7 @@ public class AdminDashboardController {
     private Frame frame;
     private AdminDashboardPanel panel;
     private AddUserPanel addUserPanel;
+    private UserTableDAO userTableDAO;
     private UserDAO userDAO;
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
@@ -34,11 +36,12 @@ public class AdminDashboardController {
     private ManageCategoriesController manageCategoriesController;
     private ReportsDashboardController reportsDashboardController;
 
-    public AdminDashboardController(EmpUser user, Frame frame, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO, CategoriesDAO categoriesDAO){
+    public AdminDashboardController(EmpUser user, Frame frame, UserTableDAO userTableDAO, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO, ReportDAO reportDAO, CategoriesDAO categoriesDAO){
         this.user = user;
         this.frame = frame;
         this.panel = frame.getAdminDashboardPanel();
         this.addUserPanel = panel.getAddUserPanel(); 
+        this.userTableDAO = userTableDAO;
         this.userDAO = userDAO;
         this.empDAO = empDAO;
         this.techDAO = techDAO;
@@ -53,7 +56,7 @@ public class AdminDashboardController {
         ManageCategoriesPanel categoriesPanel = panel.getManageCategoriesPanel();
         ReportsDashboardPanel reportsDashboardPanel = panel.getReportsDashboardPanel();
         DepartmentManagementPanel departmentManagementPanel = panel.getDeptManagementPanel();
-        this.viewUsersController = new UserManagementController(user, viewUsersPanel, userDAO, empDAO, techDAO, deptDAO, ticketsDAO);
+        this.viewUsersController = new UserManagementController(user, viewUsersPanel, userTableDAO, userDAO, empDAO, techDAO, deptDAO, ticketsDAO);
         this.manageCategoriesController = new ManageCategoriesController(categoriesPanel, categoriesDAO, ticketsDAO);
         this.reportsDashboardController = new ReportsDashboardController(reportDAO, empDAO, techDAO, deptDAO, ticketsDAO, categoriesDAO, reportsDashboardPanel);
         this.departmentManagementController = new DepartmentManagementController(departmentManagementPanel, deptDAO, empDAO);

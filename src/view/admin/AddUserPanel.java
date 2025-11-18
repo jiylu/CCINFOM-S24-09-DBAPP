@@ -150,7 +150,10 @@ public class AddUserPanel{
             employeeRole.setVisible(false);
             saveButton.setBounds(130, 240, 100, 30);
 
-            departments.setSelectedIndex(0);
+            if (departments.getItemCount() > 0) {
+                departments.setSelectedIndex(0);
+            }
+            
             employeeRole.setText("");
 
             panel.revalidate();

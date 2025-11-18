@@ -3,8 +3,6 @@ package controllers;
 import controllers.admin.AdminDashboardController;
 import dao.*;
 import java.sql.Connection;
-import java.sql.SQLException;
-
 import javax.swing.*;
 import models.EmpUser;
 import models.Employees;
@@ -16,6 +14,7 @@ import view.LoginPanel;
 
 public class LoginController {
     private Frame frame;
+    private UserTableDAO userTableDAO;
     private UserDAO userDAO;
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
@@ -40,6 +39,7 @@ public class LoginController {
     }
 
     private void initializeDAO(Connection conn){
+        this.userTableDAO = new UserTableDAO(conn);
         this.userDAO = new UserDAO(conn);
         this.empDAO = new EmployeesDAO(conn);
         this.techDAO = new TechniciansDAO(conn);
@@ -107,7 +107,7 @@ public class LoginController {
 
     private void redirectToAdminDashboard(UserAccount u){
         EmpUser user = userDAO.getEmpUserByID(u.getUserID());
-        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userDAO, empDAO, techDAO, deptDAO, ticketsDAO, reportDAO, categoriesDAO);
+        AdminDashboardController adminDashboardController = new AdminDashboardController(user, frame, userTableDAO, userDAO, empDAO, techDAO, deptDAO, ticketsDAO, reportDAO, categoriesDAO);
         adminDashboardController.init(); 
     }
 

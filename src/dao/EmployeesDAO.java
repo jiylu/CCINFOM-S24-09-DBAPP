@@ -159,6 +159,34 @@ public class EmployeesDAO {
         }
     }
 
+    public List<Employees> getActiveEmployeesByDepartment(int departmentID){
+        List<Employees> list = new ArrayList<>();
+        String query = "SELECT * FROM employees e WHERE e.dept_id = ? AND e.ACTIVE = 1";
+
+        try (PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setInt(1, departmentID);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                list.add(new Employees(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getInt(4),
+                    rs.getString(5),
+                    rs.getBoolean(6)
+                ));
+            }
+
+            rs.close();
+            pstmt.close();
+            return list;
+        } catch (SQLException e){
+            System.out.println("Error executing getEmployeesByDepartment().");
+            return null;
+        }
+    }
+
     //DELETE
     public void updateEmployee(Employees emp){
         String query = "UPDATE employees SET last_name = ?, first_name = ?, dept_id = ?, job_title = ? WHERE emp_id = ?";
