@@ -96,7 +96,7 @@ public class TicketsDAO {
 
     public int getLastTechnicianId() {
         int technicianId;
-        String query = "SELECT tech_id FROM Tickets ORDER BY ticket_id DESC LIMIT 1;";
+        String query = "SELECT tech_id FROM Tickets WHERE status = 'Enqueued' OR status = 'Active' ORDER BY ticket_id DESC LIMIT 1;";
 
          try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             ResultSet rs = pstmt.executeQuery();
