@@ -27,8 +27,10 @@ public class AddUserPanel{
         setupUsernameField();
         setupPasswordField();
         setupNameField();
+        setupEmployeeRoleField();
         setupRoleBox();
         setupButton();
+        setupDepartmentField();
     }
 
     public void showPanel() {
@@ -96,30 +98,46 @@ public class AddUserPanel{
         panel.add(saveButton);
     }
 
-    private void setupDepartmentField(String[] departmentList){
+    private void setupDepartmentField(){
         departmentLabel = new JLabel("Department:");
         departmentLabel.setBounds(20, 230, 200, 25);
         panel.add(departmentLabel);
+        departmentLabel.setVisible(false);
 
-        departments = new JComboBox<>(departmentList);
+
+        departments = new JComboBox<>();
         departments.setBounds(130, 230, 200,25);
         panel.add(departments);
+        departments.setVisible(false);
     }
 
     private void setupEmployeeRoleField(){
         employeeRoleLabel = new JLabel("Employee Role:");
         employeeRoleLabel.setBounds(20, 260, 200, 25);
         panel.add(employeeRoleLabel);
+        employeeRoleLabel.setVisible(false);
 
         employeeRole = new JTextField();
         employeeRole.setBounds(130, 260, 200, 25);
+        employeeRole.setVisible(false);
         panel.add(employeeRole);
     }
 
+    private void setupEmployeeRoleFieldVisible(){
+        employeeRoleLabel.setVisible(true);
+        employeeRole.setVisible(true);
+    }
+
+    private void setupDepartmentFieldVisible(String[] departmentList) {
+        departments.setModel(new DefaultComboBoxModel<>(departmentList));
+        departmentLabel.setVisible(true);
+        departments.setVisible(true);
+    }
     public void transformToEmployeeFields(String[] departmentList){
-        setupDepartmentField(departmentList);
-        setupEmployeeRoleField();
+        setupDepartmentFieldVisible(departmentList);
+        setupEmployeeRoleFieldVisible();
         saveButton.setBounds(130, 360, 100, 30);
+
         panel.revalidate();
         panel.repaint();
     }
