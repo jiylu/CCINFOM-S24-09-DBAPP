@@ -173,3 +173,24 @@ VALUES
 ('Software license renewal', 'Software license has expired. User requires renewal to continue working.', 2, '2023-07-19 09:30:00', 90006, 30002, 'Resolved'),
 ('Projector bulb replacement', 'Projector bulb has burnt out and needs replacement. User requests installation before next meeting.', 4, '2024-01-15 08:50:00', 90018, 30003, 'Resolved'),
 ('Network speed issue', 'Internet speed is very slow for tasks requiring high bandwidth. User requests network troubleshooting.', 3, '2024-06-05 14:10:00', 90004, 30004, 'Resolved');
+
+-- Mapped Accordingly
+INSERT INTO ResolvedTickets (ticket_id, resolve_date) VALUES
+(40015, '2021-03-15 11:12:00'),
+(40016, '2021-07-10 17:45:33'),
+(40017, '2022-02-12 10:55:12'),
+(40018, '2022-09-05 11:40:25'),
+(40019, '2023-01-18 15:22:19'),
+(40020, '2023-05-09 10:48:00'),
+(40021, '2023-09-22 09:51:44'),
+(40022, '2024-02-14 13:20:00'),
+(40023, '2024-05-06 11:09:31'),
+(40024, '2024-10-11 16:44:58'),
+(40025, '2021-04-22 11:32:17'),
+(40026, '2022-03-19 09:55:48'),
+(40027, '2022-07-22 12:05:11'),
+(40028, '2022-11-18 10:22:54'),
+(40029, '2023-04-25 16:33:08'),
+(40030, '2023-07-19 11:44:22'),
+(40031, '2024-01-15 10:05:39'),
+(40032, '2024-06-05 16:12:27');

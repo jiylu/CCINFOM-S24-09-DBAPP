@@ -379,27 +379,22 @@ public class TicketsDAO {
 
     public boolean markTicketResolved(int ticketId, String resolveDate) {
         try {
-            // First, check if a resolved entry already exists
+            // Check if a resolved entry already exists
             String checkSql = "SELECT resolve_id FROM ResolvedTickets WHERE ticket_id = ?";
             try (PreparedStatement checkStmt = connection.prepareStatement(checkSql)) {
                 checkStmt.setInt(1, ticketId);
                 ResultSet rs = checkStmt.executeQuery();
+
                 if (rs.next()) {
-                    // Update existing entry
                     String updateSql = "UPDATE ResolvedTickets SET resolve_date = ? WHERE ticket_id = ?";
                     try (PreparedStatement updateStmt = connection.prepareStatement(updateSql)) {
-                        updateStmt.setString(1, resolveDate); // can be null
+                        updateStmt.setString(1, resolveDate);
                         updateStmt.setInt(2, ticketId);
                         return updateStmt.executeUpdate() > 0;
                     }
                 } else {
-                    // Insert new entry
-                    String insertSql = "INSERT INTO ResolvedTickets (ticket_id, resolve_date) VALUES (?, ?)";
-                    try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
-                        insertStmt.setInt(1, ticketId);
-                        insertStmt.setString(2, resolveDate); // can be null
-                        return insertStmt.executeUpdate() > 0;
-                    }
+                    insertToResolvedTickets(ticketId, resolveDate);
+                    return true;
                 }
             }
         } catch (SQLException e) {
