@@ -80,6 +80,7 @@ public class ReportsDashboardController {
             report = "employee_report";
             pdfTitle = "Employee Report";
             filter = null;
+  
             panel.showEmpTicketResReportFilters();
             List<EmployeeTicketResolutionReport> empWR = reportDAO.generateEmpTicketResReport();
             panel.setupEmpTicketResReportTable(empWR);
@@ -106,9 +107,8 @@ public class ReportsDashboardController {
     private void initFilterListeners(){
         panel.getClearFilterButton().addActionListener(e -> {
             filter = null;
-            
-            panel.clearLabels(); //for technician report labels
-            panel.clearEmpLabels(); // for employee report labels
+
+            panel.clearAllLabels();
 
             if (panel.getFilterByCategoryButton().isVisible()) {
                 List<CategoryReport> cr = reportDAO.generateCategoryReport();

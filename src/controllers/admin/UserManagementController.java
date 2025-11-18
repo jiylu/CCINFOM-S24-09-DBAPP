@@ -1,6 +1,8 @@
 package controllers.admin;
 
 import dao.*;
+
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -49,6 +51,7 @@ public class UserManagementController {
         initViewEmployees();
         initViewEmpByDepartment();
         initViewTechnicians();
+        initViewByUserID();
     }
 
     private void initAddUsers(){
@@ -75,8 +78,57 @@ public class UserManagementController {
         initEditEmp(table);
         initDeactivateEmployee(table);
         panel.shift();
+        panel.showSearchUserId();
     }
 
+    private void initViewByUserID(){
+        panel.getSearchButton().addActionListener(e->{
+
+        String userId = panel.getSearchByUserIdField().getText().trim();
+
+        if (userId.isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please enter a User ID to search.", "Search Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int userID;
+
+        try {
+            userID = Integer.parseInt(userId);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Invalid User ID format. Please enter a number.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        UserAccount userD = userDAO.getUserAccountByID(userID);
+
+        if (userD == null){
+            JOptionPane.showMessageDialog(null, "User ID " + userID + " not found.", "Search Result", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+        if (userD.getRole().equals("Employee")){ 
+                Employees emp = empDAO.getEmployeeByUserId(userID);
+                List<Employees> empList = new ArrayList<>();
+                empList.add(emp);
+                List<UserAccount> userList = new ArrayList<>();
+                userList.add(userD);
+                loadEmployeesTable(empList, userList);
+
+        } else if (userD.getRole().equals("Technician")){
+                Technicians tech = techDAO.getTechnicianByUserID(userID);
+                List<Technicians> techList = new ArrayList<>();
+                techList.add(tech);
+                List<UserAccount> userList = new ArrayList<>();
+                userList.add(userD);
+                loadTechniciansTable(techList, userList);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "User ID " + userID + " is not an Employee or Technician.", "Search Result", JOptionPane.INFORMATION_MESSAGE);
+
+        };     
+        
+    });
+ };
 
     private void initViewEmpByDepartment(){
         panel.getViewByDepartment().addActionListener(e->{
@@ -177,7 +229,7 @@ public class UserManagementController {
 
         initDeactivateTechnician(table);
         initEditTech(table);
-        panel.revert();
+        panel.showSearchUserId();
     }
 
     private void initDeactivateTechnician(JTable table){

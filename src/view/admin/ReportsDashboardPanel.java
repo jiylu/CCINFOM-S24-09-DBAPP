@@ -185,8 +185,6 @@ public class ReportsDashboardPanel extends JPanel{
         if (tableScrollPane != null){
             remove(tableScrollPane);
         }
-
-        clearLabels();
         
         DefaultTableModel filteredTechModel = new DefaultTableModel(cols, 0) {
             @Override
@@ -211,9 +209,7 @@ public class ReportsDashboardPanel extends JPanel{
         if (tableScrollPane != null){
             remove(tableScrollPane);
         }
-
-        clearEmpLabels();
-
+        
         DefaultTableModel filteredEmpModel = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -239,7 +235,7 @@ public class ReportsDashboardPanel extends JPanel{
         String[] cols = {"Category Name", "Year", "Number of Tickets", "Number of Resolved Tickets"};
         DefaultTableModel model = setupTable(cols);
 
-        clearLabels();
+        clearAllLabels();
         
         for (CategoryReport cr : data){
             Object[] row = new Object[] {cr.getCategory(), cr.getYear(), cr.getTotalSubmitted(), cr.getTotalResolved()};
@@ -251,7 +247,7 @@ public class ReportsDashboardPanel extends JPanel{
         String[] cols = {"Department Name", "Year", "Category Name", "Number of Tickets"};
         DefaultTableModel model = setupTable(cols);
 
-        clearLabels();
+        clearAllLabels();
 
         for (DepartmentReport dr : data){
             Object[] row = new Object[] {dr.getDepartment(), dr.getYear(), dr.getCategory(), dr.getTotalTickets()};
@@ -263,7 +259,7 @@ public class ReportsDashboardPanel extends JPanel{
         String[] cols = {"Year", "Technician Name", "Total Assigned Tickets", "Total Tickets Resolved", "Average Resolution Time (hours)"};
         DefaultTableModel model = setupTable(cols);
 
-        clearLabels();
+        clearAllLabels();
 
         for (TechWorkloadReport techWR : data){
             Object[] row = new Object[] {
@@ -279,6 +275,8 @@ public class ReportsDashboardPanel extends JPanel{
     public void setupEmpTicketResReportTable(List<EmployeeTicketResolutionReport> data) {
         String[] cols = {"Year", "Employee Name", "Total Submitted Tickets", "Total Tickets Resolved", "Total Cancelled Tickets"};
         DefaultTableModel model = setupTable(cols);
+
+        clearAllLabels();
 
         for (EmployeeTicketResolutionReport empWR : data) {
             Object[] row = new Object[] {
@@ -297,7 +295,8 @@ public class ReportsDashboardPanel extends JPanel{
 
         DefaultTableModel model = setupFilteredTechTable(columns); 
 
-        clearLabels();
+        clearAllLabels();
+
         this.technicianLabel = new JLabel("Technician: " + techNameString);
         this.technicianLabel.setBounds(0, 100, 400, 20); 
         this.technicianLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -318,7 +317,8 @@ public class ReportsDashboardPanel extends JPanel{
 
         DefaultTableModel model = setupFilteredEmpTable(columns);
 
-        clearEmpLabels();
+        clearAllLabels();
+
         this.employeeLabel = new JLabel("Employee: " + empName);
         this.employeeLabel.setBounds(0, 100, 400, 20);
         this.employeeLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -342,7 +342,8 @@ public class ReportsDashboardPanel extends JPanel{
         
         DefaultTableModel model = setupFilteredTechTable(columns); 
         
-        clearLabels();
+        clearAllLabels();
+
         this.yearLabel = new JLabel("Year: " + year);
         this.yearLabel.setBounds(0, 100, 400, 20);
         this.yearLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -363,7 +364,7 @@ public class ReportsDashboardPanel extends JPanel{
 
         DefaultTableModel model = setupFilteredEmpTable(columns);
 
-        clearEmpLabels();
+        clearAllLabels();
         this.empYearLabel = new JLabel("Year: " + year);
         this.empYearLabel.setBounds(0, 100, 400, 20);
         this.empYearLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -379,34 +380,30 @@ public class ReportsDashboardPanel extends JPanel{
         }
     }
 
-   public void clearLabels() {
-        if (technicianLabel != null) {
-            remove(technicianLabel);
-            technicianLabel = null;
-        }
-        if (yearLabel != null) {
-            remove(yearLabel);
-            yearLabel = null;
-        }
-        
-        revalidate(); 
-        repaint();
-    }
+    public void clearAllLabels() {
+            if (technicianLabel != null) {
+                remove(technicianLabel);
+                technicianLabel = null;
+            }
 
-    public void clearEmpLabels() {
-        if (employeeLabel != null) {
-            remove(employeeLabel);
-            employeeLabel = null;
-        }
+            if (yearLabel != null) {
+                remove(yearLabel);
+                yearLabel = null;
+            }
 
-        if(empYearLabel != null) {
-            remove(empYearLabel);
-            empYearLabel = null;
-        }
+            if (employeeLabel != null) {
+                remove(employeeLabel);
+                employeeLabel = null;
+            }
 
-        revalidate();
-        repaint();
-    }
+            if (empYearLabel != null) {
+                remove(empYearLabel);
+                empYearLabel = null;
+            }
+
+            revalidate();
+            repaint();
+        }
 
     private void resetFilters(){
         clearFilter.setVisible(false);
