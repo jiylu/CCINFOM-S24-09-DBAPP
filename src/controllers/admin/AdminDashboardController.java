@@ -95,6 +95,8 @@ public class AdminDashboardController {
         });
 
         panel.getLogoutButton().addActionListener(e->{
+            frame.getLoginPanel().getUsernameField().setText("");
+            frame.getLoginPanel().getPasswordField().setText("");
             frame.showPanel(Frame.LOGIN_PANEL);
         });
     }

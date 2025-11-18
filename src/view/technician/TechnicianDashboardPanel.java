@@ -101,7 +101,7 @@ public class TechnicianDashboardPanel extends JPanel {
         logoutButton = new JButton("Logout Button");
         logoutButton.setFont(buttonFont);
         logoutButton.setBounds(20, 310, 240, 50);
-        styleNavButton(logoutButton);
+        styleLogoutButton(logoutButton);
         navPanel.add(logoutButton);
     }
 
@@ -119,6 +119,24 @@ public class TechnicianDashboardPanel extends JPanel {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(new Color(0, 153, 0));
+            }
+        });
+    }
+
+    private void styleLogoutButton(JButton button) {
+        button.setFocusPainted(false);
+        button.setBackground(new Color(204, 0, 0)); // red button
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(153, 0, 0)); // darker red on hover
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(204, 0, 0));
             }
         });
     }

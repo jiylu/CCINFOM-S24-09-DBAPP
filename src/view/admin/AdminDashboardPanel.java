@@ -67,7 +67,7 @@ public class AdminDashboardPanel extends JPanel {
         reportsButton = createGreenButton("View Reports", 640, 80, 180, 40);
         add(reportsButton);
 
-        logoutButton = createGreenButton("Log Out", 840, 80, 180, 40);
+        logoutButton = createRedButton("Log Out", 840, 80, 180, 40);
         add(logoutButton);
     }
 
@@ -99,6 +99,36 @@ public class AdminDashboardPanel extends JPanel {
 
         return button;
     }
+
+    private JButton createRedButton(String text, int x, int y, int width, int height) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, width, height);
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setFocusPainted(false);
+        button.setBackground(new Color(204, 0, 0)); // red
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Rounded effect
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(204, 0, 0)),
+                BorderFactory.createEmptyBorder(5, 15, 5, 15)
+        ));
+
+        // Hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(153, 0, 0)); // darker red on hover
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(204, 0, 0));
+            }
+        });
+
+        return button;
+    }
+
 
     private void initPanels() {
         viewUsersPanel = new UserManagementPanel();
