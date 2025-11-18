@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import reports.*;
 
@@ -30,7 +29,7 @@ public class ReportDAO {
         query.append("JOIN Tickets tk ON t.technician_id = tk.tech_id ");
         query.append("JOIN ResolvedTickets rt ON tk.ticket_id = rt.ticket_id ");
         query.append("GROUP BY t.technician_id, technician_name, year ");
-        query.append("ORDER BY t.technician_id, year;");
+        query.append("ORDER BY year, t.technician_id; ");
 
         
         try (java.sql.PreparedStatement ps = conn.prepareStatement(query.toString())){ 
@@ -160,7 +159,7 @@ public class ReportDAO {
         query.append("FROM employees e ");
         query.append("JOIN Tickets tk ON e.emp_id = tk.emp_id ");
         query.append("GROUP BY e.emp_id, employee_name, year ");
-        query.append("ORDER BY e.emp_id, year;");
+        query.append("ORDER BY year, e.emp_id;");
 
         try (java.sql.PreparedStatement ps = conn.prepareStatement(query.toString())) {
             try (java.sql.ResultSet rs = ps.executeQuery()) {
@@ -401,7 +400,7 @@ public class ReportDAO {
         query.append("JOIN Tickets t ON e.emp_id = t.emp_id ");
         query.append("JOIN categories c ON t.category_id = c.category_id ");
         query.append("GROUP BY d.department_name, YEAR(t.creation_date), c.category_name ");
-        query.append("ORDER BY d.department_name, year;");
+        query.append("ORDER BY year, d.department_name;");
         
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query.toString());
