@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.*;
 import models.Categories;
 import models.TechUser;
+import models.Technicians;
 import models.Tickets;
 import view.Frame;
 import view.technician.*;
@@ -43,6 +44,7 @@ public class TechnicianDashboardController {
 
     public void init(){
         frame.showPanel(Frame.TECHNICIAN_PANEL);
+        updateHeaderName();
         initListeners();
         loadTicketCategories();
         loadAssignedTickets();
@@ -79,6 +81,19 @@ public class TechnicianDashboardController {
             loadActiveTicketForCancel();
             panel.showPanel(TechnicianDashboardPanel.CANCEL_TICKET);
         });
+    }
+
+    private void updateHeaderName() {
+        try {
+            int techID = techDAO.getTechnicianIdByUserId(user.getUserID());
+            Technicians tech = techDAO.getTechnicianByID(techID);
+
+            if (tech != null) {
+                panel.setTechnicianName(tech.getTech_firstName(), tech.getTech_lastName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadActiveTicketForCancel() {
@@ -332,7 +347,6 @@ private void cancelActiveTicket(Tickets ticket) {
             JOptionPane.showMessageDialog(frame, "Error updating ticket!");
         }
     }
-
 
     private void activateNextEnqueuedTicket(){
         try {

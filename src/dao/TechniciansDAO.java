@@ -159,8 +159,30 @@ public class TechniciansDAO {
     } catch (SQLException e) {
         e.printStackTrace();
     }
+        return -1;
+    }
 
-    return -1;
+    public Technicians getTechnicianByID(int techID) {
+        String sql = "SELECT technician_id, tech_firstName, tech_lastName, active FROM Technicians WHERE technician_id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, techID);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new Technicians(
+                            rs.getInt("technician_id"),
+                            rs.getString("tech_lastName"),
+                            rs.getString("tech_firstName"),
+                            rs.getBoolean("active")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null; // Not found
     }
 
     public void deactivateTechnician(int techID) {

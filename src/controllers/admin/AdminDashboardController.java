@@ -8,6 +8,7 @@ import dao.TechniciansDAO;
 import dao.TicketsDAO;
 import dao.UserDAO;
 import models.EmpUser;
+import models.Employees;
 import view.Frame;
 import view.admin.AddUserPanel;
 import view.admin.AdminDashboardPanel;
@@ -57,6 +58,16 @@ public class AdminDashboardController {
         this.reportsDashboardController = new ReportsDashboardController(reportDAO, empDAO, techDAO, deptDAO, ticketsDAO, categoriesDAO, reportsDashboardPanel);
         this.departmentManagementController = new DepartmentManagementController(departmentManagementPanel, deptDAO, empDAO);
         frame.showPanel(Frame.ADMIN_PANEL);
+
+        try {
+            Employees adminEmp = empDAO.getEmployeeByUserId(user.getUserID());
+            if (adminEmp != null) {
+                panel.setAdminName(adminEmp.getFirstName(), adminEmp.getLastName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         initListeners();
     }
 

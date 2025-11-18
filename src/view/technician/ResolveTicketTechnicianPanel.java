@@ -18,195 +18,178 @@ public class ResolveTicketTechnicianPanel extends JPanel {
     private JButton saveButton;
     private List<Tickets> ticketsList;
 
-    public ResolveTicketTechnicianPanel(){
+    public ResolveTicketTechnicianPanel() {
         setLayout(null);
-        setupTitle();
-        setupTicketsAndCategories();
-        setupTicketSubject();
-        setupTicketDescription();
-        setupEmployeeID();
-        setupLogDetails();
-        setupStatus();
-        setupButton();
+        setBackground(new Color(230, 230, 230));
+
+        setupFormBackground();
         setupStatusListener();
     }
 
-    private void setupTitle(){
-        JLabel titleLabel = new JLabel("Select Ticket to Resolve");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
-        titleLabel.setBounds(250, 20, 500, 35);
-        add(titleLabel);
-    }
+    private void setupFormBackground() {
+        JPanel formPanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-    private void setupTicketsAndCategories(){
-        JLabel ticketsLabel = new JLabel("Tickets: ");
+                // Shadow
+                g2.setColor(new Color(0, 0, 0, 50));
+                g2.fillRoundRect(5, 5, getWidth(), getHeight(), 20, 20);
+
+                // White panel with slight transparency
+                g2.setColor(new Color(255, 255, 255, 230));
+                g2.fillRoundRect(0, 0, getWidth() - 5, getHeight() - 5, 20, 20);
+            }
+        };
+        formPanel.setLayout(null);
+        formPanel.setBounds(150, 30, 700, 550);
+        formPanel.setOpaque(false);
+        add(formPanel);
+
+        // Title
+        JLabel formTitle = new JLabel("Select Ticket to Resolve");
+        formTitle.setFont(new Font("Arial", Font.BOLD, 28));
+        formTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        formTitle.setBounds(0, 20, 700, 40);
+        formPanel.add(formTitle);
+
+        // Tickets
+        JLabel ticketsLabel = new JLabel("Tickets:");
         ticketsLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        ticketsLabel.setBounds(250,80,120,25);
-        add(ticketsLabel);
+        ticketsLabel.setBounds(50, 80, 120, 25);
+        formPanel.add(ticketsLabel);
 
-        ticketsToResolve = new JComboBox<>(); // Filled dynamically by controller
-        ticketsToResolve.setBounds(370,80,250,30);
-        add(ticketsToResolve);
+        ticketsToResolve = new JComboBox<>();
+        ticketsToResolve.setBounds(200, 80, 300, 30);
+        formPanel.add(ticketsToResolve);
 
+        // Categories
         JLabel categoryLabel = new JLabel("Category:");
         categoryLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        categoryLabel.setBounds(250, 120, 120, 25);
-        add(categoryLabel);
+        categoryLabel.setBounds(50, 130, 120, 25);
+        formPanel.add(categoryLabel);
 
-        categories = new JComboBox<CategoryItem>(); // Uses CategoryItem with ID + name
-        categories.setBounds(370, 120, 250, 30);
-        add(categories);
-    }
+        categories = new JComboBox<>();
+        categories.setBounds(200, 130, 300, 30);
+        formPanel.add(categories);
 
-    private void setupTicketSubject(){
-        JLabel ticketSubject = new JLabel("Ticket Subject:");
-        ticketSubject.setFont(new Font("Arial", Font.BOLD, 16));
-        ticketSubject.setBounds(250, 160, 400, 25);
-        add(ticketSubject);
+        // Ticket Subject
+        JLabel subjectLabel = new JLabel("Ticket Subject:");
+        subjectLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        subjectLabel.setBounds(50, 180, 150, 25);
+        formPanel.add(subjectLabel);
 
         ticketsSubjectLabel = new JTextArea();
         ticketsSubjectLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        ticketsSubjectLabel.setBounds(370, 160, 400, 50);
+        ticketsSubjectLabel.setBounds(200, 180, 400, 50);
         ticketsSubjectLabel.setLineWrap(true);
         ticketsSubjectLabel.setWrapStyleWord(true);
         ticketsSubjectLabel.setEditable(false);
         ticketsSubjectLabel.setOpaque(false);
-        add(ticketsSubjectLabel);
-    }
+        formPanel.add(ticketsSubjectLabel);
 
-    private void setupTicketDescription(){
-        JLabel ticketDescription = new JLabel("Description:");
-        ticketDescription.setFont(new Font("Arial", Font.BOLD, 16));
-        ticketDescription.setBounds(250, 210, 400, 25);
-        add(ticketDescription);
+        // Ticket Description
+        JLabel descriptionLabel = new JLabel("Description:");
+        descriptionLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        descriptionLabel.setBounds(50, 240, 150, 25);
+        formPanel.add(descriptionLabel);
 
         ticketsDescriptionLabel = new JTextArea();
         ticketsDescriptionLabel.setFont(new Font("Arial", Font.PLAIN, 13));
-        ticketsDescriptionLabel.setBounds(370, 210, 280, 80);
+        ticketsDescriptionLabel.setBounds(200, 240, 400, 80);
         ticketsDescriptionLabel.setLineWrap(true);
         ticketsDescriptionLabel.setWrapStyleWord(true);
         ticketsDescriptionLabel.setEditable(false);
         ticketsDescriptionLabel.setOpaque(false);
-        add(ticketsDescriptionLabel);
-    }
+        formPanel.add(ticketsDescriptionLabel);
 
-    private void setupEmployeeID(){
-        JLabel employeeID = new JLabel("Employee ID:");
-        employeeID.setFont(new Font("Arial", Font.BOLD, 16));
-        employeeID.setBounds(250, 280, 400, 25);
-        add(employeeID);
+        // Employee ID
+        JLabel empLabel = new JLabel("Employee ID:");
+        empLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        empLabel.setBounds(50, 320, 150, 25);
+        formPanel.add(empLabel);
 
         employeeIDLabel = new JLabel("");
         employeeIDLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        employeeIDLabel.setBounds(370, 280, 400, 25);
-        add(employeeIDLabel);
-    }
+        employeeIDLabel.setBounds(200, 320, 300, 25);
+        formPanel.add(employeeIDLabel);
 
-    private void setupLogDetails(){
-        JLabel creationDate = new JLabel("Creation Date:");
-        creationDate = new JLabel("Creation Date:");
-        creationDate.setFont(new Font("Arial", Font.BOLD, 16));
-        creationDate.setBounds(250, 320, 400, 25);
-        add(creationDate);
+        // Dates
+        JLabel creationLabel = new JLabel("Creation Date:");
+        creationLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        creationLabel.setBounds(50, 360, 150, 25);
+        formPanel.add(creationLabel);
 
         creationDateLabel = new JLabel("");
         creationDateLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        creationDateLabel.setBounds(370, 320, 400, 25);
-        add(creationDateLabel);
+        creationDateLabel.setBounds(200, 360, 300, 25);
+        formPanel.add(creationDateLabel);
 
-        JLabel resolveDateTitle = new JLabel("Resolve Date:");
-        resolveDateTitle.setFont(new Font("Arial", Font.BOLD, 16));
-        resolveDateTitle.setBounds(250, 360, 120, 25);
-        add(resolveDateTitle);
+        JLabel resolveLabel = new JLabel("Resolve Date:");
+        resolveLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        resolveLabel.setBounds(50, 400, 150, 25);
+        formPanel.add(resolveLabel);
 
-        resolveDateLabel = new JLabel(""); // shows the date dynamically
+        resolveDateLabel = new JLabel("");
         resolveDateLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        resolveDateLabel.setBounds(370, 360, 200, 25);
-        add(resolveDateLabel);
-    }
+        resolveDateLabel.setBounds(200, 400, 200, 25);
+        formPanel.add(resolveDateLabel);
 
-    private void setupStatus(){
+        // Status
         JLabel statusLabel = new JLabel("Ticket Status:");
         statusLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        statusLabel.setBounds(250, 400, 120, 25);
-        add(statusLabel);
+        statusLabel.setBounds(50, 440, 150, 25);
+        formPanel.add(statusLabel);
 
         status = new JComboBox<>(new String[]{"Mark Ticket Resolution Status", "Resolved"});
-        status.setBounds(370, 400, 250, 30);
-        add(status);
+        status.setBounds(200, 440, 300, 30);
+        formPanel.add(status);
+
+        // Save button (below status)
+        saveButton = new JButton("Save");
+        saveButton.setFont(new Font("Arial", Font.BOLD, 14));
+        saveButton.setBackground(new Color(0, 153, 0));
+        saveButton.setForeground(Color.WHITE);
+        saveButton.setFocusPainted(false);
+        saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        saveButton.setBounds(362, 490, 140, 35); // centered below status
+        saveButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                saveButton.setBackground(new Color(0, 115, 0));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                saveButton.setBackground(new Color(0, 153, 0));
+            }
+        });
+        formPanel.add(saveButton);
     }
 
-    private void setupStatusListener(){
+    private void setupStatusListener() {
         status.addActionListener(e -> {
             boolean isClosed = "Resolved".equals(status.getSelectedItem());
-
             if (isClosed) {
                 java.time.LocalDateTime now = java.time.LocalDateTime.now();
                 java.time.format.DateTimeFormatter formatter =
                         java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-                String formattedDateTime = now.format(formatter);
-                resolveDateLabel.setText(formattedDateTime);
+                resolveDateLabel.setText(now.format(formatter));
             } else {
-                resolveDateLabel.setText("—");
+                resolveDateLabel.setText("");
             }
         });
     }
 
-    private void setupButton(){
-        Font buttonFont = new Font("Arial", Font.BOLD, 14);
-
-        saveButton = new JButton("Save");
-        saveButton.setFont(buttonFont);
-        saveButton.setBounds(520, 450, 100, 35);
-        add(saveButton);
-    }
-
-    public JComboBox<String> getTicketsToResolve(){
-        return ticketsToResolve;
-    }
-
-    public JComboBox<CategoryItem> getCategories(){
-        return categories;
-    }
-
-    public JComboBox<String> getStatus(){
-        return status;
-    }
-
-    public JLabel getEmployeeIDLabel() {
-        return employeeIDLabel;
-    }
-
-    public JLabel getCreationDateLabel() {
-        return creationDateLabel;
-    }
-
-    public JButton getSaveButton() {
-        return saveButton;
-    }
-
-    public JTextArea getTicketsSubjectLabel() {
-        return ticketsSubjectLabel;
-    }
-
-    public JTextArea getTicketsDescriptionLabel(){
-        return ticketsDescriptionLabel;
-    }
-
-    public JLabel getResolveDateLabel() {
-        return resolveDateLabel;
-    }
-
-    public List<Tickets> getTicketsList() {
-        return ticketsList;
-    }
-
-    public void setCategory(String category) {
-        categories.setSelectedItem(category);
-    }
-
-    public void setTicketsList(List<Tickets> ticketsList){
-        this.ticketsList = ticketsList;
-    }
+    // Getters
+    public JComboBox<String> getTicketsToResolve() { return ticketsToResolve; }
+    public JComboBox<CategoryItem> getCategories() { return categories; }
+    public JComboBox<String> getStatus() { return status; }
+    public JLabel getEmployeeIDLabel() { return employeeIDLabel; }
+    public JLabel getCreationDateLabel() { return creationDateLabel; }
+    public JLabel getResolveDateLabel() { return resolveDateLabel; }
+    public JButton getSaveButton() { return saveButton; }
+    public JTextArea getTicketsSubjectLabel() { return ticketsSubjectLabel; }
+    public JTextArea getTicketsDescriptionLabel() { return ticketsDescriptionLabel; }
+    public List<Tickets> getTicketsList() { return ticketsList; }
+    public void setCategory(String category) { categories.setSelectedItem(category); }
+    public void setTicketsList(List<Tickets> ticketsList) { this.ticketsList = ticketsList; }
 }

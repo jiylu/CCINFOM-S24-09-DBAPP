@@ -1,8 +1,7 @@
 package view.admin;
 
-import java.awt.CardLayout;
-import java.awt.Font;
 import javax.swing.*;
+import java.awt.*;
 
 public class AdminDashboardPanel extends JPanel {
     public final static String EMPTY_PANEL = "empty";
@@ -12,117 +11,166 @@ public class AdminDashboardPanel extends JPanel {
     public final static String VIEW_CATEGORIES = "viewCategories";
 
     private JLabel titleLabel;
-    private JButton viewUsersButton; 
+    private JButton viewUsersButton;
     private JButton manageDepartmentsButton;
     private JButton manageCategoriesButton;
-    private JButton reportsButton; 
+    private JButton reportsButton;
 
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private AddUserPanel addUserPanel;
+    private AddUserPanel addUserPanel; // kept for controller
     private UserManagementPanel viewUsersPanel;
+    private DepartmentManagementPanel deptManagementPanel;
     private ManageCategoriesPanel manageCategoriesPanel;
     private ReportsDashboardPanel reportsDashboardPanel;
-    private DepartmentManagementPanel deptManagementPanel;
 
-    public AdminDashboardPanel(){
+    public AdminDashboardPanel() {
         setLayout(null);
+        setBackground(new Color(230, 230, 230));
+
+        initHeaderBar();
+        setupButtons();
         initPanels();
         setupCardLayout();
-        initTitle();
-        setupButtons();
     }
 
-    private void initPanels(){
+    // Dark green header bar
+    private void initHeaderBar() {
+        JPanel headerBar = new JPanel();
+        headerBar.setBackground(new Color(0, 102, 0)); // dark green
+        headerBar.setBounds(0, 0, 1500, 70);
+        headerBar.setLayout(null);
+
+        titleLabel = new JLabel("Admin Dashboard");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 28));
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setBounds(20, 10, 600, 50);
+        headerBar.add(titleLabel);
+
+        add(headerBar);
+    }
+
+    // Top buttons (modern green design)
+    private void setupButtons() {
+        Font buttonFont = new Font("Arial", Font.BOLD, 16);
+
+        viewUsersButton = createGreenButton("Manage Users", 10, 80, 180, 40);
+        add(viewUsersButton);
+
+        manageDepartmentsButton = createGreenButton("Manage Departments", 200, 80, 200, 40);
+        add(manageDepartmentsButton);
+
+        manageCategoriesButton = createGreenButton("Manage Categories", 420, 80, 200, 40);
+        add(manageCategoriesButton);
+
+        reportsButton = createGreenButton("View Reports", 640, 80, 180, 40);
+        add(reportsButton);
+    }
+
+    private JButton createGreenButton(String text, int x, int y, int width, int height) {
+        JButton button = new JButton(text);
+        button.setBounds(x, y, width, height);
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setFocusPainted(false);
+        button.setBackground(new Color(0, 153, 0));
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createEmptyBorder());
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        // Rounded effect
+        button.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(0, 153, 0)),
+                BorderFactory.createEmptyBorder(5, 15, 5, 15)
+        ));
+
+        // Hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(0, 115, 0));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(0, 153, 0));
+            }
+        });
+
+        return button;
+    }
+
+    private void initPanels() {
         viewUsersPanel = new UserManagementPanel();
+        deptManagementPanel = new DepartmentManagementPanel();
         manageCategoriesPanel = new ManageCategoriesPanel();
         reportsDashboardPanel = new ReportsDashboardPanel();
-        deptManagementPanel = new DepartmentManagementPanel();
+        // addUserPanel is not initialized here, controller will handle it
     }
 
-    private void setupCardLayout(){
+    private void setupCardLayout() {
         JPanel emptyPanel = new JPanel();
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        cardPanel.setBounds(10, 85, 1180, 710);
-        
+        cardPanel.setBounds(10, 140, 1180, 710);
+
+        cardPanel.setBackground(Color.WHITE);
+        viewUsersPanel.setBackground(Color.WHITE);
+        deptManagementPanel.setBackground(Color.WHITE);
+        manageCategoriesPanel.setBackground(Color.WHITE);
+        reportsDashboardPanel.setBackground(Color.WHITE);
+
         cardPanel.add(emptyPanel, EMPTY_PANEL);
         cardPanel.add(viewUsersPanel, VIEW_USERS);
-        cardPanel.add(manageCategoriesPanel, VIEW_CATEGORIES);
         cardPanel.add(deptManagementPanel, VIEW_DEPT);
+        cardPanel.add(manageCategoriesPanel, VIEW_CATEGORIES);
         cardPanel.add(reportsDashboardPanel, VIEW_REPORTS);
+
         add(cardPanel);
     }
 
-    public void showPanel(String name){
+    public void showPanel(String name) {
         cardLayout.show(cardPanel, name);
     }
 
-    private void initTitle(){
-        titleLabel = new JLabel("Admin Dashboard");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 32)); 
-        titleLabel.setBounds(10, 10, 500, 50);
-
-        add(titleLabel);
-    }
-
-    private void setupButtons(){
-        viewUsersButton = new JButton("Manage Users");
-        viewUsersButton.setBounds(10, 60, 150, 25);
-        add(viewUsersButton);
-
-        manageDepartmentsButton = new JButton("Manage Departments");
-        manageDepartmentsButton.setBounds(170, 60, 180, 25);
-        add(manageDepartmentsButton);
-
-        manageCategoriesButton = new JButton("Manage Categories");
-        manageCategoriesButton.setBounds(360, 60, 150, 25);
-        add(manageCategoriesButton);
-
-        reportsButton = new JButton("View Reports");
-        reportsButton.setBounds(520, 60, 150, 25);
-        add(reportsButton);
-
-
-    }
-
+    // Getters
     public JLabel getTitleLabel(){
         return titleLabel;
     }
 
-    public JButton getViewUsersButton(){
+    public JButton getViewUsersButton() {
         return viewUsersButton;
     }
 
-    public JButton getReportsButton(){
-        return reportsButton;
-    }
-
-    public JButton getManageDepartmentsButton(){
+    public JButton getManageDepartmentsButton() {
         return manageDepartmentsButton;
     }
 
-    public JButton getManageCategoriesButton(){
+    public JButton getManageCategoriesButton() {
         return manageCategoriesButton;
     }
 
-    public UserManagementPanel getViewUsersPanel(){
+    public JButton getReportsButton() {
+        return reportsButton;
+    }
+
+    public UserManagementPanel getViewUsersPanel() {
         return viewUsersPanel;
     }
 
-    public ReportsDashboardPanel getReportsDashboardPanel(){
-        return reportsDashboardPanel;
-    }
-
-    public DepartmentManagementPanel getDeptManagementPanel(){
+    public DepartmentManagementPanel getDeptManagementPanel() {
         return deptManagementPanel;
-    }
-
-    public AddUserPanel getAddUserPanel(){
-        return addUserPanel;
     }
 
     public ManageCategoriesPanel getManageCategoriesPanel() {
         return manageCategoriesPanel;
+    }
+
+    public ReportsDashboardPanel getReportsDashboardPanel() {
+        return reportsDashboardPanel;
+    }
+
+    public AddUserPanel getAddUserPanel() {
+        return addUserPanel;
+    }
+
+    public void setAdminName(String firstName, String lastName) {
+        titleLabel.setText("Welcome, Admin " + firstName + " " + lastName + "!");
     }
 }

@@ -41,6 +41,16 @@ public class EmployeeDashboardController{
 
     public void init(){
         frame.showPanel(Frame.EMPLOYEE_PANEL);
+
+        try {
+            Employees emp = empDAO.getEmployeeByUserId(user.getUserID());
+            if (emp != null) {
+                panel.setEmployeeName(emp.getFirstName(), emp.getLastName());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         loadCategories();
         initListeners();
     }
