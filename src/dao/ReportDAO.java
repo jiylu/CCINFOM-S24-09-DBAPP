@@ -25,9 +25,10 @@ public class ReportDAO {
         query.append("YEAR(tk.creation_date) AS year, ");
         query.append("COUNT(tk.ticket_id) AS assigned_tickets, ");
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
-        query.append("AVG(CASE WHEN tk.status = 'Resolved' THEN TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date) ELSE NULL END) AS average_resolution_time ");
+        query.append("AVG(CASE WHEN tk.status = 'Resolved' THEN TIMESTAMPDIFF(HOUR, tk.creation_date, rt.resolve_date) ELSE NULL END) AS average_resolution_time ");
         query.append("FROM Technicians t ");
         query.append("JOIN Tickets tk ON t.technician_id = tk.tech_id ");
+        query.append("JOIN ResolvedTickets rt ON tk.ticket_id = rt.ticket_id ");
         query.append("GROUP BY t.technician_id, technician_name, year ");
         query.append("ORDER BY t.technician_id, year;");
 
@@ -64,8 +65,9 @@ public class ReportDAO {
         query.append("YEAR(tk.creation_date) AS year, ");
         query.append("COUNT(tk.ticket_id) AS assigned_tickets, ");        
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets,");
-        query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date)) AS average_resolution_time");
+        query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, rt.resolve_date)) AS average_resolution_time");
         query.append(" FROM Tickets tk");
+        query.append(" JOIN ResolvedTickets rt ON tk.ticket_id = rt.ticket_id");
         query.append(" WHERE tk.tech_id = ? ");
         query.append(" GROUP BY year");
         query.append(" ORDER BY year ASC");
@@ -108,9 +110,10 @@ public class ReportDAO {
         query.append("CONCAT(t.tech_firstName, ' ', t.tech_lastName) AS technician_name, ");
         query.append("COUNT(tk.ticket_id) AS assigned_tickets, ");
         query.append("SUM(CASE WHEN tk.status = 'Resolved' THEN 1 ELSE 0 END) AS resolved_tickets, ");
-        query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, tk.resolve_date)) AS average_time");
+        query.append("AVG(TIMESTAMPDIFF(HOUR, tk.creation_date, rt.resolve_date)) AS average_time");
         query.append(" FROM Tickets tk");
         query.append(" JOIN Technicians t ON t.technician_id = tk.tech_id");
+        query.append(" JOIN ResolvedTickets rt ON tk.ticket_id = rt.ticket_id ");
         query.append(" WHERE YEAR(tk.creation_date) = ?"); // Use placeholder for parameterized execution
         query.append(" GROUP BY t.technician_id, technician_name");
         query.append(" ORDER BY technician_name");
