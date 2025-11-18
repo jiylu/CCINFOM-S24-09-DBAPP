@@ -10,9 +10,3 @@ Inside the root of the `src/` folder, create a file named:
 db.url=jdbc:mysql://localhost:3306/ticketing_system
 db.user=<your mysql user>
 db.password=<your mysql password>
-```
-### 3. Make Sure the Database Exists
-Before running the project, ensure that the MySQL database is created:
-```sql 
-CREATE DATABASE ticketing_system;
-```
