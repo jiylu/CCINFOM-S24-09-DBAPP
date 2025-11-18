@@ -27,7 +27,7 @@ public class DepartmentManagementController {
     }
 
     public void initListener(){
-        panel.getAddDepartmentButton().addActionListener(e->{
+        panel.getAddDepartmentButton().addActionListener(e -> {
             initAddDepartment();
         });
     }
@@ -58,6 +58,11 @@ public class DepartmentManagementController {
                 return;
             }
 
+            if (isInvalidInput(deptName)){
+                JOptionPane.showMessageDialog(null, "Department name should be 3-40 characters long.");
+                return;
+            }
+
             deptDAO.insertDepartment(deptName);
             JOptionPane.showMessageDialog(null, "Inserted " + deptName);
             loadDeptTable(deptDAO.getAllDepartments());
@@ -85,6 +90,12 @@ public class DepartmentManagementController {
                     return;
                 }
 
+                if (isInvalidInput(input)){
+                    JOptionPane.showMessageDialog(null, "Department name should be 3-40 characters long.");
+                    return;
+                }
+
+
                 deptDAO.editDepartment(deptID, input);
                 JOptionPane.showMessageDialog(null, "Successfully edited DeptID: " + deptID);
                 loadDeptTable(deptDAO.getAllDepartments());
@@ -94,6 +105,14 @@ public class DepartmentManagementController {
 
     private void initDeactivateDept(JTable table){
         table.getColumn("Deactivate").setCellEditor(new ButtonEditor(new JCheckBox(), "Deactivate", row -> {
+            String status = table.getValueAt(row, 2).toString();
+
+            if (status.contentEquals("Inactive")){
+                JOptionPane.showMessageDialog(null, "Department already deactivated.");
+                return;
+            }
+            
+            
             int deptID = (int) table.getValueAt(row, 0);
             if (!empDAO.getEmployeesByDepartment(deptID).isEmpty()){
                 JOptionPane.showMessageDialog(null, "This department has employees.", "Cannot deactivate department", JOptionPane.WARNING_MESSAGE);
@@ -107,6 +126,10 @@ public class DepartmentManagementController {
                 loadDeptTable(deptDAO.getAllDepartments());
             }
         }));
+    }
+
+    public boolean isInvalidInput(String department){
+        return department.length() < 3 || department.length() > 40;
     }
 
     public boolean isExistingDepartment(String department){
