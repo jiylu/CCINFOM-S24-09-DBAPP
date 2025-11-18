@@ -393,9 +393,9 @@ public class ReportDAO {
         query.append("YEAR(t.creation_date) AS year, ");
         query.append("c.category_name, ");
         query.append("COUNT(t.ticket_id) AS total_tickets ");
-        query.append("FROM departments d ");
+        query.append("FROM Departments d ");
         query.append("JOIN employees e ON d.department_id = e.dept_id ");
-        query.append("JOIN tickets t ON e.emp_id = t.employee_id ");
+        query.append("JOIN tickets t ON e.emp_id = t.emp_id ");
         query.append("JOIN categories c ON t.category_id = c.category_id ");
         query.append("GROUP BY d.department_name, YEAR(t.creation_date), c.category_name ");
         query.append("ORDER BY d.department_name, year;");
@@ -433,7 +433,7 @@ public class ReportDAO {
         query.append("COUNT(t.ticket_id) AS total_tickets ");
         query.append("FROM departments d ");
         query.append("JOIN employees e ON d.department_id = e.dept_id ");
-        query.append("JOIN tickets t ON e.emp_id = t.employee_id ");
+        query.append("JOIN tickets t ON e.emp_id = t.emp_id ");
         query.append("JOIN categories c ON t.category_id = c.category_id ");
         query.append("WHERE d.department_id = ? ");
         query.append("GROUP BY d.department_name, YEAR(t.creation_date), c.category_name ");
@@ -473,7 +473,7 @@ public class ReportDAO {
         query.append("COUNT(t.ticket_id) AS total_tickets ");
         query.append("FROM departments d ");
         query.append("JOIN employees e ON d.department_id = e.dept_id ");
-        query.append("JOIN tickets t ON e.emp_id = t.employee_id ");
+        query.append("JOIN tickets t ON e.emp_id = t.emp_id ");
         query.append("JOIN categories c ON t.category_id = c.category_id ");
         query.append("WHERE YEAR(t.creation_date) = ? ");
         query.append("GROUP BY d.department_name, YEAR(t.creation_date), c.category_name ");

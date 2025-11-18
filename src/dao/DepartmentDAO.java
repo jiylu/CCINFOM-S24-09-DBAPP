@@ -14,7 +14,7 @@ public class DepartmentDAO {
 
     public List<Department> getAllDepartments(){
         List<Department> list = new ArrayList<>();
-        String query = "SELECT * FROM departments ORDER BY active DESC, department_id";
+        String query = "SELECT * FROM Departments ORDER BY active DESC, department_id";
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(query);
@@ -32,7 +32,8 @@ public class DepartmentDAO {
             return list;
         } catch (Exception e) {
             System.out.println("Error retrieving all departments.");
-            return null;
+            e.printStackTrace();
+            return new ArrayList<>();
         }
     }
 
@@ -40,9 +41,9 @@ public class DepartmentDAO {
         List<String> list = new ArrayList<>();
         String query = null;
         if (excludeAdministration){
-            query = "SELECT department_name FROM departments WHERE department_name != 'Administration'";
+            query = "SELECT department_name FROM Departments WHERE department_name != 'Administration'";
         } else {
-            query = "SELECT department_name FROM departments";
+            query = "SELECT department_name FROM Departments";
         }
 
         try (Statement stmt = conn.createStatement()){
@@ -63,7 +64,7 @@ public class DepartmentDAO {
     }
 
     public Department getDepartmentByID(int departmentID) {
-        String query = "SELECT * FROM departments WHERE department_id = ?";
+        String query = "SELECT * FROM Departments WHERE department_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)){
             ps.setInt(1, departmentID);
             ResultSet rs = ps.executeQuery();
@@ -87,7 +88,7 @@ public class DepartmentDAO {
     }
 
     public Integer getDepartmentIDByName(String department){
-        String query = "SELECT department_id FROM departments WHERE department_name= ?";
+        String query = "SELECT department_id FROM Departments WHERE department_name= ?";
         try (PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, department);
             ResultSet rs = ps.executeQuery();
@@ -108,7 +109,7 @@ public class DepartmentDAO {
     }
 
     public void insertDepartment(String departmentName){
-        String query = "INSERT INTO departments (department_name) VALUES (?)";
+        String query = "INSERT INTO Departments (department_name) VALUES (?)";
 
         try (PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, departmentName);
@@ -120,7 +121,7 @@ public class DepartmentDAO {
     }
 
     public void editDepartment(int deptID, String departmentName){
-        String query = "UPDATE departments SET department_name = ? WHERE department_id = ?";
+        String query = "UPDATE Departments SET department_name = ? WHERE department_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, departmentName);
             ps.setInt(2, deptID);
@@ -138,7 +139,7 @@ public class DepartmentDAO {
     }
 
     public void deactivateDepartment(int deptID){
-        String query = "UPDATE departments SET active = 0 WHERE department_id = ?";
+        String query = "UPDATE Departments SET active = 0 WHERE department_id = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)){
             ps.setInt(1, deptID);
             int rowsAffected = ps.executeUpdate();
