@@ -18,6 +18,10 @@ public class UserManagementPanel extends JPanel{
     private JButton addUser;
     private JButton viewByDepartment;
 
+    private JLabel searchLabel;
+    private JTextField searchByUserIdField;
+    private JButton searchButton;
+
     private JTable table;
     private JScrollPane tableScrollPane;
 
@@ -27,6 +31,9 @@ public class UserManagementPanel extends JPanel{
         setupViewTechniciansButton();
         setupAddUserButton();
         setupViewByDepartmentButton();
+        setupSearchLabel();
+        setupSearchByUserIdField();
+        setupSearchButton();
     }
 
     private void setupViewEmployeesButton(){
@@ -54,6 +61,26 @@ public class UserManagementPanel extends JPanel{
         viewByDepartment.setVisible(false);
     }
 
+    private void setupSearchLabel() {
+        searchLabel = new JLabel("User ID:");
+        searchLabel.setBounds(925, 20, 100, 25); 
+        add(searchLabel);
+        searchLabel.setVisible(false);
+    }
+
+    private void setupSearchByUserIdField() {
+        searchByUserIdField = new JTextField(10);
+        searchByUserIdField.setBounds(980, 20, 100, 25);
+        add(searchByUserIdField);
+        searchByUserIdField.setVisible(false);
+    }
+    
+    private void setupSearchButton() {
+        searchButton = new JButton("Search");
+        searchButton.setBounds(1085, 20, 80, 25);
+        add(searchButton);
+        searchButton.setVisible(false);
+    }
 
     public void shift(){
         viewByDepartment.setVisible(true);
@@ -62,6 +89,19 @@ public class UserManagementPanel extends JPanel{
     public void revert(){
         viewByDepartment.setVisible(false);
     }
+
+    public void showSearchUserId(){
+        searchLabel.setVisible(true);
+        searchByUserIdField.setVisible(true);
+        searchButton.setVisible(true);
+    }
+
+    public void hideSearchUserId(){
+        searchLabel.setVisible(false);
+        searchByUserIdField.setVisible(false);
+        searchButton.setVisible(false);
+    }
+
 
     private DefaultTableModel setupTable(String[] cols){
         if (tableScrollPane != null){
@@ -212,5 +252,13 @@ public class UserManagementPanel extends JPanel{
 
     public JButton getAddUser() {
         return addUser;
+    }
+
+    public JTextField getSearchByUserIdField() {
+        return searchByUserIdField;
+    }
+
+    public JButton getSearchButton() {
+        return searchButton;
     }
 }

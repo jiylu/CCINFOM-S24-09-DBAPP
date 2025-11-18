@@ -150,6 +150,35 @@ public class UserDAO {
         }
     }
 
+    
+    public UserAccount getUserAccountByID(int userID){
+        String query = "SELECT * FROM UserAccounts WHERE user_id = ?";
+
+        try (PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()){
+                UserAccount user = new UserAccount(
+                    rs.getInt(1),
+                    rs.getString(2),
+                    rs.getString(3),
+                    rs.getString(4)
+
+                );
+                rs.close();
+                ps.close();
+                return user;
+            }
+
+            rs.close();
+            ps.close();
+            return null;
+        } catch (SQLException e){
+            System.out.println("getUserAccountByID error.");
+            return null;
+        }
+    }
 
     public UserAccount insertUserAccount(String role, String username, String password){
         String query = "INSERT INTO UserAccounts (role, username, password) VALUES (?, ?, ?)";
