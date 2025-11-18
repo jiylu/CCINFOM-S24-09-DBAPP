@@ -94,7 +94,6 @@ public class TicketsDAO {
         }
     }
 
-
     public int getLastTechnicianId() {
         int technicianId;
         String query = "SELECT tech_id FROM Tickets ORDER BY ticket_id DESC LIMIT 1;";
