@@ -125,8 +125,7 @@ VALUES
     (50029, 30010),
     (50030, 30011),
     (50031, 30012),
-    (50032, 30013),
-    (50034, 30014);
+    (50032, 30013);
 
 INSERT IGNORE INTO Categories (category_name)
 VALUES
