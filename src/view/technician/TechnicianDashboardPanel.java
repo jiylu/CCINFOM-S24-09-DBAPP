@@ -98,7 +98,7 @@ public class TechnicianDashboardPanel extends JPanel {
         styleNavButton(ticketHistoryButton);
         navPanel.add(ticketHistoryButton);
 
-        logoutButton = new JButton("Logout Button");
+        logoutButton = new JButton("Logout");
         logoutButton.setFont(buttonFont);
         logoutButton.setBounds(20, 310, 240, 50);
         styleLogoutButton(logoutButton);
