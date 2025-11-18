@@ -135,7 +135,7 @@ public class UserManagementController {
                 return;
             }
 
-            if (ticketsDAO.hasActiveOrEnqueuedTickets(empID)) {
+            if (ticketsDAO.hasActiveOrEnqueuedTickets(empID, TicketsDAO.EMP_TICKETS)) {
                 JOptionPane.showMessageDialog(null,
                         "This Employee still has Active or Enqueued Tickets.", "Cannot Deactivate Employee",
                                 JOptionPane.WARNING_MESSAGE);
@@ -197,7 +197,7 @@ public class UserManagementController {
                 return;
             }
 
-            if(ticketsDAO.hasActiveOrEnqueuedTickets(technicianID)) {
+            if(ticketsDAO.hasActiveOrEnqueuedTickets(technicianID, TicketsDAO.TECH_TICKETS)) {
                 JOptionPane.showMessageDialog(null,
                         "This Technician still has Active or Enqueued Tickets.", "Cannot Deactivate Technician",
                                 JOptionPane.WARNING_MESSAGE);

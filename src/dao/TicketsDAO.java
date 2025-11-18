@@ -3,7 +3,6 @@ package dao;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import models.CancelledTickets;
 import models.ResolvedTickets;
 import models.Tickets;
@@ -11,6 +10,9 @@ import models.Tickets;
 public class TicketsDAO {
     private Connection connection;
 
+    public static final int TECH_TICKETS = 1;
+    public static final int EMP_TICKETS = 2;
+    
     public TicketsDAO(Connection connection) {
         this.connection = connection;
     }
@@ -456,11 +458,17 @@ public class TicketsDAO {
         }
     }
 
-    public boolean hasActiveOrEnqueuedTickets(int technicianId) {
-        String query = "SELECT COUNT(*) FROM Tickets WHERE tech_id = ? AND status IN ('Active', 'Enqueued')";
+    public boolean hasActiveOrEnqueuedTickets(int id, int identifier){
+        String query = "SELECT COUNT(*) FROM Tickets WHERE ";
+        
+        if (identifier == EMP_TICKETS){
+            query = query + "emp_id = ? AND status IN ('Active', 'Enqueued')"; 
+        } else if (identifier == TECH_TICKETS){
+            query = query + "tech_id = ? AND status IN ('Active', 'Enqueued')"; 
+        }
 
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, technicianId);
+            stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1) > 0;
