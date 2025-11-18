@@ -147,14 +147,27 @@ public class EmployeeDashboardController{
         }
 }
 
-    private int getTechnicianId() { //tagakuha ng next tecgnician
+    private int getTechnicianId() { 
         List<Technicians> allTechs = techniciansDAO.getAllTechnicians();
-        if (allTechs == null || allTechs.isEmpty()) return 0; // fallback
+        if (allTechs == null || allTechs.isEmpty()) return -1;
 
-        // increment index 
-        lastTechIndex = (lastTechIndex + 1) % allTechs.size();
+        int lastAssignedTechId = ticketsDAO.getLastTechnicianId();
+        int size = allTechs.size();
+        int lastAssignedIndex = -1;
 
-        return allTechs.get(lastTechIndex).getTechnician_id();
+        for (int i = 0; i < size; i++) {
+            if (allTechs.get(i).getTechnician_id() == lastAssignedTechId) {
+                lastAssignedIndex = i;
+                break;
+            }
+        }
+
+        if (lastAssignedIndex != -1) {
+            int nextIndex = (lastAssignedIndex + 1) % size;
+            return allTechs.get(nextIndex).getTechnician_id();
+        } 
+        
+        return allTechs.get(0).getTechnician_id();
     }
 
     private void viewTicketHistory() {
