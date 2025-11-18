@@ -90,6 +90,9 @@ public class UserManagementPanel extends JPanel {
         searchButton.setBounds(1085, 20, 80, 25);
         add(searchButton);
         searchButton.setVisible(false);
+
+    }
+
     private void styleButton(JButton button) {
         button.setFocusPainted(false);
         button.setBackground(new Color(0, 102, 204)); // Blue buttons
@@ -127,10 +130,6 @@ public class UserManagementPanel extends JPanel {
         searchByUserIdField.setVisible(false);
         searchButton.setVisible(false);
     }
-
-
-    private DefaultTableModel setupTable(String[] cols){
-        if (tableScrollPane != null){
     // ================= TABLE SETUP =================
     private DefaultTableModel setupTable(String[] cols) {
         if (tableScrollPane != null) {
@@ -273,5 +272,4 @@ public class UserManagementPanel extends JPanel {
     public JButton getSearchButton() {
         return searchButton;
     }
-}
 }
