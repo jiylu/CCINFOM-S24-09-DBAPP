@@ -1,7 +1,6 @@
 package controllers.admin;
 
 import dao.*;
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JCheckBox;
@@ -9,9 +8,8 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import models.EmpUser;
-import models.Employees;
-import models.TechUser;
-import models.Technicians;
+import models.EmployeeUserTableModel;
+import models.TechnicianUserTableModel;
 import models.UserAccount;
 import util.ButtonEditor;
 import util.ButtonRenderer;
@@ -21,6 +19,7 @@ import view.admin.UserManagementPanel;
 public class UserManagementController {
     private EmpUser user;
     private UserManagementPanel panel;    
+    private UserTableDAO userTableDAO;
     private UserDAO userDAO;
     private EmployeesDAO empDAO;
     private TechniciansDAO techDAO;
@@ -30,9 +29,10 @@ public class UserManagementController {
     private AddUserPanel addUserPanel;
     private AddUserController addUserController;
 
-    public UserManagementController(EmpUser user, UserManagementPanel panel, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO){
+    public UserManagementController(EmpUser user, UserManagementPanel panel, UserTableDAO userTableDAO, UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO, TicketsDAO ticketsDAO){
         this.user = user;
         this.panel = panel;
+        this.userTableDAO = userTableDAO;
         this.userDAO = userDAO;
         this.empDAO = empDAO;
         this.techDAO = techDAO;
@@ -62,16 +62,13 @@ public class UserManagementController {
 
     private void initViewEmployees(){
         panel.getViewEmployees().addActionListener(e->{
-            List<Employees> empList = empDAO.getAllEmployees();
-            List<UserAccount> userList = userDAO.getAllUserAccounts();
-
-            loadEmployeesTable(empList, userList);
+            List<EmployeeUserTableModel> empList = userTableDAO.getAllEmployees();
+            loadEmployeesTable(empList);
         });
     }
 
-    private void loadEmployeesTable(List<Employees> empList, List<UserAccount> userList){
-        List<EmpUser> empUsers = userDAO.getAllEmpUsers();
-        panel.setupEmployeesTable(empList, userList, empUsers); 
+    private void loadEmployeesTable(List<EmployeeUserTableModel> empList){
+        panel.setupEmployeesTable(empList);
         JTable table = panel.getTable();
         table.getColumn("Edit").setCellRenderer(new ButtonRenderer("Edit"));
         table.getColumn("Deactivate").setCellRenderer(new ButtonRenderer("Deactivate")); 
@@ -83,7 +80,6 @@ public class UserManagementController {
 
     private void initViewByUserID(){
         panel.getSearchButton().addActionListener(e->{
-
         String userId = panel.getSearchByUserIdField().getText().trim();
 
         if (userId.isEmpty()){
@@ -106,26 +102,22 @@ public class UserManagementController {
             JOptionPane.showMessageDialog(null, "User ID " + userID + " not found.", "Search Result", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+
         if (userD.getRole().equals("Employee")){ 
-                Employees emp = empDAO.getEmployeeByUserId(userID);
-                List<Employees> empList = new ArrayList<>();
+                EmployeeUserTableModel emp = userTableDAO.getEmployee(userID);
+                List<EmployeeUserTableModel> empList = new ArrayList<>();
                 empList.add(emp);
-                List<UserAccount> userList = new ArrayList<>();
-                userList.add(userD);
-                loadEmployeesTable(empList, userList);
+                loadEmployeesTable(empList);
 
         } else if (userD.getRole().equals("Technician")){
-                Technicians tech = techDAO.getTechnicianByUserID(userID);
-                List<Technicians> techList = new ArrayList<>();
+                TechnicianUserTableModel tech = userTableDAO.getTechnicianByUserID(userID);
+                List<TechnicianUserTableModel> techList = new ArrayList<>();
                 techList.add(tech);
-                List<UserAccount> userList = new ArrayList<>();
-                userList.add(userD);
-                loadTechniciansTable(techList, userList);
+                loadTechniciansTable(techList);
 
         } else {
             JOptionPane.showMessageDialog(null, "User ID " + userID + " is not an Employee or Technician.", "Search Result", JOptionPane.INFORMATION_MESSAGE);
-
-        };     
+        }     
         
     });
  };
@@ -138,10 +130,8 @@ public class UserManagementController {
             if (res == JOptionPane.OK_OPTION){
                 String selectedDept = (String) comboBox.getSelectedItem();
                 int deptID = deptDAO.getDepartmentIDByName(selectedDept);
-                List<Employees> empList = empDAO.getEmployeesByDepartment(deptID);
-                List<UserAccount> userList = userDAO.getAllUserAccounts();
-                List<EmpUser> empUsers = userDAO.getAllEmpUsers();
-                panel.setupEmployeesTable(empList, userList, empUsers); 
+                List<EmployeeUserTableModel> empList = userTableDAO.getAllEmployeesByDepartment(deptID);
+                loadEmployeesTable(empList);
             }
         });
     }
@@ -150,9 +140,8 @@ public class UserManagementController {
         EditUserController euc = new EditUserController(userDAO, empDAO, techDAO, deptDAO);
 
         euc.setOnSaveCallback(() -> {
-        List<Employees> empList = empDAO.getAllEmployees();
-            List<UserAccount> userList = userDAO.getAllUserAccounts();
-            loadEmployeesTable(empList, userList);
+            List<EmployeeUserTableModel> empList = userTableDAO.getAllEmployees();
+            loadEmployeesTable(empList);
         });
 
         euc.initListener(table);
@@ -162,9 +151,8 @@ public class UserManagementController {
         EditUserController euc = new EditUserController(userDAO, empDAO, techDAO, deptDAO);
 
         euc.setOnSaveCallback(() -> {
-            List<Technicians> techList = techDAO.getAllTechnicians();
-            List<UserAccount> userList = userDAO.getAllUserAccounts();
-            loadTechniciansTable(techList, userList);
+            List<TechnicianUserTableModel> techList = userTableDAO.getAllTechnicians();
+            loadTechniciansTable(techList);
         });
 
         euc.initListener(table);
@@ -202,26 +190,21 @@ public class UserManagementController {
                 JOptionPane.showMessageDialog(null, "Deactivated User ID " + userID);
                 
                 // refresh table
-                List<Employees> empList = empDAO.getAllEmployees();
-                List<UserAccount> userList = userDAO.getAllUserAccounts();
-
-                loadEmployeesTable(empList, userList);
+                List<EmployeeUserTableModel> empList = userTableDAO.getAllEmployees();
+                loadEmployeesTable(empList);
             }
         }));
     }
 
     private void initViewTechnicians(){
         panel.getViewTechnicians().addActionListener(e->{
-            List<Technicians> techList = techDAO.getAllTechnicians();
-            List<UserAccount> userList = userDAO.getAllUserAccounts();
-
-            loadTechniciansTable(techList, userList);
+            List<TechnicianUserTableModel> techList = userTableDAO.getAllTechnicians();
+            loadTechniciansTable(techList);
         });
     }
 
-    private void loadTechniciansTable(List<Technicians> techList, List<UserAccount> userList){
-        List<TechUser> techUsers = userDAO.getAllTechUsers();
-        panel.setupTechniciansTable(techList, userList, techUsers); 
+    private void loadTechniciansTable(List<TechnicianUserTableModel> techList){
+        panel.setupTechniciansTable(techList); 
 
         JTable table = panel.getTable();
         table.getColumn("Edit").setCellRenderer(new ButtonRenderer("Edit"));
@@ -264,10 +247,8 @@ public class UserManagementController {
                 JOptionPane.showMessageDialog(null, "Deactivated User ID " + userID);
                 
                 // refresh table
-                List<Technicians> techList = techDAO.getAllTechnicians();
-                List<UserAccount> userList = userDAO.getAllUserAccounts();
-
-                loadTechniciansTable(techList, userList);
+                List<TechnicianUserTableModel> techList = userTableDAO.getAllTechnicians();
+                loadTechniciansTable(techList);
             }
         }));
     }

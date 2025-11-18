@@ -81,20 +81,22 @@ public class EditUserController {
         username = table.getValueAt(row, 2).toString();
         password = table.getValueAt(row, 3).toString();
         String fullName = table.getValueAt(row, 4).toString();
-        String[] nameParts = fullName.split(",\\s*");
+        String[] nameParts = fullName.split("\\s+");
         lastName = nameParts[0];
         firstName = nameParts.length > 1 ? nameParts[1] : "";
     }
 
     private void determineRole(JTable table, int row) {
-        Object roleValue = table.getValueAt(row, 6);
-
-        if (roleValue != null && roleValue.toString().equalsIgnoreCase("Admin")) {
-            userRole = UserAccount.ADMIN_ROLE;
-            deptID = (int) table.getValueAt(row, 5);
-        } else if (table.getValueAt(row, 5) instanceof Integer) { 
-            userRole = UserAccount.EMP_ROLE;
-            deptID = (int) table.getValueAt(row, 5);
+        String col = table.getColumnName(5);
+        
+        if (col.equalsIgnoreCase("Department")){
+            String department = table.getValueAt(row, 5).toString(); 
+            
+            if (department.equalsIgnoreCase("Administration")){
+                userRole = UserAccount.ADMIN_ROLE;
+            } else {
+                userRole = UserAccount.EMP_ROLE;
+            }
         } else {
             userRole = UserAccount.TECH_ROLE;
         }
@@ -106,36 +108,42 @@ public class EditUserController {
         editPanel.getPasswordField().setText(password);
         editPanel.getFirstNameField().setText(firstName);
         editPanel.getLastNameField().setText(lastName);
-        String role = userRole;
         
-        editPanel.getRoles().setSelectedItem(Character.toUpperCase(role.charAt(0)) + role.substring(1));
-        dropBoxFunctionality();
-
-        if (userRole.contentEquals(UserAccount.EMP_ROLE)) {
-            String[] departments = deptDAO.getAllDepartmentNames(false).toArray(new String[0]);
-            editPanel.transformToEmployeeFields(departments);
-
-            String currDept = deptDAO.getDepartmentByID(deptID).getDepartmentName();
-            editPanel.getDepartmentBox().setSelectedItem(currDept);
-            editPanel.getEmployeeRole().setText(table.getValueAt(row, 6).toString());
-        } 
+        editPanel.getRoles().setSelectedItem(userRole);
+        String[] departments = deptDAO.getAllDepartmentNames(false).toArray(new String[0]);
+        String department = table.getValueAt(row, 5).toString();
 
         if (userRole.contentEquals(UserAccount.EMP_ROLE) || userRole.contentEquals(UserAccount.ADMIN_ROLE)){
+            dropBoxFunctionality(table, departments, department, row);
+        }
+
+        if (userRole.contentEquals(UserAccount.EMP_ROLE) || userRole.contentEquals(UserAccount.ADMIN_ROLE)) {
+            dropBoxFunctionality(table, departments, department, row);
             editPanel.getRoles().removeItem("Technician");
+
+            if (userRole.contentEquals(UserAccount.EMP_ROLE)){
+                editPanel.transformToEmployeeFields(departments);
+                editPanel.getDepartmentBox().setSelectedItem(department);
+                editPanel.getEmployeeRole().setText(table.getValueAt(row, 6).toString());
+            }
+
         } else {
             editPanel.getRoles().setEnabled(false);
         }
     }
 
-    private void dropBoxFunctionality(){
+    private void dropBoxFunctionality(JTable table, String[] departments, String department, int row){
         editPanel.getRoles().addActionListener(e->{
             String selectedRole = (String) editPanel.getRoles().getSelectedItem();
             String[] departmentList = deptDAO.getAllDepartmentNames(true).toArray(new String[0]);
             
-            if (selectedRole.contentEquals("Employee")){
+            if (selectedRole.contentEquals(UserAccount.EMP_ROLE)){
                 userRole = UserAccount.EMP_ROLE;
+                editPanel.transformToEmployeeFields(departments);
+                editPanel.getDepartmentBox().setSelectedItem(department);
+                editPanel.getEmployeeRole().setText(table.getValueAt(row, 6).toString());
                 editPanel.transformToEmployeeFields(departmentList);
-            } else {
+            } else if (selectedRole.contentEquals(UserAccount.ADMIN_ROLE)) {
                 userRole = UserAccount.ADMIN_ROLE;
                 editPanel.revert();
             }
@@ -153,7 +161,7 @@ public class EditUserController {
 
     private void updateEmployeeData(UserAccount user){
         String newLastName = editPanel.getLastNameField().getText().trim();
-        String newFirstName = editPanel.getLastNameField().getText().trim();
+        String newFirstName = editPanel.getFirstNameField().getText().trim();
         String newRole = editPanel.getEmployeeRole().getText().trim();
         String newDept = editPanel.getDepartmentBox().getSelectedItem().toString();
         int newDeptID = deptDAO.getDepartmentIDByName(newDept);
@@ -164,7 +172,7 @@ public class EditUserController {
 
     private void updateAdminData(UserAccount user){
         String newLastName = editPanel.getLastNameField().getText().trim();
-        String newFirstName = editPanel.getLastNameField().getText().trim();
+        String newFirstName = editPanel.getFirstNameField().getText().trim();
         int fieldDeptID = deptDAO.getDepartmentIDByName("Administration");
 
         Employees emp = new Employees(specID, newLastName, newFirstName, fieldDeptID, "Admin", true);
