@@ -29,7 +29,7 @@ public class EditUserController {
     private String lastName;
     private String firstName; 
     private String userRole;
-    private int deptID;
+    private String department;
 
     public EditUserController (UserDAO userDAO, EmployeesDAO empDAO, TechniciansDAO techDAO, DepartmentDAO deptDAO){
         this.userDAO = userDAO;
@@ -90,7 +90,7 @@ public class EditUserController {
         String col = table.getColumnName(5);
         
         if (col.equalsIgnoreCase("Department")){
-            String department = table.getValueAt(row, 5).toString(); 
+            department = table.getValueAt(row, 5).toString(); 
             
             if (department.equalsIgnoreCase("Administration")){
                 userRole = UserAccount.ADMIN_ROLE;
@@ -111,14 +111,12 @@ public class EditUserController {
         
         editPanel.getRoles().setSelectedItem(userRole);
         String[] departments = deptDAO.getAllDepartmentNames(false).toArray(new String[0]);
-        String department = table.getValueAt(row, 5).toString();
 
         if (userRole.contentEquals(UserAccount.EMP_ROLE) || userRole.contentEquals(UserAccount.ADMIN_ROLE)){
             dropBoxFunctionality(table, departments, department, row);
         }
 
         if (userRole.contentEquals(UserAccount.EMP_ROLE) || userRole.contentEquals(UserAccount.ADMIN_ROLE)) {
-            dropBoxFunctionality(table, departments, department, row);
             editPanel.getRoles().removeItem("Technician");
 
             if (userRole.contentEquals(UserAccount.EMP_ROLE)){
@@ -140,7 +138,7 @@ public class EditUserController {
             if (selectedRole.contentEquals(UserAccount.EMP_ROLE)){
                 userRole = UserAccount.EMP_ROLE;
                 editPanel.transformToEmployeeFields(departments);
-                editPanel.getDepartmentBox().setSelectedItem(department);
+                editPanel.getDepartmentBox().setSelectedItem(table.getValueAt(row, 5).toString());
                 editPanel.getEmployeeRole().setText(table.getValueAt(row, 6).toString());
                 editPanel.transformToEmployeeFields(departmentList);
             } else if (selectedRole.contentEquals(UserAccount.ADMIN_ROLE)) {
