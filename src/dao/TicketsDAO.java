@@ -94,6 +94,25 @@ public class TicketsDAO {
         }
     }
 
+    public int getLastTechnicianId() {
+        int technicianId;
+        String query = "SELECT tech_id FROM Tickets ORDER BY ticket_id DESC LIMIT 1;";
+
+         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                technicianId = rs.getInt("tech_id");
+            } else {
+                technicianId = -1; 
+            }
+        } catch (SQLException e) {
+            System.out.println("Error retrieving last technician ID.");
+            e.printStackTrace();
+            technicianId = -1; 
+        }
+        return technicianId; 
+    }
+
     public List<Tickets> getTicketsByCategoryID(int categoryID) throws SQLException {
         List<Tickets> list = new ArrayList<>();
         String query = "SELECT * FROM tickets t WHERE t.category_id = ?";
