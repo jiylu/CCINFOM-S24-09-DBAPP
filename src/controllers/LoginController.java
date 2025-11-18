@@ -81,11 +81,7 @@ public class LoginController {
 
         if (user.getRole().contentEquals(UserAccount.EMP_ROLE) || user.getRole().contentEquals(UserAccount.ADMIN_ROLE)){
             Employees emp = null;
-            try {
-                emp = empDAO.getEmployeeByUserId(user.getUserID());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            emp = empDAO.getEmployeeByUserId(user.getUserID());
             if (!emp.isActive()){
                 JOptionPane.showMessageDialog(null, "User is deactivated.", "Invalid", JOptionPane.ERROR_MESSAGE);
                 return null;

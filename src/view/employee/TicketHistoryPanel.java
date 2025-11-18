@@ -26,15 +26,23 @@ public class TicketHistoryPanel extends JPanel {
     }
 
     private void initTable() {
-        String[] columnNames = {"Ticket ID", "Category ID", "Department ID", "Employee ID", 
-                                "Technician ID", "Creation Date", "Status"};
+        String[] columnNames = {"Ticket ID", "Category ID", "Ticket Subject", "Ticket Description", "Technician ID", "Creation Date", "Status"};
 
         tableModel = new DefaultTableModel(columnNames, 0);
         ticketTable = new JTable(tableModel);
+        ticketTable.setRowHeight(30);
+
         scrollPane = new JScrollPane(ticketTable);
         scrollPane.setBounds(30, 115, 750, 400);
         add(scrollPane);
-    }
+
+        int[] columnWidths = {60, 60, 150, 250, 65, 87, 80};
+        for (int i = 0; i < columnWidths.length; i++) {
+            ticketTable.getColumnModel().getColumn(i).setPreferredWidth(columnWidths[i]);
+            ticketTable.getColumnModel().getColumn(i).setMinWidth(columnWidths[i]);
+            ticketTable.getColumnModel().getColumn(i).setMaxWidth(columnWidths[i]);
+        }
+        }
 
     public void loadTickets(java.util.List<models.Tickets> tickets) {
         
@@ -44,7 +52,8 @@ public class TicketHistoryPanel extends JPanel {
             tableModel.addRow(new Object[] {
                 ticket.getTicket_id(),
                 ticket.getCategory_id(),
-                ticket.getEmployee_id(),
+                ticket.getTicket_subject(),
+                ticket.getTicket_description(),
                 ticket.getTechnician_id(),
                 ticket.getCreation_date(),
                 ticket.getStatus()
