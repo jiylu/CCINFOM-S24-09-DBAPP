@@ -67,7 +67,7 @@ public class DepartmentManagementPanel extends JPanel {
         table.getTableHeader().setForeground(Color.WHITE);
 
         tableScrollPane = new JScrollPane(table);
-        tableScrollPane.setBounds(20, 70, 1120, 620);
+        tableScrollPane.setBounds(20, 70, 1120, 500);
         tableScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         tableScrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
         add(tableScrollPane);
