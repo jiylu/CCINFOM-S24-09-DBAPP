@@ -171,7 +171,33 @@ VALUES
 ('PC performance optimization', 'Computer performance is slow with multiple apps running. User requests optimization for faster workflow.', 1, '2023-04-25 14:00:00', 90013, 30001, 'Resolved'), -- 30001 2 Resolved
 ('Software license renewal', 'Software license has expired. User requires renewal to continue working.', 2, '2023-07-19 09:30:00', 90006, 30002, 'Resolved'), -- 30002 2 Resolved
 ('Projector bulb replacement', 'Projector bulb has burnt out and needs replacement. User requests installation before next meeting.', 4, '2024-01-15 08:50:00', 90018, 30003, 'Resolved'), -- 30003 2 Resolved
-('Network speed issue', 'Internet speed is very slow for tasks requiring high bandwidth. User requests network troubleshooting.', 3, '2024-06-05 14:10:00', 90004, 30004, 'Resolved'); -- 30004 2 Resolved
+('Network speed issue', 'Internet speed is very slow for tasks requiring high bandwidth. User requests network troubleshooting.', 3, '2024-06-05 14:10:00', 90004, 30004, 'Resolved'), -- 30004 2 Resolved
+
+-- additional resolved tickets
+('Email sync failure', 'User reports that email is not syncing across devices and requests immediate fix', 2, '2021-03-11 10:20:00', 90009, 30005, 'Resolved'), 
+('Printer not responding', 'Printer stops working during document processing and needs troubleshooting', 3, '2024-02-18 15:45:00', 90002, 30006, 'Resolved'), 
+('WiFi intermittent connection', 'Device keeps disconnecting from the wireless network and requires diagnostics', 1, '2020-09-22 08:50:00', 90014, 30007, 'Resolved'), 
+('Password reset request', 'User cannot access the system and needs a manual password reset', 4, '2025-05-19 09:00:00', 90001, 30008, 'Resolved'), 
+('Application crash issue', 'Work application repeatedly crashes during use and needs investigation', 2, '2022-12-04 13:10:00', 90018, 30009, 'Resolved'), 
+('Monitor display flickering', 'Monitor flickers randomly which affects user productivity', 3, '2023-08-29 11:27:00', 90006, 30010, 'Resolved'), 
+('VPN connection timeout', 'VPN disconnects after a few minutes and requires stable configuration', 1, '2021-06-17 16:30:00', 90011, 30011, 'Resolved'), 
+('Account lockout', 'User account becomes locked after multiple login attempts and needs unlocking', 4, '2025-03-03 07:55:00', 90004, 30012, 'Resolved'), 
+('Software update failure', 'System fails to complete software update and needs manual patching', 2, '2020-11-09 13:40:00', 90017, 30013, 'Resolved'), 
+('Overheating laptop', 'Laptop overheats during normal usage and requires hardware cleaning', 3, '2023-02-14 10:05:00', 90008, 30000, 'Resolved'), 
+('Slow network authentication', 'Network login takes too long before granting access', 1, '2024-07-26 12:20:00', 90003, 30001, 'Resolved'), 
+('Missing application permissions', 'User cannot use specific application features due to missing permissions', 4, '2025-01-06 14:55:00', 90010, 30002, 'Resolved'), 
+('Loose keyboard keys', 'Keyboard keys are loose and sometimes unresponsive and need replacement', 3, '2022-04-08 09:30:00', 90000, 30003, 'Resolved'), 
+('System slow boot', 'System takes too long to start and requires optimization', 1, '2023-09-13 08:10:00', 90005, 30004, 'Resolved'), 
+('Firewall restriction issue', 'User reports that certain websites cannot be accessed and needs review of firewall rules', 1, '2021-02-12 09:10:00', 90007, 30005, 'Resolved'), 
+('Spreadsheet tool malfunction', 'User reports that a spreadsheet tool stops responding during data entry and needs fixing', 2, '2024-03-21 11:25:00', 90003, 30006, 'Resolved'), 
+('Laptop battery draining fast', 'Battery depletes quickly during normal use and needs diagnostics', 3, '2020-06-30 14:45:00', 90012, 30007, 'Resolved'), 
+('Account permission update needed', 'User requests additional permissions to perform required tasks', 4, '2025-02-10 08:30:00', 90016, 30008, 'Resolved'), 
+('Network printer mapping issue', 'User cannot map the network printer and needs assistance', 1, '2023-10-14 10:05:00', 90005, 30009, 'Resolved'), 
+('Software installation request', 'User needs assistance installing a new application for work use', 2, '2022-09-19 13:20:00', 90010, 30010, 'Resolved'), 
+('Overheating desktop unit', 'Desktop heats up under light use and needs cleaning and thermal check', 3, '2021-05-04 15:00:00', 90000, 30011, 'Resolved'), 
+('Email access restriction', 'User is unable to access email due to permission settings and needs updating', 4, '2024-08-07 09:55:00', 90011, 30012, 'Resolved'), 
+('Router authentication loop', 'User is stuck in a repeated login loop when connecting to router', 1, '2025-07-12 16:30:00', 90002, 30013, 'Resolved'), 
+('CPU fan making noise', 'CPU fan is producing unusual noise and needs inspection', 3, '2020-10-03 08:40:00', 90014, 30000, 'Resolved');
 
 -- Mapped Accordingly
 INSERT INTO ResolvedTickets (ticket_id, resolve_date) VALUES
@@ -192,4 +218,30 @@ INSERT INTO ResolvedTickets (ticket_id, resolve_date) VALUES
 (40029, '2023-04-25 16:33:08'),
 (40030, '2023-07-19 11:44:22'),
 (40031, '2024-01-15 10:05:39'),
-(40032, '2024-06-05 16:12:27');
+(40032, '2024-06-05 16:12:27'),
+
+-- additional resolved tickets
+(40033, '2021-03-11 15:20:00'),
+(40034, '2024-02-18 21:45:00'),
+(40035, '2020-09-22 15:50:00'),
+(40036, '2025-05-19 13:00:00'),
+(40037, '2022-12-04 21:10:00'),
+(40038, '2023-08-29 17:27:00'),
+(40039, '2021-06-17 21:30:00'),
+(40040, '2025-03-03 14:55:00'),
+(40041, '2020-11-09 19:40:00'),
+(40042, '2023-02-14 15:05:00'),
+(40043, '2024-07-26 20:20:00'),
+(40044, '2025-01-06 18:55:00'),
+(40045, '2022-04-08 16:30:00'),
+(40046, '2023-09-13 14:10:00'),
+(40047, '2021-02-12 14:10:00'),
+(40048, '2024-03-21 18:25:00'),
+(40049, '2020-06-30 18:45:00'),
+(40050, '2025-02-10 16:30:00'),
+(40051, '2023-10-14 16:05:00'),
+(40052, '2022-09-19 20:20:00'),
+(40053, '2021-05-04 20:00:00'),
+(40054, '2024-08-07 15:55:00'),
+(40055, '2025-07-12 20:30:00'),
+(40056, '2020-10-03 16:40:00');
