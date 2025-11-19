@@ -86,6 +86,7 @@ public class TechnicianDashboardController {
             frame.getLoginPanel().getUsernameField().setText("");
             frame.getLoginPanel().getPasswordField().setText("");
             frame.showPanel(Frame.LOGIN_PANEL);
+            this.user = null;
         });
     }
 
