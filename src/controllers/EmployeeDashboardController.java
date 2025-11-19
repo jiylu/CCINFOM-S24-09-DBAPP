@@ -96,8 +96,8 @@ public class EmployeeDashboardController{
     }
 
     private void createTicket() {
-        String subject = createTicketPanel.getSubjectField().getText();
-        String description = createTicketPanel.getDescription().getText();
+        String subject = createTicketPanel.getSubjectField().getText().trim();
+        String description = createTicketPanel.getDescription().getText().trim();
         CategoryItem selectedCategory = (CategoryItem) createTicketPanel.getCategories().getSelectedItem();
 
 
@@ -147,27 +147,32 @@ public class EmployeeDashboardController{
         }
 }
 
-    private int getTechnicianId() { 
+    private int getTechnicianId() {
+
+        // gets the list of all active technicians in the db
         List<Technicians> allTechs = techniciansDAO.getAllTechnicians();
         if (allTechs == null || allTechs.isEmpty()) return -1;
 
-        int lastAssignedTechId = ticketsDAO.getLastTechnicianId();
-        int size = allTechs.size();
-        int lastAssignedIndex = -1;
+        // gets the first technician without any active tickets
+        for (Technicians t : allTechs) {
+            int activeCount = ticketsDAO.getActiveTicketCountByTechnician(t.getTechnician_id());
+            if (activeCount == 0) {
+                return t.getTechnician_id(); // Return the first available technician
+            }
+        } // if all technicians have active tickets, move to next query
 
-        for (int i = 0; i < size; i++) {
-            if (allTechs.get(i).getTechnician_id() == lastAssignedTechId) {
-                lastAssignedIndex = i;
-                break;
+        // gets the technician with the least number of enqueued tickets
+        Technicians chosenTech = null;
+        int minEnqueued = Integer.MAX_VALUE;
+
+        for (Technicians t : allTechs) {
+            int enqueuedCount = ticketsDAO.getEnqueuedTicketCountByTechnician(t.getTechnician_id());
+            if (enqueuedCount < minEnqueued) {
+                minEnqueued = enqueuedCount;
+                chosenTech = t; //technician with least enqueued tickets of all 
             }
         }
-
-        if (lastAssignedIndex != -1) {
-            int nextIndex = (lastAssignedIndex + 1) % size;
-            return allTechs.get(nextIndex).getTechnician_id();
-        } 
-        
-        return allTechs.get(0).getTechnician_id();
+        return (chosenTech != null) ? chosenTech.getTechnician_id() : -1;
     }
 
     private void viewTicketHistory() {

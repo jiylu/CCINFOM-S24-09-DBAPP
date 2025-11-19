@@ -94,24 +94,52 @@ public class TicketsDAO {
         }
     }
 
-    public int getLastTechnicianId() {
-        int technicianId;
-        String query = "SELECT tech_id FROM Tickets WHERE status = 'Enqueued' OR status = 'Active' ORDER BY ticket_id DESC LIMIT 1;";
+    // public int getLastTechnicianId() {
+    //     int technicianId;
+    //     String query = "SELECT tech_id FROM Tickets WHERE status = 'Enqueued' OR status = 'Active' ORDER BY ticket_id DESC LIMIT 1;";
 
-         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                technicianId = rs.getInt("tech_id");
-            } else {
-                technicianId = -1; 
+    //      try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+    //         ResultSet rs = pstmt.executeQuery();
+    //         if (rs.next()) {
+    //             technicianId = rs.getInt("tech_id");
+    //         } else {
+    //             technicianId = -1; 
+    //         }
+    //     } catch (SQLException e) {
+    //         System.out.println("Error retrieving last technician ID.");
+    //         e.printStackTrace();
+    //         technicianId = -1; 
+    //     }
+    //     return technicianId; 
+    // }
+
+    public int getActiveTicketCountByTechnician(int techId) {
+        String query = "SELECT COUNT(*) FROM Tickets WHERE tech_id = ? AND status = 'Active'";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, techId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
             }
         } catch (SQLException e) {
-            System.out.println("Error retrieving last technician ID.");
             e.printStackTrace();
-            technicianId = -1; 
         }
-        return technicianId; 
+        return 0;
+
     }
+
+    public int getEnqueuedTicketCountByTechnician(int techId) {
+        String query = "SELECT COUNT(*) FROM Tickets WHERE tech_id = ? AND status = 'Enqueued'";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setInt(1, techId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
     public List<Tickets> getTicketsByCategoryID(int categoryID) throws SQLException {
         List<Tickets> list = new ArrayList<>();
@@ -311,7 +339,15 @@ public class TicketsDAO {
     }
 
     public int getAvailableTechnicianId() throws SQLException {
-        String sql = "SELECT technician_id FROM Technicians WHERE technician_id NOT IN (SELECT technician_id FROM Tickets WHERE status = 'Active') LIMIT 1";
+        String sql = "SELECT t.technician_id\n" + //
+                        "FROM Technicians t\n" + //
+                        "WHERE NOT EXISTS (\n" + //
+                        "    SELECT 1\n" + //
+                        "    FROM Tickets tk\n" + //
+                        "    WHERE tk.tech_id = t.technician_id\n" + //
+                        "      AND tk.status = 'Active'\n" + //
+                        ")\n" + //
+                        "LIMIT 1;";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery()) {
