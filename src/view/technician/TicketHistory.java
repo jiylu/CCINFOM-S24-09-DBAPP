@@ -80,15 +80,15 @@ public class TicketHistory extends JPanel {
     }
 
     // Optional: clear table
-    public void clearTickets() {
-        tableModel.setRowCount(0);
-    }
+    // public void clearTickets() {
+    //     tableModel.setRowCount(0);
+    // }
 
     public JTable getTicketTable() {
         return ticketTable;
     }
 
-    public DefaultTableModel getTableModel() {
-        return tableModel;
-    }
+    // public DefaultTableModel getTableModel() {
+    //     return tableModel;
+    // }
 }
