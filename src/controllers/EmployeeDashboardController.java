@@ -162,17 +162,17 @@ public class EmployeeDashboardController{
         } // if all technicians have active tickets, move to next query
 
         // gets the technician with the least number of enqueued tickets
-        Technicians bestTech = null;
+        Technicians chosenTech = null;
         int minEnqueued = Integer.MAX_VALUE;
 
         for (Technicians t : allTechs) {
             int enqueuedCount = ticketsDAO.getEnqueuedTicketCountByTechnician(t.getTechnician_id());
             if (enqueuedCount < minEnqueued) {
                 minEnqueued = enqueuedCount;
-                bestTech = t; //technician with least enqueued tickets of all 
+                chosenTech = t; //technician with least enqueued tickets of all 
             }
         }
-        return (bestTech != null) ? bestTech.getTechnician_id() : -1;
+        return (chosenTech != null) ? chosenTech.getTechnician_id() : -1;
     }
 
     private void viewTicketHistory() {
