@@ -41,6 +41,12 @@ public class EmployeeDashboardController{
     public void init(){
         frame.showPanel(Frame.EMPLOYEE_PANEL);
 
+
+        panel.resetPanel();
+        this.panel = frame.getEmployeeDashboardPanel();
+        this.createTicketPanel = panel.getCreateTicketPanel();
+        this.ticketHistoryPanel = panel.getTicketHistoryPanel();
+        
         try {
             Employees emp = empDAO.getEmployeeByUserId(user.getUserID());
             if (emp != null) {

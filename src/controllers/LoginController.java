@@ -116,6 +116,7 @@ public class LoginController {
     private void redirectToTechDashboard(UserAccount u){
         TechUser user = userDAO.getTechUserByID(u.getUserID());
         TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, ticketsDAO, techDAO, categoriesDAO);
+
         System.out.println(technicianDashboardController);
         technicianDashboardController.init();
     }

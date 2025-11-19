@@ -3,6 +3,7 @@ package controllers;
 import dao.CategoriesDAO;
 import dao.TechniciansDAO;
 import dao.TicketsDAO;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -43,6 +44,13 @@ public class TechnicianDashboardController {
 
     public void init(){
         frame.showPanel(Frame.TECHNICIAN_PANEL);
+        panel.resetPanel();
+
+        this.panel = frame.getTechnicianDashboardPanel();
+        this.resolveTicketTechnicianPanel = panel.getResolveTicketTechnicianPanel();
+        this.cancelTicketPanel = panel.getCancelTicketPanel();
+        this.ticketHistoryPanel = panel.getTicketHistoryPanel();
+        this.ticketQueuePanel = panel.getTechnicianTicketQueuePanel();
         updateHeaderName();
         loadTicketCategories();
         loadAssignedTickets();
@@ -188,11 +196,11 @@ private void cancelActiveTicket(Tickets ticket) {
 
     private void loadTicketHistory() {
         try {
-            int technicianId = techDAO.getTechnicianIdByUserId(user.getUserID());
-            List<Tickets> tickets = ticketsDAO.getResolvedTickets(technicianId);
+            System.out.println(user.getTechID() + "eewdwe");
+            List<Tickets> tickets = ticketsDAO.getResolvedTickets(user.getTechID());
             ticketHistoryPanel.loadTickets(tickets);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("loadTicketHistory");
         }
     }
 
