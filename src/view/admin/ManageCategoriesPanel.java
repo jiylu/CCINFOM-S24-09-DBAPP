@@ -12,6 +12,7 @@ public class ManageCategoriesPanel extends JPanel {
     private JButton addCategoryButton;
     private JButton deleteCategoryButton;
     private JButton selectColumnButton;
+    private JButton backButton;
 
     public ManageCategoriesPanel() {
         setLayout(null);
@@ -20,6 +21,7 @@ public class ManageCategoriesPanel extends JPanel {
         setupAddCategoryButton();
         setupSelectColumnButton();
         setupDeleteCategoryButton();
+        setupBackButton();
     }
 
     private void setupAddCategoryButton() {

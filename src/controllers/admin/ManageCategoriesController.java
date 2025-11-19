@@ -88,7 +88,13 @@ public class ManageCategoriesController {
 
             if (res == JOptionPane.YES_OPTION){
                 String input = textField.getText().trim();
-    
+                
+                if (input.length() < 3 || input.length() > 40) {
+                    JOptionPane.showMessageDialog(null, "Category name cannot must be 3 - 40 characters long.", "Input Error",
+                            JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
                 if (isExistingCategory(input)){
                     return;
                 }
@@ -112,8 +118,8 @@ public class ManageCategoriesController {
         if (res == JOptionPane.YES_OPTION) {
             String catName = textField.getText().trim();
 
-            if (catName.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Category name cannot be empty.", "Input Error",
+            if (catName.length() < 3 || catName.length() > 40) {
+                JOptionPane.showMessageDialog(null, "Category name cannot must be 3 - 40 characters long.", "Input Error",
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
