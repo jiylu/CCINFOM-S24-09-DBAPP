@@ -61,4 +61,7 @@ public class TicketHistoryPanel extends JPanel {
         }
     }
 
+    public void clearTickets() {
+        tableModel.setRowCount(0); 
+    }
 }
