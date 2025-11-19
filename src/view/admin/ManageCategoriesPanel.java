@@ -1,9 +1,9 @@
 package view.admin;
 
+import java.awt.*;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import models.Categories;
 
 public class ManageCategoriesPanel extends JPanel {
@@ -21,7 +21,7 @@ public class ManageCategoriesPanel extends JPanel {
         setupAddCategoryButton();
         setupSelectColumnButton();
         setupDeleteCategoryButton();
-        setupBackButton();
+        //setupBackButton();
     }
 
     private void setupAddCategoryButton() {
