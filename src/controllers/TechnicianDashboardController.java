@@ -3,7 +3,6 @@ package controllers;
 import dao.CategoriesDAO;
 import dao.TechniciansDAO;
 import dao.TicketsDAO;
-import db.DBConnection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -45,9 +44,9 @@ public class TechnicianDashboardController {
     public void init(){
         frame.showPanel(Frame.TECHNICIAN_PANEL);
         updateHeaderName();
-        initListeners();
         loadTicketCategories();
         loadAssignedTickets();
+        initListeners();
     }
 
     private void initListeners(){
@@ -66,13 +65,13 @@ public class TechnicianDashboardController {
         });
 
         panel.getViewTicketQueueButton().addActionListener(e -> {
-            ticketQueuePanel.clearTickets();
+            //ticketQueuePanel.clearTickets();
             loadTicketQueue();
             panel.showPanel(TechnicianDashboardPanel.TICKET_QUEUE);
         });
 
         panel.getTicketHistoryButton().addActionListener(e -> {
-            ticketHistoryPanel.clearTickets();
+            //ticketHistoryPanel.clearTickets();
             loadTicketHistory();
             panel.showPanel(TechnicianDashboardPanel.TICKET_HISTORY);
         });
@@ -86,7 +85,7 @@ public class TechnicianDashboardController {
             frame.getLoginPanel().getUsernameField().setText("");
             frame.getLoginPanel().getPasswordField().setText("");
             frame.showPanel(Frame.LOGIN_PANEL);
-            this.user = null;
+            //this.user = null;
         });
     }
 
@@ -177,22 +176,10 @@ private void cancelActiveTicket(Tickets ticket) {
 
     private void loadTicketQueue() {
         try {
-            int technicianId = new TechniciansDAO(DBConnection.connect())
-                    .getTechnicianIdByUserId(user.getUserID());
+            int technicianId = techDAO.getTechnicianIdByUserId(user.getUserID());
+
             List<Tickets> tickets = ticketsDAO.getTicketsByTechnicianID(technicianId);
-
-            for (Tickets t : tickets) {
-                ticketQueuePanel.addTicket(
-                    String.valueOf(t.getTicket_id()),
-                    String.valueOf(t.getTicket_subject()),
-                    String.valueOf(t.getCategory_id()),
-                    String.valueOf(t.getEmployee_id()),
-                    String.valueOf(t.getTechnician_id()),
-                    t.getCreation_date(),
-                    t.getStatus()
-                );
-            }
-
+            ticketQueuePanel.loadTickets(tickets);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -201,22 +188,9 @@ private void cancelActiveTicket(Tickets ticket) {
 
     private void loadTicketHistory() {
         try {
-            int technicianId = new TechniciansDAO(DBConnection.connect())
-                    .getTechnicianIdByUserId(user.getUserID());
+            int technicianId = techDAO.getTechnicianIdByUserId(user.getUserID());
             List<Tickets> tickets = ticketsDAO.getResolvedTickets(technicianId);
-
-            for (Tickets t : tickets) {
-                ticketHistoryPanel.addTicket(
-                    String.valueOf(t.getTicket_id()),
-                    String.valueOf(t.getTicket_subject()),
-                    String.valueOf(t.getCategory_id()),
-                    String.valueOf(t.getEmployee_id()),
-                    String.valueOf(t.getTechnician_id()),
-                    t.getCreation_date(),
-                    t.getStatus()
-                );
-            }
-
+            ticketHistoryPanel.loadTickets(tickets);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -225,8 +199,7 @@ private void cancelActiveTicket(Tickets ticket) {
     private void loadAssignedTickets() {
         try {
             // Get technician ID from the logged-in user
-            int technicianId = new TechniciansDAO(DBConnection.connect())
-                    .getTechnicianIdByUserId(user.getUserID());
+            int technicianId = techDAO.getTechnicianIdByUserId(user.getUserID());
 
             // Fetch tickets assigned to this technician
             List<Tickets> tickets = ticketsDAO.getTicketsByTechnician(technicianId);

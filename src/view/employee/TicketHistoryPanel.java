@@ -1,8 +1,8 @@
 package view.employee;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 //import java.util.List;
 //import models.Tickets;
 
@@ -42,7 +42,7 @@ public class TicketHistoryPanel extends JPanel {
             ticketTable.getColumnModel().getColumn(i).setMinWidth(columnWidths[i]);
             ticketTable.getColumnModel().getColumn(i).setMaxWidth(columnWidths[i]);
         }
-        }
+    }
 
     public void loadTickets(java.util.List<models.Tickets> tickets) {
         
