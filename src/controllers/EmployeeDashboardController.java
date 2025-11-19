@@ -46,7 +46,7 @@ public class EmployeeDashboardController{
         this.panel = frame.getEmployeeDashboardPanel();
         this.createTicketPanel = panel.getCreateTicketPanel();
         this.ticketHistoryPanel = panel.getTicketHistoryPanel();
-        
+
         try {
             Employees emp = empDAO.getEmployeeByUserId(user.getUserID());
             if (emp != null) {
@@ -97,7 +97,6 @@ public class EmployeeDashboardController{
             frame.getLoginPanel().getUsernameField().setText("");
             frame.getLoginPanel().getPasswordField().setText("");
             frame.showPanel(Frame.LOGIN_PANEL);
-            this.user = null;
             ticketHistoryPanel.clearTickets();
             createTicketPanel.clearFields();
         });
