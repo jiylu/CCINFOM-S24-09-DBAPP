@@ -54,6 +54,8 @@ public class LoginController {
             UserAccount u = loginUser();
             if (u != null){
                 System.out.println("Role returned: '" + u.getRole() + "'");
+                System.out.println("UserID: " + u.getUserID());
+                System.out.println("Username: " + u.getUsername());
                 switch (u.getRole()){
                     case UserAccount.ADMIN_ROLE -> redirectToAdminDashboard(u); 
                     case UserAccount.EMP_ROLE -> redirectToEmployeeDashboard(u);
@@ -114,6 +116,8 @@ public class LoginController {
     private void redirectToTechDashboard(UserAccount u){
         TechUser user = userDAO.getTechUserByID(u.getUserID());
         TechnicianDashboardController technicianDashboardController = new TechnicianDashboardController(user, frame, ticketsDAO, techDAO, categoriesDAO);
+
+        System.out.println(technicianDashboardController);
         technicianDashboardController.init();
     }
 }

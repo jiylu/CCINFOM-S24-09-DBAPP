@@ -1,13 +1,14 @@
 package view.technician;
 
+import java.awt.*;
+import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
+import models.Tickets;
 
 public class TicketHistory extends JPanel {
     private JLabel titleLabel;
     private JTable ticketTable;
-    private DefaultTableModel tableModel;
     private JScrollPane scrollPane;
 
     public TicketHistory() {
@@ -24,13 +25,17 @@ public class TicketHistory extends JPanel {
         add(titleLabel);
     }
 
-    private void initTable() {
+    private DefaultTableModel initTable() {
+        if (scrollPane != null) {
+            remove(scrollPane);
+        }
+
         // Define columns
         String[] columnNames = {"Ticket Id", "Subject", "Category ID", "Employee ID", 
                                 "Technician ID", "Creation Date", "Status"};
 
         // Create empty table model (editable = false)
-        tableModel = new DefaultTableModel(columnNames, 0) {
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false; // make table read-only
@@ -48,24 +53,42 @@ public class TicketHistory extends JPanel {
         scrollPane = new JScrollPane(ticketTable);
         scrollPane.setBounds(20, 70, 850, 700);
         add(scrollPane);
+
+        return tableModel;
     }
 
     // Utility method to add a ticket row
     public void addTicket(String ticketId, String ticketSubject, String categoryId, String employeeId,
                           String technicianId, String creationDate, String status) {
-        tableModel.addRow(new Object[]{ticketId, ticketSubject, categoryId, employeeId, technicianId, creationDate, status});
+        //tableModel.addRow(new Object[]{ticketId, ticketSubject, categoryId, employeeId, technicianId, creationDate, status});
+    }
+
+    public void loadTickets(List<Tickets> tickets){
+        DefaultTableModel tableModel = initTable();
+
+        for (models.Tickets ticket : tickets) {
+            tableModel.addRow(new Object[] {
+                ticket.getTicket_id(),
+                ticket.getCategory_id(),
+                ticket.getTicket_subject(),
+                ticket.getTicket_description(),
+                ticket.getTechnician_id(),
+                ticket.getCreation_date(),
+                ticket.getStatus()
+            });
+        }  
     }
 
     // Optional: clear table
-    public void clearTickets() {
-        tableModel.setRowCount(0);
-    }
+    // public void clearTickets() {
+    //     tableModel.setRowCount(0);
+    // }
 
     public JTable getTicketTable() {
         return ticketTable;
     }
 
-    public DefaultTableModel getTableModel() {
-        return tableModel;
-    }
+    // public DefaultTableModel getTableModel() {
+    //     return tableModel;
+    // }
 }

@@ -1,8 +1,8 @@
 package view.technician;
 
+import java.awt.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 
 public class TechnicianTicketQueue extends JPanel {
     private JLabel titleLabel;
@@ -54,6 +54,24 @@ public class TechnicianTicketQueue extends JPanel {
                           String technicianId, String creationDate, String status) {
         tableModel.addRow(new Object[]{ticketId, ticketSubject, categoryId, employeeId, technicianId, creationDate, status});
     }
+
+    public void loadTickets(java.util.List<models.Tickets> tickets) {
+        
+        tableModel.setRowCount(0); 
+
+        for (models.Tickets ticket : tickets) {
+            tableModel.addRow(new Object[] {
+                ticket.getTicket_id(),
+                ticket.getCategory_id(),
+                ticket.getTicket_subject(),
+                ticket.getTicket_description(),
+                ticket.getTechnician_id(),
+                ticket.getCreation_date(),
+                ticket.getStatus()
+            });
+        }
+    }
+
 
     // Optional: clear table
     public void clearTickets() {

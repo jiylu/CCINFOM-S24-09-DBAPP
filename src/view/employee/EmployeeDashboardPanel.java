@@ -28,6 +28,18 @@ public class EmployeeDashboardPanel extends JPanel {
         setupCardLayout();
     }
 
+    public void resetPanel() {
+        this.removeAll();
+
+        initHeaderBar();
+        initNavigationPanel();
+        initPanels();
+        setupCardLayout();
+
+        this.revalidate();
+        this.repaint();
+    }
+
     // Dark green header bar
     private void initHeaderBar() {
         JPanel headerBar = new JPanel();
